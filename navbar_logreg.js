@@ -18,52 +18,11 @@ async function loadNavbar() {
         const html = await resp.text();
         navbarContainer.innerHTML = html;
         
-        initializeDarkMode();
         window.dispatchEvent(new Event('navbarLoaded'));
     } catch (error) {
         console.error('Error loading navbar:', error);
     }
 }
-
-// Dark Mode Functionality
-function initializeDarkMode() {
-    const themeToggle = document.getElementById('themeToggle');
-    const themeIcon = document.getElementById('themeIcon');
-    
-    if (!themeToggle || !themeIcon) return;
-    
-    // Load dark mode preference from localStorage
-    const savedTheme = localStorage.getItem('darkMode');
-    if (savedTheme === 'true') {
-        document.body.classList.add('dark');
-        themeIcon.textContent = '☀️';
-    } else {
-        themeIcon.textContent = '🌙';
-    }
-    
-    // Toggle dark mode
-    themeToggle.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        document.body.classList.toggle('dark');
-        const isDark = document.body.classList.contains('dark');
-        themeIcon.textContent = isDark ? '☀️' : '🌙';
-        // Save preference to localStorage
-        localStorage.setItem('darkMode', isDark ? 'true' : 'false');
-    });
-}
-
-// Initialize dark mode on page load
-function initDarkModeOnLoad() {
-    const savedTheme = localStorage.getItem('darkMode');
-    if (savedTheme === 'true') {
-        document.body.classList.add('dark');
-    }
-}
-
-// Initialize dark mode immediately (before DOM ready)
-initDarkModeOnLoad();
-
 
 // Load navbar immediately (before DOMContentLoaded to prevent lag)
 // This ensures navbar appears instantly without delay

@@ -18,7 +18,6 @@ async function loadNavbar() {
         navbarContainer.innerHTML = html;
         
         initializeNavbar();
-        initializeDarkMode();
         window.dispatchEvent(new Event('navbarLoaded'));
         
         // Load all badges immediately (no delays) - similar to dashboard.html and cart.html
@@ -46,48 +45,6 @@ async function loadNavbar() {
         console.error('Error loading navbar:', error);
     }
 }
-
-// Dark Mode Functionality
-function initializeDarkMode() {
-    const themeToggle = document.getElementById('themeToggle');
-    const themeIcon = document.getElementById('themeIcon');
-    
-    if (!themeToggle || !themeIcon) return;
-    
-    // Load dark mode preference from localStorage
-    const savedTheme = localStorage.getItem('darkMode');
-    if (savedTheme === 'true') {
-        document.body.classList.add('dark');
-        themeIcon.textContent = '☀️';
-    } else {
-        themeIcon.textContent = '🌙';
-    }
-    
-    // Toggle dark mode
-    themeToggle.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        document.body.classList.toggle('dark');
-        const isDark = document.body.classList.contains('dark');
-        themeIcon.textContent = isDark ? '☀️' : '🌙';
-        // Save preference to localStorage
-        localStorage.setItem('darkMode', isDark ? 'true' : 'false');
-        
-        // Dispatch custom event to notify other listeners
-        window.dispatchEvent(new CustomEvent('darkModeToggled', { detail: { isDark } }));
-    });
-}
-
-// Initialize dark mode on page load
-function initDarkModeOnLoad() {
-    const savedTheme = localStorage.getItem('darkMode');
-    if (savedTheme === 'true') {
-        document.body.classList.add('dark');
-    }
-}
-
-// Initialize dark mode immediately (before DOM ready)
-initDarkModeOnLoad();
 
 // Initialize navbar functionality
 function initializeNavbar() {

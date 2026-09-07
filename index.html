@@ -16,9 +16,7 @@
     
     <!-- AOS Animation Library -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <!-- Dark Mode CSS -->
-    <link rel="stylesheet" href="assets/css/dark-mode.css">
-    
+
     <style>
         /* Global Styles */
         * {
@@ -41,20 +39,9 @@
             transition: all 0.3s ease;
         }
         
-        body.dark .navbar {
-            background: rgba(30, 41, 59, 0.95) !important;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3) !important;
-            border-bottom: 1px solid var(--border-dark);
-        }
-        
         .navbar.scrolled {
             padding: 0.5rem 0;
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.15);
-        }
-        
-        body.dark .navbar.scrolled {
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5) !important;
         }
         
         .navbar-brand {
@@ -64,17 +51,9 @@
             transition: all 0.3s ease;
         }
         
-        body.dark .navbar-brand {
-            color: var(--accent-blue-light) !important;
-        }
-        
         .navbar-brand:hover {
             color: #256892 !important;
             transform: scale(1.05);
-        }
-        
-        body.dark .navbar-brand:hover {
-            color: var(--accent-blue) !important;
         }
         
         .nav-link {
@@ -91,15 +70,6 @@
             transition: all 0.3s ease;
             position: relative;
             border-radius: 10px;
-        }
-        
-        body.dark .nav-link {
-            color: var(--text-dark) !important;
-        }
-        
-        body.dark .nav-link:hover,
-        body.dark .nav-link.active {
-            color: var(--accent-blue-light) !important;
         }
         
         .nav-link::after {
@@ -123,24 +93,6 @@
         .nav-link.active {
             color: #1a4a6b !important;
             font-weight: 900;
-        }
-        
-        /* Dark Mode Toggle Button in Navbar */
-        #themeToggle {
-            font-size: 1.25rem;
-            transition: all 0.3s ease;
-        }
-        
-        #themeToggle:hover {
-            transform: scale(1.1);
-        }
-        
-        body.dark #themeToggle {
-            color: var(--text-dark) !important;
-        }
-        
-        body.dark #themeToggle:hover {
-            color: var(--accent-blue-light) !important;
         }
         
         /* Navigation Icons Styles */
@@ -1512,12 +1464,6 @@
                             </li>
                         </ul>
                     </li>
-                    <!-- Dark Mode Toggle (shown when not logged in) -->
-                    <li class="nav-item" id="themeToggleNavItem">
-                        <button id="themeToggle" class="nav-link" title="Toggle Dark Mode" style="border: none; background: transparent; padding: 0 16px; cursor: pointer;">
-                            <span id="themeIcon">🌙</span>
-                        </button>
-                    </li>
                     <!-- Login/Register buttons (shown when not logged in) -->
                     <li class="nav-item" id="loginNavItem">
                         <a class="nav-link" href="login.html">Login</a>
@@ -1537,11 +1483,6 @@
                             <li><a class="dropdown-item" href="recent_orders.html"><i class="fas fa-receipt me-2"></i>Recent Orders</a></li>
                             <li><a class="dropdown-item" href="#" onclick="openSettingsModal(); return false;"><i class="fas fa-cog me-2"></i>Settings</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li>
-                                <button id="themeToggle" class="dropdown-item" title="Toggle Dark Mode" style="border: none; background: transparent; width: 100%; text-align: left; padding: 0.5rem 1rem;">
-                                    <span id="themeIcon">🌙</span> <span style="margin-left: 0.5rem;">Dark Mode</span>
-                                </button>
-                            </li>
                             <li><a class="dropdown-item" href="#" onclick="logout(); return false;"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
                         </ul>
                     </li>
@@ -1886,77 +1827,6 @@
             });
         });
         
-        // Initialize dark mode toggle for static landing navbar
-        function initializeDarkMode() {
-            // Load dark mode preference from localStorage
-            const savedTheme = localStorage.getItem('darkMode');
-            if (savedTheme === 'true') {
-                document.body.classList.add('dark');
-            }
-            
-            // Update theme icon based on current state
-            const themeIcon = document.getElementById('themeIcon');
-            if (themeIcon) {
-                themeIcon.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
-            }
-            
-            // Handle navbar theme toggle button (for both logged-in and non-logged-in users)
-            // Use event delegation to handle dynamically loaded navbar
-            document.addEventListener('click', function(e) {
-                const themeToggle = e.target.closest('#themeToggle');
-                if (themeToggle) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    document.body.classList.toggle('dark');
-                    const isDark = document.body.classList.contains('dark');
-                    const icon = document.getElementById('themeIcon');
-                    if (icon) {
-                        icon.textContent = isDark ? '☀️' : '🌙';
-                    }
-                    localStorage.setItem('darkMode', isDark ? 'true' : 'false');
-                }
-            });
-        }
-        
-        // Initialize dark mode immediately (before DOM ready)
-        (function() {
-            const savedTheme = localStorage.getItem('darkMode');
-            if (savedTheme === 'true') {
-                document.body.classList.add('dark');
-            }
-        })();
-        
-        // Initialize dark mode toggle on DOM ready
-        document.addEventListener('DOMContentLoaded', function () {
-            initializeDarkMode();
-            
-            // Also initialize dark mode after navbar loads (in case navbar.js loads later)
-            setTimeout(function() {
-                const savedTheme = localStorage.getItem('darkMode');
-                if (savedTheme === 'true' && !document.body.classList.contains('dark')) {
-                    document.body.classList.add('dark');
-                }
-                // Update theme icon if it exists
-                const themeIcon = document.getElementById('themeIcon');
-                if (themeIcon) {
-                    themeIcon.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
-                }
-            }, 500);
-            
-            // Listen for navbar loaded event
-            window.addEventListener('navbarLoaded', function() {
-                const savedTheme = localStorage.getItem('darkMode');
-                if (savedTheme === 'true' && !document.body.classList.contains('dark')) {
-                    document.body.classList.add('dark');
-                }
-                // Update theme icon if it exists
-                const themeIcon = document.getElementById('themeIcon');
-                if (themeIcon) {
-                    themeIcon.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
-                }
-            });
-        });
-        
         // Update cart count
         function updateCartCount() {
             try {
@@ -1996,10 +1866,9 @@
                 })
                 .then(data => {
                     if (data.success && data.user) {
-                        // User is logged in - show icons and user dropdown, hide login/register and theme toggle
+                        // User is logged in - show icons and user dropdown, hide login/register
                         const loginNavItem = document.getElementById('loginNavItem');
                         const registerNavItem = document.getElementById('registerNavItem');
-                        const themeToggleNavItem = document.getElementById('themeToggleNavItem');
                         const userDropdownNavItem = document.getElementById('userDropdownNavItem');
                         const navHomeItem = document.getElementById('navHomeItem');
                         const navCartItem = document.getElementById('navCartItem');
@@ -2009,7 +1878,6 @@
                         
                         if (loginNavItem) loginNavItem.style.display = 'none';
                         if (registerNavItem) registerNavItem.style.display = 'none';
-                        if (themeToggleNavItem) themeToggleNavItem.style.display = 'none';
                         if (userDropdownNavItem) userDropdownNavItem.style.display = 'block';
                         if (navHomeItem) navHomeItem.style.display = 'block';
                         if (navCartItem) navCartItem.style.display = 'block';
@@ -2029,10 +1897,9 @@
                             updateNavbarBadges();
                         }, 500);
                     } else {
-                        // User is not logged in - show login/register and theme toggle, hide icons and user dropdown
+                        // User is not logged in - show login/register, hide icons and user dropdown
                         const loginNavItem = document.getElementById('loginNavItem');
                         const registerNavItem = document.getElementById('registerNavItem');
-                        const themeToggleNavItem = document.getElementById('themeToggleNavItem');
                         const userDropdownNavItem = document.getElementById('userDropdownNavItem');
                         const navHomeItem = document.getElementById('navHomeItem');
                         const navCartItem = document.getElementById('navCartItem');
@@ -2041,7 +1908,6 @@
                         
                         if (loginNavItem) loginNavItem.style.display = 'block';
                         if (registerNavItem) registerNavItem.style.display = 'block';
-                        if (themeToggleNavItem) themeToggleNavItem.style.display = 'block';
                         if (userDropdownNavItem) userDropdownNavItem.style.display = 'none';
                         if (navHomeItem) navHomeItem.style.display = 'none';
                         if (navCartItem) navCartItem.style.display = 'none';
@@ -2050,10 +1916,9 @@
                     }
                 })
                 .catch(error => {
-                    // Not logged in - show login/register and theme toggle, hide icons
+                    // Not logged in - show login/register, hide icons
                     const loginNavItem = document.getElementById('loginNavItem');
                     const registerNavItem = document.getElementById('registerNavItem');
-                    const themeToggleNavItem = document.getElementById('themeToggleNavItem');
                     const userDropdownNavItem = document.getElementById('userDropdownNavItem');
                     const navHomeItem = document.getElementById('navHomeItem');
                     const navCartItem = document.getElementById('navCartItem');
@@ -2061,7 +1926,6 @@
                     
                     if (loginNavItem) loginNavItem.style.display = 'block';
                     if (registerNavItem) registerNavItem.style.display = 'block';
-                    if (themeToggleNavItem) themeToggleNavItem.style.display = 'block';
                     if (userDropdownNavItem) userDropdownNavItem.style.display = 'none';
                     if (navHomeItem) navHomeItem.style.display = 'none';
                     if (navCartItem) navCartItem.style.display = 'none';

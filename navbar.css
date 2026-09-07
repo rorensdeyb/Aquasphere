@@ -174,27 +174,6 @@ body {
     text-align: center;
 }
 
-/* Ensure Dark Mode button text matches other dropdown items exactly */
-#themeToggle {
-    font-size: 0.95rem !important;
-    font-weight: 400 !important;
-    line-height: 1.5 !important;
-}
-
-#themeToggle span:not(#themeIcon) {
-    font-size: 0.95rem !important;
-    font-weight: 400 !important;
-}
-
-#themeToggle #themeIcon {
-    font-size: 0.95rem;
-    display: inline-block;
-    width: 20px;
-    text-align: center;
-    margin-right: 0.5rem;
-    vertical-align: middle;
-}
-
 .cart-badge {
     position: absolute;
     top: -5px;
@@ -426,46 +405,6 @@ body {
     font-size: 0.9rem;
 }
 
-/* Dark mode styles for navbar elements */
-body.dark .notification-header {
-    color: #f1f5f9 !important;
-}
 
-body.dark .notification-title {
-    color: #f1f5f9 !important;
-}
-
-body.dark .notification-desc {
-    color: #94a3b8 !important;
-}
-
-body.dark .notification-meta {
-    color: #64748b !important;
-}
-
-body.dark .notification-empty {
-    color: #94a3b8 !important;
-}
-
-body.dark .notification-empty i {
-    color: #64748b !important;
-}
-
-body.dark .notification-pagination {
-    background: #1e293b !important;
-    border-top-color: #334155 !important;
-}
-
-body.dark .notification-pagination span {
-    color: #f1f5f9 !important;
-}
-
-body.dark .nav-item.dropdown .nav-link #usernameDisplay {
-    color: #f1f5f9 !important;
-}
-
-body.dark .nav-item.dropdown .nav-link:hover #usernameDisplay {
-    color: #38bdf8 !important;
-}
 
 

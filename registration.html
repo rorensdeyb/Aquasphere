@@ -13,9 +13,7 @@
     
     <!-- Google Fonts Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Dark Mode CSS -->
-    <link rel="stylesheet" href="assets/css/dark-mode.css">
-    <!-- Shared Navbar CSS -->
+<!-- Shared Navbar CSS -->
     <link rel="stylesheet" href="navbar.css">
     
     <style>
@@ -146,11 +144,6 @@
             transition: all 0.2s ease-in-out;
         }
         
-        /* Remove transitions from select to prevent color flash in dark mode */
-        body.dark .form-select,
-        body.dark .form-select * {
-            transition: none !important;
-        }
         
         /* Select dropdown arrow styling - only for gender field */
         #gender.form-select {
@@ -553,58 +546,6 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             loadNavbar();
-            if (typeof initDarkModeOnLoad === 'function') {
-                initDarkModeOnLoad();
-            }
-            
-            // Force dark mode styling on gender select to prevent light color flash
-            const genderSelect = document.getElementById('gender');
-            if (genderSelect) {
-                // Function to apply dark styles immediately
-                const applyDarkStyles = function() {
-                    if (document.body.classList.contains('dark')) {
-                        genderSelect.style.setProperty('background-color', '#334155', 'important');
-                        genderSelect.style.setProperty('border-color', '#334155', 'important');
-                        genderSelect.style.setProperty('color', '#f1f5f9', 'important');
-                        genderSelect.style.setProperty('transition', 'none', 'important');
-                    }
-                };
-                
-                // Apply immediately on load
-                applyDarkStyles();
-                
-                // Re-apply on change to prevent flash
-                genderSelect.addEventListener('change', function() {
-                    applyDarkStyles();
-                });
-                
-                // Also apply on focus/blur
-                genderSelect.addEventListener('focus', function() {
-                    if (document.body.classList.contains('dark')) {
-                        this.style.setProperty('background-color', '#334155', 'important');
-                        this.style.setProperty('border-color', '#256892', 'important');
-                        this.style.setProperty('color', '#f1f5f9', 'important');
-                    }
-                });
-                
-                genderSelect.addEventListener('blur', function() {
-                    applyDarkStyles();
-                });
-                
-                // Use MutationObserver to watch for class changes on body
-                const observer = new MutationObserver(function(mutations) {
-                    mutations.forEach(function(mutation) {
-                        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-                            applyDarkStyles();
-                        }
-                    });
-                });
-                
-                observer.observe(document.body, {
-                    attributes: true,
-                    attributeFilter: ['class']
-                });
-            }
         });
     </script>
     
@@ -647,38 +588,7 @@
                 const dd = String(maxDate.getDate()).padStart(2, '0');
                 birthdayInput.max = `${yyyy}-${mm}-${dd}`;
                 
-                // Force calendar icon to be white in dark mode
-                function applyCalendarIconStyle() {
-                    if (document.body.classList.contains('dark')) {
-                        const style = document.createElement('style');
-                        style.id = 'calendar-icon-dark-fix';
-                        style.textContent = `
-                            body.dark #birthday::-webkit-calendar-picker-indicator,
-                            body.dark .register-card input[type="date"]::-webkit-calendar-picker-indicator {
-                                filter: invert(1) brightness(2) !important;
-                                opacity: 1 !important;
-                                width: 20px !important;
-                                height: 20px !important;
-                            }
-                        `;
-                        // Remove existing style if any
-                        const existing = document.getElementById('calendar-icon-dark-fix');
-                        if (existing) existing.remove();
-                        document.head.appendChild(style);
-                    }
-                }
-                
-                // Apply immediately
-                applyCalendarIconStyle();
-                
-                // Re-apply when dark mode toggles
-                const observer = new MutationObserver(() => {
-                    applyCalendarIconStyle();
-                });
-                observer.observe(document.body, {
-                    attributes: true,
-                    attributeFilter: ['class']
-                });
+
             }
             
             // Success timers to revert the green glow after 3s
