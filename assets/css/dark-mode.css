@@ -72,7 +72,7 @@ body.dark .nav-link {
 
 body.dark .nav-link:hover,
 body.dark .nav-link.active {
-  color: var(--accent-blue-light) !important;
+  color: #60a5fa !important;
 }
 
 body.dark .nav-link[title]:hover {
@@ -1310,7 +1310,13 @@ body.dark .site-footer {
 body.dark footer a,
 body.dark .footer a,
 body.dark .site-footer a {
-  color: var(--accent-blue-light) !important;
+  color: #93c5fd !important;
+}
+
+body.dark footer a:hover,
+body.dark .footer a:hover,
+body.dark .site-footer a:hover {
+  color: #bfdbfe !important;
 }
 
 /* Landing / Home page (index.html) - Hero section exempt from dark mode */
@@ -1336,7 +1342,8 @@ body.dark .hero-content {
 body.dark .btn-hero:hover,
 body.dark .cta-section .btn-hero:hover {
   background: var(--panel-bg-dark) !important;
-  color: var(--accent-blue-light) !important;
+  color: #93c5fd !important;
+  border-color: #93c5fd !important;
 }
 
 body.dark .btn-hero-outline {
