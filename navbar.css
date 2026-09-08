@@ -32,7 +32,7 @@ body {
 .navbar-brand {
     font-weight: 700;
     font-size: 1.5rem;
-    color: #256892 !important;
+    color: #2383B5 !important;
     transition: all 0.3s ease;
     display: flex !important;
     align-items: center !important;
@@ -44,7 +44,7 @@ body {
 }
 
 .navbar-brand:hover {
-    color: #1a4a6b !important;
+    color: #155A7A !important;
     transform: scale(1.05);
 }
 
@@ -74,7 +74,7 @@ body {
     height: 3px;
     bottom: 0;
     left: 50%;
-    background: linear-gradient(90deg, #256892, #1a4a6b);
+    background: linear-gradient(90deg, #2383B5, #155A7A);
     transition: all 0.3s ease;
     transform: translateX(-50%);
 }
@@ -86,19 +86,19 @@ body {
 
 .nav-link:hover,
 .nav-link.active {
-    color: #1a4a6b !important;
+    color: #155A7A !important;
 }
 
 /* Blue hover effect for icon nav links */
 .nav-link[title]:hover {
-    background: rgba(37, 104, 146, 0.1) !important;
-    color: #256892 !important;
+    background: rgba(35, 131, 181, 0.1) !important;
+    color: #2383B5 !important;
     border-radius: 10px;
 }
 
 .nav-link[title].active {
-    background: rgba(37, 104, 146, 0.1) !important;
-    color: #256892 !important;
+    background: rgba(35, 131, 181, 0.1) !important;
+    color: #2383B5 !important;
     border-radius: 10px;
 }
 
@@ -137,7 +137,7 @@ body {
 
 .nav-item.dropdown .nav-link i.fa-user-circle {
     font-size: 1.3rem;
-    color: #256892;
+    color: #2383B5;
 }
 
 .nav-item.dropdown .nav-link #usernameDisplay {
@@ -147,7 +147,7 @@ body {
 }
 
 .nav-item.dropdown .nav-link:hover #usernameDisplay {
-    color: #256892;
+    color: #2383B5;
 }
 
 .dropdown-menu {
@@ -165,8 +165,8 @@ body {
 }
 
 .dropdown-item:hover {
-    background: rgba(37, 104, 146, 0.1);
-    color: #256892;
+    background: rgba(35, 131, 181, 0.1);
+    color: #2383B5;
 }
 
 .dropdown-item i {
@@ -216,7 +216,7 @@ body {
     position: absolute;
     top: -5px;
     right: -5px;
-    background: linear-gradient(135deg, #256892, #1e4f73);
+    background: linear-gradient(135deg, #2383B5, #155A7A);
     color: white;
     border-radius: 50%;
     width: 20px;
@@ -226,7 +226,7 @@ body {
     justify-content: center;
     font-size: 0.7rem;
     font-weight: 700;
-    box-shadow: 0 2px 8px rgba(37, 104, 146, 0.4);
+    box-shadow: 0 2px 8px rgba(35, 131, 181, 0.4);
     min-width: 20px;
     min-height: 20px;
     box-sizing: border-box;
@@ -285,13 +285,13 @@ body {
 }
 
 .notification-header i {
-    color: #256892;
+    color: #2383B5;
 }
 
 .notification-header .btn-clear {
     border: none;
-    background: rgba(37, 104, 146, 0.08);
-    color: #256892;
+    background: rgba(35, 131, 181, 0.08);
+    color: #2383B5;
     font-weight: 600;
     padding: 6px 10px;
     border-radius: 10px;
@@ -300,7 +300,7 @@ body {
 }
 
 .notification-header .btn-clear:hover {
-    background: rgba(37, 104, 146, 0.15);
+    background: rgba(35, 131, 181, 0.15);
 }
 
 .notification-item {
@@ -313,7 +313,7 @@ body {
 }
 
 .notification-item:hover {
-    background: rgba(37, 104, 146, 0.06);
+    background: rgba(35, 131, 181, 0.06);
 }
 
 .notification-icon {
@@ -373,19 +373,19 @@ body {
     align-items: center;
     justify-content: space-between;
     padding: 0.6rem 1rem;
-    background: #f8fafc;
-    border-top: 1px solid #e2e8f0;
+    background: #EAF7FC;
+    border-top: 1px solid #D5E5ED;
 }
 
 .notification-pagination button {
     border: none;
-    background: linear-gradient(135deg, #256892, #1e4f73);
+    background: linear-gradient(135deg, #2383B5, #155A7A);
     color: white;
     padding: 6px 12px;
     border-radius: 10px;
     font-weight: 600;
     font-size: 0.9rem;
-    box-shadow: 0 4px 12px rgba(37, 104, 146, 0.25);
+    box-shadow: 0 4px 12px rgba(35, 131, 181, 0.25);
     transition: all 0.2s ease;
 }
 

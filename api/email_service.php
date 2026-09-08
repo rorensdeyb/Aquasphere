@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * Email Service for AquaSphere using Brevo (formerly Sendinblue) API
  */
@@ -130,10 +130,10 @@ function send_otp_email_brevo($email, $otp_code, $username) {
         <style>
             body { font-family: Inter, system-ui, Segoe UI, sans-serif; line-height: 1.6; color: #333; }
             .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-            .header { background: linear-gradient(135deg, #256892, #1e4f73); color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }
+            .header { background: linear-gradient(135deg, #2383B5, #155A7A); color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }
             .content { padding: 20px; background-color: #f9f9f9; border-radius: 0 0 8px 8px; }
             .otp-box { background-color: white; padding: 30px; margin: 20px 0; border-radius: 8px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-            .otp-code { font-size: 36px; font-weight: bold; color: #256892; letter-spacing: 8px; margin: 20px 0; }
+            .otp-code { font-size: 36px; font-weight: bold; color: #2383B5; letter-spacing: 8px; margin: 20px 0; }
             .warning { background-color: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; border-radius: 5px; margin: 20px 0; }
             .footer { text-align: center; padding: 20px; color: #666; font-size: 12px; }
         </style>
@@ -222,10 +222,10 @@ function send_password_reset_otp_email_brevo($email, $otp_code, $username) {
         <style>
             body { font-family: Inter, system-ui, Segoe UI, sans-serif; line-height: 1.6; color: #333; }
             .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-            .header { background: linear-gradient(135deg, #256892, #1e4f73); color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }
+            .header { background: linear-gradient(135deg, #2383B5, #155A7A); color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }
             .content { padding: 20px; background-color: #f9f9f9; border-radius: 0 0 8px 8px; }
             .otp-box { background-color: white; padding: 30px; margin: 20px 0; border-radius: 8px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-            .otp-code { font-size: 36px; font-weight: bold; color: #256892; letter-spacing: 8px; margin: 20px 0; }
+            .otp-code { font-size: 36px; font-weight: bold; color: #2383B5; letter-spacing: 8px; margin: 20px 0; }
             .warning { background-color: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; border-radius: 5px; margin: 20px 0; }
             .footer { text-align: center; padding: 20px; color: #666; font-size: 12px; }
         </style>
@@ -306,10 +306,10 @@ function send_suspension_email_brevo($email, $username, $reason) {
     <head><meta charset='UTF-8'><title>Account Suspended</title></head>
     <body style='font-family: Inter, system-ui, Segoe UI, sans-serif; color: #0f172a;'>
         <div style='max-width:600px;margin:0 auto;padding:20px;'>
-            <div style='background:linear-gradient(135deg,#256892,#1e4f73);padding:16px;border-radius:12px 12px 0 0;color:white;text-align:center;'>
+            <div style='background:linear-gradient(135deg,#2383B5,#155A7A);padding:16px;border-radius:12px 12px 0 0;color:white;text-align:center;'>
                 <h2 style='margin:0;'>Account Suspended</h2>
             </div>
-            <div style='background:#f8fafc;padding:24px;border:1px solid #e2e8f0;border-top:none;border-radius:0 0 12px 12px;'>
+            <div style='background:#EAF7FC;padding:24px;border:1px solid #D5E5ED;border-top:none;border-radius:0 0 12px 12px;'>
                 <p>Hello <strong>$username</strong>,</p>
                 <p>Your AquaSphere account has been <strong>temporarily suspended</strong>.</p>
                 <p><strong>Reason provided by admin:</strong><br>" . nl2br(htmlspecialchars($reason)) . "</p>
@@ -346,7 +346,7 @@ function send_unsuspension_email_brevo($email, $username) {
             <div style='background:linear-gradient(135deg,#22c55e,#16a34a);padding:16px;border-radius:12px 12px 0 0;color:white;text-align:center;'>
                 <h2 style='margin:0;'>Suspension Lifted</h2>
             </div>
-            <div style='background:#f8fafc;padding:24px;border:1px solid #e2e8f0;border-top:none;border-radius:0 0 12px 12px;'>
+            <div style='background:#EAF7FC;padding:24px;border:1px solid #D5E5ED;border-top:none;border-radius:0 0 12px 12px;'>
                 <p>Hello <strong>$username</strong>,</p>
                 <p>Your AquaSphere account suspension has been <strong>lifted</strong>. You can now sign in again.</p>
                 <p>If you have any concerns, please contact support.</p>

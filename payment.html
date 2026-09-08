@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -54,20 +54,20 @@
         .payment-header h1 {
             font-size: 2.5rem;
             font-weight: 800;
-            color: #1a4a6b;
+            color: #155A7A;
             margin-bottom: 0.5rem;
             text-shadow: 0 2px 8px rgba(3, 105, 161, 0.1);
         }
         
         .payment-header p {
             font-size: 1.1rem;
-            color: #64748b;
+            color: #607D8B;
             margin: 0;
         }
         
         /* Payment Card */
         .payment-card {
-            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #f0f9ff 100%);
+            background: linear-gradient(135deg, #ffffff 0%, #EAF7FC 50%, #f0f9ff 100%);
             border-radius: 28px;
             box-shadow: 0 30px 100px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.1);
             overflow: hidden;
@@ -82,7 +82,7 @@
             left: 0;
             right: 0;
             height: 5px;
-            background: linear-gradient(90deg, #256892, #1e4f73, #3b7fb8, #256892, #256892);
+            background: linear-gradient(90deg, #2383B5, #155A7A, #5BC0EB, #2383B5, #2383B5);
             background-size: 200% 100%;
             animation: gradientShift 3s ease infinite;
             z-index: 1;
@@ -98,7 +98,7 @@
         }
         
         .payment-card-header {
-            background: linear-gradient(135deg, #256892 0%, #1e4f73 50%, #3b7fb8 100%);
+            background: linear-gradient(135deg, #2383B5 0%, #155A7A 50%, #5BC0EB 100%);
             padding: 2rem 2rem 1.5rem;
             position: relative;
             overflow: hidden;
@@ -168,7 +168,7 @@
         /* Payment Method Card */
         .payment-method-card {
             background: white;
-            border: 3px solid #e2e8f0;
+            border: 3px solid #D5E5ED;
             border-radius: 20px;
             padding: 1.5rem;
             cursor: pointer;
@@ -190,7 +190,7 @@
         }
         
         .payment-method-card:hover {
-            border-color: #256892;
+            border-color: #2383B5;
             transform: translateY(-4px);
             box-shadow: 0 12px 32px rgba(14, 165, 233, 0.2);
         }
@@ -200,7 +200,7 @@
         }
         
         .payment-method-card.selected {
-            border-color: #256892;
+            border-color: #2383B5;
             background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
             box-shadow: 0 8px 24px rgba(14, 165, 233, 0.25);
         }
@@ -217,7 +217,7 @@
         
         .payment-method-card.disabled:hover {
             transform: none;
-            border-color: #e2e8f0;
+            border-color: #D5E5ED;
             box-shadow: none;
         }
         
@@ -238,13 +238,13 @@
             align-items: center;
             justify-content: center;
             font-size: 2rem;
-            background: linear-gradient(135deg, #256892, #1e4f73);
+            background: linear-gradient(135deg, #2383B5, #155A7A);
             color: white;
             box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
         }
         
         .payment-method-card.disabled .payment-method-icon {
-            background: linear-gradient(135deg, #94a3b8, #64748b);
+            background: linear-gradient(135deg, #94a3b8, #607D8B);
             box-shadow: 0 4px 12px rgba(148, 163, 184, 0.2);
         }
         
@@ -258,8 +258,8 @@
         }
         
         .payment-method-card.selected .payment-method-radio {
-            border-color: #256892;
-            background: #256892;
+            border-color: #2383B5;
+            background: #2383B5;
         }
         
         .payment-method-card.selected .payment-method-radio::after {
@@ -276,7 +276,7 @@
         
         .payment-method-card.disabled .payment-method-radio {
             border-color: #cbd5e1;
-            background: #f1f5f9;
+            background: #EAF7FC;
         }
         
         .payment-method-info {
@@ -297,7 +297,7 @@
         
         .payment-method-description {
             font-size: 0.9rem;
-            color: #64748b;
+            color: #607D8B;
             line-height: 1.5;
             margin-bottom: 0.75rem;
         }
@@ -308,8 +308,8 @@
         
         .coming-soon-badge {
             display: inline-block;
-            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
-            color: #64748b;
+            background: linear-gradient(135deg, #EAF7FC, #D5E5ED);
+            color: #607D8B;
             padding: 0.4rem 0.75rem;
             border-radius: 12px;
             font-size: 0.75rem;
@@ -330,10 +330,10 @@
         .order-summary h3 {
             font-size: 1.25rem;
             font-weight: 700;
-            color: #1a4a6b;
+            color: #155A7A;
             margin-bottom: 1rem;
             padding-bottom: 0.75rem;
-            border-bottom: 2px solid #f1f5f9;
+            border-bottom: 2px solid #EAF7FC;
         }
         
         .summary-row {
@@ -345,11 +345,11 @@
         }
         
         .summary-row:not(:last-child) {
-            border-bottom: 1px solid #f1f5f9;
+            border-bottom: 1px solid #EAF7FC;
         }
         
         .summary-label {
-            color: #64748b;
+            color: #607D8B;
             font-weight: 500;
         }
         
@@ -361,18 +361,18 @@
         .summary-row.total {
             margin-top: 0.5rem;
             padding-top: 1rem;
-            border-top: 2px solid #e2e8f0;
+            border-top: 2px solid #D5E5ED;
         }
         
         .summary-row.total .summary-label {
             font-size: 1.1rem;
-            color: #1a4a6b;
+            color: #155A7A;
             font-weight: 700;
         }
         
         .summary-row.total .summary-value {
             font-size: 1.5rem;
-            color: #256892;
+            color: #2383B5;
             font-weight: 800;
         }
         
@@ -385,8 +385,8 @@
         
         .btn-back {
             background: white;
-            border: 2px solid #e2e8f0;
-            color: #64748b;
+            border: 2px solid #D5E5ED;
+            color: #607D8B;
             padding: 0.875rem 2rem;
             border-radius: 12px;
             font-weight: 600;
@@ -401,14 +401,14 @@
         
         .btn-back:hover {
             border-color: #cbd5e1;
-            background: #f8fafc;
+            background: #EAF7FC;
             color: #475569;
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
         
         .btn-place-order {
-            background: linear-gradient(135deg, #256892, #1e4f73);
+            background: linear-gradient(135deg, #2383B5, #155A7A);
             border: none;
             color: white;
             padding: 0.875rem 2.5rem;
@@ -472,7 +472,7 @@
         
         .payment-error-container {
             position: relative;
-            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            background: linear-gradient(135deg, #ffffff 0%, #EAF7FC 100%);
             border-radius: 24px;
             padding: 2.5rem;
             max-width: 450px;
@@ -495,7 +495,7 @@
             background: transparent;
             border: none;
             font-size: 1.5rem;
-            color: #64748b;
+            color: #607D8B;
             cursor: pointer;
             width: 36px;
             height: 36px;
@@ -549,13 +549,13 @@
         
         .payment-error-container p {
             font-size: 1rem;
-            color: #64748b;
+            color: #607D8B;
             margin-bottom: 1.5rem;
             line-height: 1.6;
         }
         
         .payment-error-btn {
-            background: linear-gradient(135deg, #256892, #1e4f73);
+            background: linear-gradient(135deg, #2383B5, #155A7A);
             border: none;
             color: white;
             padding: 0.875rem 2rem;
@@ -568,7 +568,7 @@
         }
         
         .payment-error-btn:hover {
-            background: linear-gradient(135deg, #1e4f73, #256892);
+            background: linear-gradient(135deg, #155A7A, #2383B5);
             transform: translateY(-2px);
             box-shadow: 0 8px 24px rgba(14, 165, 233, 0.4);
         }
@@ -602,7 +602,7 @@
         }
         
         .address-modal {
-            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #f0f9ff 100%);
+            background: linear-gradient(135deg, #ffffff 0%, #EAF7FC 50%, #f0f9ff 100%);
             border-radius: 28px;
             width: 100%;
             max-width: 600px;
@@ -633,7 +633,7 @@
             left: 0;
             right: 0;
             height: 5px;
-            background: linear-gradient(90deg, #256892, #1e4f73, #3b7fb8, #256892, #256892);
+            background: linear-gradient(90deg, #2383B5, #155A7A, #5BC0EB, #2383B5, #2383B5);
             background-size: 200% 100%;
             animation: gradientShift 3s ease infinite;
             z-index: 1;
@@ -649,7 +649,7 @@
         }
         
         .modal-header {
-            background: linear-gradient(135deg, #256892 0%, #1e4f73 50%, #3b7fb8 100%);
+            background: linear-gradient(135deg, #2383B5 0%, #155A7A 50%, #5BC0EB 100%);
             padding: 2rem 2rem 1.5rem;
             border-bottom: none;
             border-radius: 28px 28px 0 0;
@@ -718,7 +718,7 @@
         
         .modal-footer {
             padding: 1.5rem 2rem 2rem;
-            border-top: 1px solid #e2e8f0;
+            border-top: 1px solid #D5E5ED;
             display: flex;
             justify-content: flex-end;
             gap: 1rem;
@@ -726,8 +726,8 @@
         }
         
         .btn-cancel {
-            background: #f1f5f9;
-            border: 2px solid #e2e8f0;
+            background: #EAF7FC;
+            border: 2px solid #D5E5ED;
             color: #475569;
             padding: 0.75rem 2rem;
             border-radius: 12px;
@@ -738,7 +738,7 @@
         }
         
         .btn-cancel:hover {
-            background: #e2e8f0;
+            background: #D5E5ED;
             border-color: #cbd5e1;
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -766,7 +766,7 @@
         }
         
         .logout-confirm-content {
-            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            background: linear-gradient(135deg, #ffffff 0%, #EAF7FC 100%);
             border-radius: 24px;
             box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1);
             max-width: 420px;
@@ -795,7 +795,7 @@
             left: 0;
             right: 0;
             height: 4px;
-            background: linear-gradient(90deg, #256892 0%, #1e4f73 50%, #1a4a6b 100%);
+            background: linear-gradient(90deg, #2383B5 0%, #155A7A 50%, #155A7A 100%);
             animation: gradientShift 3s ease infinite;
         }
         
@@ -833,7 +833,7 @@
             position: absolute;
             inset: -4px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #256892, #1e4f73);
+            background: linear-gradient(135deg, #2383B5, #155A7A);
             opacity: 0.2;
             animation: iconPulseBlue 2s ease-in-out infinite;
         }
@@ -851,7 +851,7 @@
         
         .logout-confirm-icon i {
             font-size: 2.5rem;
-            color: #256892;
+            color: #2383B5;
             position: relative;
             z-index: 1;
             animation: iconBounce 0.6s ease;
@@ -881,7 +881,7 @@
         
         .logout-confirm-body p {
             font-size: 1rem;
-            color: #64748b;
+            color: #607D8B;
             line-height: 1.6;
             margin: 0;
         }
@@ -907,26 +907,26 @@
         }
         
         .btn-logout-cancel {
-            background: #f1f5f9;
+            background: #EAF7FC;
             color: #475569;
-            border: 2px solid #e2e8f0;
+            border: 2px solid #D5E5ED;
         }
         
         .btn-logout-cancel:hover {
-            background: #e2e8f0;
+            background: #D5E5ED;
             border-color: #cbd5e1;
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
         
         .btn-logout-confirm {
-            background: linear-gradient(135deg, #256892 0%, #1e4f73 100%);
+            background: linear-gradient(135deg, #2383B5 0%, #155A7A 100%);
             color: white;
             box-shadow: 0 4px 16px rgba(14, 165, 233, 0.4);
         }
         
         .btn-logout-confirm:hover {
-            background: linear-gradient(135deg, #1e4f73 0%, #1a4a6b 100%);
+            background: linear-gradient(135deg, #155A7A 0%, #155A7A 100%);
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(14, 165, 233, 0.5);
         }
@@ -937,7 +937,7 @@
         
         /* Footer Styles */
         .footer {
-            background: #0f2a3d; 
+            background: #155A7A; 
             color: white;
             padding: 80px 0 40px;
             font-family: 'Inter', sans-serif;
@@ -984,7 +984,7 @@
         }
 
         .footer-link:hover {
-            color: #3b7fb8;
+            color: #5BC0EB;
             transform: translateX(8px);
         }
 
@@ -997,7 +997,7 @@
 
         .footer-icon {
             width: 20px;
-            color: #3b7fb8;
+            color: #5BC0EB;
             margin-right: 12px;
         }
 
@@ -1020,7 +1020,7 @@
         }
 
         .social-icons a:hover {
-            background: #3b7fb8;
+            background: #5BC0EB;
             transform: translateY(-5px);
         }
 
@@ -1069,7 +1069,7 @@
         
         .payment-success-container {
             position: relative;
-            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            background: linear-gradient(135deg, #ffffff 0%, #EAF7FC 100%);
             border-radius: 24px;
             padding: 3rem;
             max-width: 500px;
@@ -1159,7 +1159,7 @@
         
         .payment-success-container p {
             font-size: 1rem;
-            color: #64748b;
+            color: #607D8B;
             margin-bottom: 1.5rem;
             line-height: 1.6;
         }
@@ -1169,7 +1169,7 @@
             align-items: center;
             justify-content: center;
             gap: 0.75rem;
-            color: #256892;
+            color: #2383B5;
             font-weight: 600;
             margin-top: 1rem;
         }
@@ -1178,7 +1178,7 @@
             width: 20px;
             height: 20px;
             border: 3px solid #e0f2fe;
-            border-top-color: #256892;
+            border-top-color: #2383B5;
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }

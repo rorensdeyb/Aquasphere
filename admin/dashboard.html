@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" data-bs-theme="light">
 <head>
     <meta charset="UTF-8">
@@ -32,7 +32,7 @@
             left: 0;
             height: 100vh;
             width: 250px;
-            background: linear-gradient(135deg, #256892 0%, #1e4f73 100%);
+            background: linear-gradient(135deg, #2383B5 0%, #155A7A 100%);
             color: white;
             padding-top: 20px;
             box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
@@ -102,7 +102,7 @@
         .page-header h1 {
             font-size: 1.8rem;
             font-weight: 700;
-            color: #1a4a6b;
+            color: #155A7A;
             margin: 0;
         }
         
@@ -122,7 +122,7 @@
         }
         
         .stats-card.primary {
-            border-left-color: #256892;
+            border-left-color: #2383B5;
         }
         
         .stats-card.success {
@@ -141,7 +141,7 @@
             font-size: 2.5rem;
             font-weight: 700;
             margin: 0;
-            color: #1a4a6b;
+            color: #155A7A;
         }
         
         .stats-card p {
@@ -169,7 +169,7 @@
         
         .content-card h5 {
             font-weight: 600;
-            color: #1a4a6b;
+            color: #155A7A;
             margin-bottom: 20px;
         }
         
@@ -184,7 +184,7 @@
         .table thead th {
             background-color: #f8f9fa;
             font-weight: 600;
-            color: #1a4a6b;
+            color: #155A7A;
             border-bottom: 2px solid #dee2e6;
         }
         
@@ -206,12 +206,12 @@
         }
         
         .btn-primary {
-            background: linear-gradient(135deg, #256892, #1e4f73);
+            background: linear-gradient(135deg, #2383B5, #155A7A);
             border: none;
         }
         
         .btn-primary:hover {
-            background: linear-gradient(135deg, #1e4f73, #256892);
+            background: linear-gradient(135deg, #155A7A, #2383B5);
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(14, 165, 233, 0.4);
         }
@@ -230,7 +230,7 @@
         }
         
         .system-status-item:hover i {
-            color: #256892;
+            color: #2383B5;
             transform: scale(1.1);
         }
         
@@ -503,7 +503,7 @@
             const statusColors = {
                 'pending': '#fbbf24',
                 'preparing': '#3b82f6',
-                'shipped': '#256892',
+                'shipped': '#2383B5',
                 'out_for_delivery': '#8b5cf6',
                 'delivered': '#22c55e',
                 'cancelled': '#ef4444',
@@ -576,7 +576,7 @@
                 
                 return `
                     <tr>
-                        <td><a href="orders.html" style="color: #256892; text-decoration: none;"><strong>#${order.id}</strong></a></td>
+                        <td><a href="orders.html" style="color: #2383B5; text-decoration: none;"><strong>#${order.id}</strong></a></td>
                         <td>${escapeHtml(order.username || 'N/A')}</td>
                         <td><strong>₱${parseFloat(order.total_amount).toFixed(2)}</strong></td>
                         <td><span class="badge bg-${getStatusColor(status)}">${statusLabel}</span></td>

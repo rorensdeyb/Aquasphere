@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -49,7 +49,7 @@
 }
 
 .profile-container {
-    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #f0f9ff 100%);
+    background: linear-gradient(135deg, #ffffff 0%, #EAF7FC 50%, #f0f9ff 100%);
     border-radius: 28px;
     width: 100%;
     max-width: 800px;
@@ -68,7 +68,7 @@
     left: 0;
     right: 0;
     height: 6px;
-    background: linear-gradient(90deg, #1e4f73, #3b7fb8, #60a5fa, #1e4f73);
+    background: linear-gradient(90deg, #155A7A, #5BC0EB, #60a5fa, #155A7A);
     background-size: 200% 100%;
     animation: gradientShift 3s linear infinite;
     z-index: 10;
@@ -81,7 +81,7 @@
 
 /* --- Header --- */
 .profile-header {
-    background: #1e4f73; 
+    background: #155A7A; 
     padding: 2rem;
     border-radius: 28px 28px 0 0;
     color: white;
@@ -109,7 +109,7 @@
 
 .profile-section {
     margin-bottom: 2rem;
-    border-bottom: 1px solid #e2e8f0;
+    border-bottom: 1px solid #D5E5ED;
     padding-bottom: 1.5rem;
 }
 
@@ -122,7 +122,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    color: #334155;
+    color: #163B53;
     font-size: 1.1rem;
     font-weight: 700;
     margin-bottom: 1.5rem !important;
@@ -146,7 +146,7 @@
 .form-group label {
     font-weight: 600;
     font-size: 0.9rem;
-    color: #1e4f73;
+    color: #155A7A;
     margin-bottom: 0.5rem;
 }
 
@@ -161,7 +161,7 @@
 .input-wrapper .icon {
     position: absolute;
     left: 14px;
-    color: #64748b;
+    color: #607D8B;
     pointer-events: none;
     font-size: 1rem;
 }
@@ -180,7 +180,7 @@
 .form-group select {
     width: 100%;
     padding: 0.75rem 1rem 0.75rem 2.5rem; /* Left padding makes room for icon */
-    border: 1.5px solid #e2e8f0;
+    border: 1.5px solid #D5E5ED;
     border-radius: 12px;
     background: white;
     font-size: 0.95rem;
@@ -196,7 +196,7 @@
 /* --- Interaction States --- */
 .form-group input:focus {
     outline: none;
-    border-color: #3b7fb8;
+    border-color: #5BC0EB;
     box-shadow: 0 0 0 4px rgba(59, 127, 184, 0.15);
 }
 
@@ -204,7 +204,7 @@
 
 /* --- Buttons --- */
 #updateProfileBtn {
-    background: #1e4f73;
+    background: #155A7A;
     color: white;
     padding: 0.8rem 2.5rem;
     border-radius: 12px;
@@ -215,9 +215,9 @@
 }
 
 #updateProfileBtn:hover:not(:disabled) {
-    background: #256892;
+    background: #2383B5;
     transform: translateY(-2px);
-    box-shadow: 0 8px 15px rgba(30, 79, 115, 0.2);
+    box-shadow: 0 8px 15px rgba(21, 90, 122, 0.2);
 }
 
 #updateProfileBtn:disabled {
@@ -229,7 +229,7 @@
         
         /* Match registration error styling */
         .custom-error {
-            color: #e11d48;
+            color: #E53935;
             font-size: 0.8rem;
             margin-top: 6px;
             font-weight: 600;
@@ -238,7 +238,7 @@
         }
 
         .form-control.error, .form-select.error, .custom-input.error {
-            border-color: #fb7185;
+            border-color: #E53935;
         }
 
         .form-control.error:focus, .custom-input.error:focus {
@@ -247,7 +247,7 @@
 
         /* Success state for valid inputs */
         .form-control.success, .custom-input.success {
-            border-color: #256892;
+            border-color: #2383B5;
             background-color: #f0f9ff;
         }
         
@@ -275,7 +275,7 @@
         .form-group select {
             width: 100%;
             padding: 12px 16px;
-            border: 2px solid #e2e8f0;
+            border: 2px solid #D5E5ED;
             border-radius: 12px;
             font-size: 0.95rem;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -286,7 +286,7 @@
         .form-group input:focus,
         .form-group select:focus {
             outline: none;
-            border-color: #256892;
+            border-color: #2383B5;
             box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.12), 0 4px 12px rgba(14, 165, 233, 0.15);
             background: linear-gradient(to bottom, #ffffff, #f8faff);
             transform: translateY(-1px);
@@ -311,8 +311,8 @@
             display: flex;
             justify-content: flex-end;
             gap: 1rem;
-            border-top: 2px solid #f1f5f9;
-            background: linear-gradient(to bottom, #ffffff, #f8fafc);
+            border-top: 2px solid #EAF7FC;
+            background: linear-gradient(to bottom, #ffffff, #EAF7FC);
             border-radius: 0 0 28px 28px;
             position: relative;
             z-index: 1;
@@ -320,9 +320,9 @@
         
         .btn-cancel {
             padding: 12px 28px;
-            border: 2px solid #e2e8f0;
+            border: 2px solid #D5E5ED;
             background: white;
-            color: #64748b;
+            color: #607D8B;
             border-radius: 12px;
             font-weight: 600;
             font-size: 0.95rem;
@@ -335,17 +335,17 @@
         
         .btn-cancel:hover {
             border-color: #cbd5e1;
-            background: #f8fafc;
+            background: #EAF7FC;
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            color: #64748b;
+            color: #607D8B;
             text-decoration: none;
         }
         
         .btn-submit {
             padding: 12px 28px;
             border: none;
-            background: linear-gradient(135deg, #256892, #1e4f73);
+            background: linear-gradient(135deg, #2383B5, #155A7A);
             color: white;
             border-radius: 12px;
             font-weight: 600;
@@ -356,7 +356,7 @@
         }
         
         .btn-submit:hover {
-            background: linear-gradient(135deg, #1e4f73, #1a4a6b);
+            background: linear-gradient(135deg, #155A7A, #155A7A);
             transform: translateY(-2px);
             box-shadow: 0 6px 24px rgba(14, 165, 233, 0.45);
         }
@@ -367,7 +367,7 @@
         
         /* Footer Styles */
         .footer {
-            background: #0f2a3d; 
+            background: #155A7A; 
             color: white;
             padding: 80px 0 40px;
             font-family: 'Inter', sans-serif;
@@ -414,7 +414,7 @@
         }
 
         .footer-link:hover {
-            color: #3b7fb8;
+            color: #5BC0EB;
             transform: translateX(8px);
         }
 
@@ -427,7 +427,7 @@
 
         .footer-icon {
             width: 20px;
-            color: #3b7fb8;
+            color: #5BC0EB;
             margin-right: 12px;
         }
 
@@ -450,7 +450,7 @@
         }
 
         .social-icons a:hover {
-            background: #3b7fb8;
+            background: #5BC0EB;
             transform: translateY(-5px);
         }
 
@@ -506,7 +506,7 @@
         }
         
         .password-change-content {
-            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #f0f9ff 100%);
+            background: linear-gradient(135deg, #ffffff 0%, #EAF7FC 50%, #f0f9ff 100%);
             border-radius: 28px;
             width: 90%;
             max-width: 500px;
@@ -536,7 +536,7 @@
             left: 0;
             right: 0;
             height: 5px;
-            background: linear-gradient(90deg, #256892, #1e4f73, #3b7fb8, #256892, #256892);
+            background: linear-gradient(90deg, #2383B5, #155A7A, #5BC0EB, #2383B5, #2383B5);
             background-size: 200% 100%;
             animation: gradientShift 3s ease infinite;
         }
@@ -557,7 +557,7 @@
             width: 80px;
             height: 80px;
             margin: 0 auto 1.5rem;
-            background: linear-gradient(135deg, #256892, #1e4f73);
+            background: linear-gradient(135deg, #2383B5, #155A7A);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -597,7 +597,7 @@
         .password-change-content h3 {
             font-size: 1.5rem;
             font-weight: 700;
-            color: #1a4a6b;
+            color: #155A7A;
             margin-bottom: 1rem;
             position: relative;
             z-index: 1;
@@ -625,7 +625,7 @@
         .password-change-loader .loader-dot {
             width: 12px;
             height: 12px;
-            background: linear-gradient(135deg, #256892, #1e4f73);
+            background: linear-gradient(135deg, #2383B5, #155A7A);
             border-radius: 50%;
             animation: loaderDot 1.4s ease-in-out infinite;
         }
@@ -675,7 +675,7 @@
         }
         
         .address-modal {
-            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #f0f9ff 100%);
+            background: linear-gradient(135deg, #ffffff 0%, #EAF7FC 50%, #f0f9ff 100%);
             border-radius: 28px;
             width: 100%;
             max-width: 600px;
@@ -700,7 +700,7 @@
         }
         
         .modal-header {
-            background: linear-gradient(135deg, #256892 0%, #1e4f73 50%, #3b7fb8 100%);
+            background: linear-gradient(135deg, #2383B5 0%, #155A7A 50%, #5BC0EB 100%);
             padding: 2rem 2rem 1.5rem;
             border-bottom: none;
             border-radius: 28px 28px 0 0;
@@ -770,7 +770,7 @@
         }
         
         .logout-confirm-content {
-            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            background: linear-gradient(135deg, #ffffff 0%, #EAF7FC 100%);
             border-radius: 24px;
             box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1);
             max-width: 420px;
@@ -799,7 +799,7 @@
             left: 0;
             right: 0;
             height: 4px;
-            background: linear-gradient(90deg, #256892 0%, #1e4f73 50%, #1a4a6b 100%);
+            background: linear-gradient(90deg, #2383B5 0%, #155A7A 50%, #155A7A 100%);
             background-size: 200% 100%;
             animation: gradientShift 3s ease infinite;
         }
@@ -829,14 +829,14 @@
             position: absolute;
             inset: -4px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #256892, #1e4f73);
+            background: linear-gradient(135deg, #2383B5, #155A7A);
             opacity: 0.2;
             animation: iconPulseBlue 2s ease-in-out infinite;
         }
         
         .logout-confirm-icon i {
             font-size: 2.5rem;
-            color: #256892;
+            color: #2383B5;
             position: relative;
             z-index: 1;
             animation: iconBounce 0.6s ease;
@@ -857,7 +857,7 @@
         
         .logout-confirm-body p {
             font-size: 1rem;
-            color: #64748b;
+            color: #607D8B;
             line-height: 1.6;
             margin: 0;
         }
@@ -883,26 +883,26 @@
         }
         
         .btn-logout-cancel {
-            background: #f1f5f9;
+            background: #EAF7FC;
             color: #475569;
-            border: 2px solid #e2e8f0;
+            border: 2px solid #D5E5ED;
         }
         
         .btn-logout-cancel:hover {
-            background: #e2e8f0;
+            background: #D5E5ED;
             border-color: #cbd5e1;
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
         
         .btn-logout-confirm {
-            background: linear-gradient(135deg, #256892 0%, #1e4f73 100%);
+            background: linear-gradient(135deg, #2383B5 0%, #155A7A 100%);
             color: white;
             box-shadow: 0 4px 16px rgba(14, 165, 233, 0.4);
         }
         
         .btn-logout-confirm:hover {
-            background: linear-gradient(135deg, #1e4f73 0%, #1a4a6b 100%);
+            background: linear-gradient(135deg, #155A7A 0%, #155A7A 100%);
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(14, 165, 233, 0.5);
         }
@@ -925,12 +925,12 @@
         /* Override Bootstrap success alert colors to blue */
         .alert-success {
             background-color: #dbeafe !important;
-            border-color: #256892 !important;
-            color: #1a4a6b !important;
+            border-color: #2383B5 !important;
+            color: #155A7A !important;
         }
         
         .alert-success i {
-            color: #256892 !important;
+            color: #2383B5 !important;
         }
         
         @media (max-width: 768px) {
@@ -996,7 +996,7 @@
         }
         
         .address-modal {
-            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #f0f9ff 100%);
+            background: linear-gradient(135deg, #ffffff 0%, #EAF7FC 50%, #f0f9ff 100%);
             border-radius: 24px;
             width: 90%;
             max-width: 600px;
@@ -1019,7 +1019,7 @@
         }
         
         .address-modal .modal-header {
-            background: linear-gradient(135deg, #256892 0%, #1e4f73 50%, #3b7fb8 100%);
+            background: linear-gradient(135deg, #2383B5 0%, #155A7A 50%, #5BC0EB 100%);
             padding: 1.5rem 2rem;
             border-radius: 24px 24px 0 0;
             display: flex;
@@ -1065,7 +1065,7 @@
         .form-group label {
             display: block;
             font-weight: 600;
-            color: #1a4a6b;
+            color: #155A7A;
             margin-bottom: 0.5rem;
             font-size: 0.95rem;
         }
@@ -1074,7 +1074,7 @@
         .form-group select {
             width: 100%;
             padding: 10px 12px;
-            border: 2px solid #e2e8f0;
+            border: 2px solid #D5E5ED;
             border-radius: 8px;
             font-size: 0.95rem;
             transition: all 0.3s ease;
@@ -1083,7 +1083,7 @@
         .form-group input:focus,
         .form-group select:focus {
             outline: none;
-            border-color: #256892;
+            border-color: #2383B5;
             box-shadow: 0 0 0 0.2rem rgba(14, 165, 233, 0.25);
         }
         
@@ -1109,7 +1109,7 @@
         
         .label-btn {
             padding: 12px 28px;
-            border: 2px solid #e2e8f0;
+            border: 2px solid #D5E5ED;
             background: white;
             color: #94a3b8;
             border-radius: 12px;
@@ -1120,14 +1120,14 @@
         }
         
         .label-btn.active {
-            background: linear-gradient(135deg, #256892, #1e4f73);
+            background: linear-gradient(135deg, #2383B5, #155A7A);
             color: white;
-            border-color: #256892;
+            border-color: #2383B5;
         }
         
         .modal-footer {
             padding: 1.5rem 2rem;
-            border-top: 2px solid #f1f5f9;
+            border-top: 2px solid #EAF7FC;
             display: flex;
             justify-content: flex-end;
             gap: 1rem;
@@ -1135,8 +1135,8 @@
         
         .btn-cancel {
             background: white;
-            border: 2px solid #e2e8f0;
-            color: #64748b;
+            border: 2px solid #D5E5ED;
+            color: #607D8B;
             padding: 10px 20px;
             border-radius: 8px;
             font-weight: 600;
@@ -1146,13 +1146,13 @@
         }
         
         .btn-cancel:hover {
-            background: #f8fafc;
+            background: #EAF7FC;
             border-color: #cbd5e1;
             color: #475569;
         }
         
         .btn-submit {
-            background: linear-gradient(135deg, #256892, #1e4f73);
+            background: linear-gradient(135deg, #2383B5, #155A7A);
             border: none;
             color: white;
             padding: 10px 20px;
@@ -1172,7 +1172,7 @@
             width: 100%;
             height: 120px;
             background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-            border: 2px dashed #256892;
+            border: 2px dashed #2383B5;
             border-radius: 16px;
             display: flex;
             align-items: center;
@@ -1184,8 +1184,8 @@
         
         .btn-add-location {
             background: linear-gradient(135deg, #ffffff, #f8faff);
-            border: 2px solid #256892;
-            color: #256892;
+            border: 2px solid #2383B5;
+            color: #2383B5;
             padding: 12px 24px;
             border-radius: 12px;
             font-weight: 600;
@@ -1198,7 +1198,7 @@
         }
         
         .btn-add-location:hover {
-            background: linear-gradient(135deg, #256892, #1e4f73);
+            background: linear-gradient(135deg, #2383B5, #155A7A);
             color: white;
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(14, 165, 233, 0.35);
@@ -1211,7 +1211,7 @@
             overflow: hidden;
             position: relative;
             margin-bottom: 0.75rem;
-            border: 2px solid #e2e8f0;
+            border: 2px solid #D5E5ED;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
         
@@ -1243,7 +1243,7 @@
         
         .btn-map-control {
             background: white;
-            border: 2px solid #e2e8f0;
+            border: 2px solid #D5E5ED;
             color: #475569;
             padding: 8px 12px;
             border-radius: 8px;
@@ -1258,9 +1258,9 @@
         }
         
         .btn-map-control:hover {
-            background: #256892;
+            background: #2383B5;
             color: white;
-            border-color: #256892;
+            border-color: #2383B5;
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
         }
@@ -1279,7 +1279,7 @@
             z-index: 1001;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
             font-weight: 600;
-            color: #256892;
+            color: #2383B5;
         }
         
         .map-loading i {
@@ -1304,7 +1304,7 @@
         .leaflet-popup-content {
             margin: 12px 16px;
             font-weight: 600;
-            color: #1a4a6b;
+            color: #155A7A;
         }
 
         /* Profile Body Custom Styles */
@@ -1316,7 +1316,7 @@
         .profile-section-card {
             margin-bottom: 2rem;
             padding-bottom: 1.5rem;
-            border-bottom: 1px solid #e2e8f0;
+            border-bottom: 1px solid #D5E5ED;
         }
 
         .profile-section-card.no-border {
@@ -1330,7 +1330,7 @@
             gap: 0.5rem;
             font-size: 1.15rem;
             font-weight: 700;
-            color: #1a4a6b;
+            color: #155A7A;
             margin-bottom: 1.5rem !important;
         }
 
@@ -1349,7 +1349,7 @@
         .input-icon {
             position: absolute;
             left: 12px;
-            color: #64748b;
+            color: #607D8B;
             font-size: 0.95rem;
             pointer-events: none;
             z-index: 2;
@@ -1358,12 +1358,12 @@
         .custom-input {
             width: 100% !important;
             padding: 10px 12px 10px 36px !important;
-            border: 2px solid #e2e8f0 !important;
+            border: 2px solid #D5E5ED !important;
             border-radius: 8px !important;
             font-size: 0.95rem !important;
             transition: all 0.3s ease !important;
             background: white !important;
-            color: #1a4a6b !important;
+            color: #155A7A !important;
         }
 
         .custom-input::placeholder {
@@ -1372,8 +1372,8 @@
 
         .custom-input:focus {
             outline: none !important;
-            border-color: #256892 !important;
-            box-shadow: 0 0 0 3px rgba(37, 104, 146, 0.1) !important;
+            border-color: #2383B5 !important;
+            box-shadow: 0 0 0 3px rgba(35, 131, 181, 0.1) !important;
         }
 
         .custom-input:hover {
@@ -1381,14 +1381,14 @@
         }
 
         .custom-input.disabled-field {
-            background: #f1f5f9 !important;
-            color: #64748b !important;
+            background: #EAF7FC !important;
+            color: #607D8B !important;
             cursor: not-allowed !important;
             padding-left: 12px !important;
         }
 
         .custom-input.disabled-field:focus {
-            border-color: #e2e8f0 !important;
+            border-color: #D5E5ED !important;
             box-shadow: none !important;
         }
 
@@ -1414,12 +1414,12 @@
         .form-group label {
             font-weight: 600;
             font-size: 0.9rem;
-            color: #1a4a6b;
+            color: #155A7A;
             margin-bottom: 0.5rem;
         }
 
         .form-group small {
-            color: #64748b !important;
+            color: #607D8B !important;
             margin-top: 0.25rem;
         }
 
@@ -1430,7 +1430,7 @@
             background: none;
             border: none;
             cursor: pointer;
-            color: #64748b;
+            color: #607D8B;
             font-size: 0.95rem;
             padding: 0;
             z-index: 3;
@@ -1438,7 +1438,7 @@
         }
 
         .btn-password-toggle-inside:hover {
-            color: #256892;
+            color: #2383B5;
         }
 
         /* Profile Footer Custom */
@@ -1448,7 +1448,7 @@
             gap: 1rem;
             padding-top: 1.5rem;
             margin-top: 1.5rem;
-            border-top: 2px solid #e2e8f0;
+            border-top: 2px solid #D5E5ED;
         }
 
         .btn-login-submit {
@@ -1458,7 +1458,7 @@
             font-size: 0.95rem !important;
             cursor: pointer !important;
             transition: all 0.3s ease !important;
-            background: linear-gradient(135deg, #256892, #1e4f73) !important;
+            background: linear-gradient(135deg, #2383B5, #155A7A) !important;
             color: white !important;
             border: none !important;
             display: flex;
@@ -1468,7 +1468,7 @@
 
         .btn-login-submit:hover:not(:disabled) {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(37, 104, 146, 0.3) !important;
+            box-shadow: 0 4px 12px rgba(35, 131, 181, 0.3) !important;
         }
 
         .btn-login-submit:disabled {
@@ -1479,9 +1479,9 @@
 
         .btn-cancel {
             padding: 10px 24px !important;
-            border: 2px solid #e2e8f0 !important;
+            border: 2px solid #D5E5ED !important;
             background: white !important;
-            color: #64748b !important;
+            color: #607D8B !important;
             border-radius: 8px !important;
             font-weight: 600 !important;
             font-size: 0.95rem !important;
@@ -1493,7 +1493,7 @@
         }
 
         .btn-cancel:hover {
-            background: #f8fafc !important;
+            background: #EAF7FC !important;
             border-color: #cbd5e1 !important;
             color: #475569 !important;
             transform: translateY(-2px);
@@ -1527,7 +1527,7 @@
 
         /* Profile Card Custom */
         .profile-card-custom {
-            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #f0f9ff 100%);
+            background: linear-gradient(135deg, #ffffff 0%, #EAF7FC 50%, #f0f9ff 100%);
             border-radius: 16px;
             overflow: hidden;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
