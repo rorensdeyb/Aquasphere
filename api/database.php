@@ -16,6 +16,37 @@ if ($is_prod_env && !$GLOBALS['use_postgres']) {
     die("Database configuration error: PostgreSQL is required in production. Please set DATABASE_URL (or PGHOST/PGDATABASE/PGUSER/PGPASSWORD).");
 }
 
+/**
+ * Get configured admin email(s) from environment variables.
+ * Supports AQUASPHERE_ADMIN_EMAIL or ADMIN_EMAIL.
+ */
+if (!function_exists('getConfiguredAdminEmail')) {
+    function getConfiguredAdminEmail() {
+        $email = getenv('AQUASPHERE_ADMIN_EMAIL') ?: getenv('ADMIN_EMAIL');
+        if (!$email && isset($_ENV['AQUASPHERE_ADMIN_EMAIL'])) $email = $_ENV['AQUASPHERE_ADMIN_EMAIL'];
+        if (!$email && isset($_ENV['ADMIN_EMAIL'])) $email = $_ENV['ADMIN_EMAIL'];
+        if (!$email && isset($_SERVER['AQUASPHERE_ADMIN_EMAIL'])) $email = $_SERVER['AQUASPHERE_ADMIN_EMAIL'];
+        if (!$email && isset($_SERVER['ADMIN_EMAIL'])) $email = $_SERVER['ADMIN_EMAIL'];
+        return strtolower(trim((string)$email));
+    }
+}
+
+/**
+ * Check if the given email matches the configured admin email.
+ * Supports comma-separated list of emails and is case-insensitive.
+ */
+if (!function_exists('isConfiguredAdminEmail')) {
+    function isConfiguredAdminEmail($email) {
+        $adminEmailStr = getConfiguredAdminEmail();
+        if (!$adminEmailStr || !$email) {
+            return false;
+        }
+        $target = strtolower(trim((string)$email));
+        $configured = array_filter(array_map('trim', explode(',', strtolower($adminEmailStr))));
+        return in_array($target, $configured, true);
+    }
+}
+
 $GLOBALS['db_path'] = $_ENV['DATABASE_PATH'] ?? 'aquasphere.db';
 
 if ($GLOBALS['use_postgres']) {

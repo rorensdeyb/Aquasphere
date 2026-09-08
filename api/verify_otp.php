@@ -71,11 +71,14 @@ try {
 
 if ($user_data) {
     try {
+        // Check if this user should be admin based on email
+        $is_admin = isConfiguredAdminEmail($email) ? 1 : 0;
+        
         // Create the user account (password is already hashed)
         $conn = get_db_connection();
         $query = "
-            INSERT INTO users (username, password_hash, email, first_name, last_name, gender, date_of_birth, created_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+            INSERT INTO users (username, password_hash, email, first_name, last_name, gender, date_of_birth, is_admin, created_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
         ";
         
         $result = execute_sql($conn, $query, [
@@ -85,7 +88,8 @@ if ($user_data) {
             $user_data['first_name'],
             $user_data['last_name'],
             $user_data['gender'],
-            $user_data['date_of_birth']
+            $user_data['date_of_birth'],
+            $is_admin
         ]);
         
         if ($result !== false) {

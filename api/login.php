@@ -22,51 +22,22 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 require_once 'sanitize.php';
+require_once 'database.php';
 
 // Get form data
 $username = assert_safe_string($_POST['username'] ?? '', 'username', 64);
 $password = $_POST['password'] ?? '';
 $remember_me = isset($_POST['remember_me']) ? 1 : 0;
 
-// Special admin login check (BEFORE requiring database)
-if ($username === 'aquasphereph@gmail.com' && $password === '@dmin2025!') {
-    // Start session for admin
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
-    }
-    $_SESSION['user_id'] = 0; // Special admin ID
-    $_SESSION['username'] = 'admin';
-    $_SESSION['is_admin'] = 1;
-    
-    // Set remember me cookie if checked
-    if ($remember_me) {
-        $cookie_value = base64_encode('admin:' . hash('sha256', '@dmin2025!'));
-        setcookie('aquasphere_remember', $cookie_value, time() + (86400 * 30), '/'); // 30 days
-    }
-    
-    // Clear any output buffer before sending JSON
-    ob_clean();
-    echo json_encode([
-        'success' => true, 
-        'message' => 'Admin login successful!',
-        'redirect' => 'admin/dashboard.html'
-    ]);
-    ob_end_flush();
-    exit;
-}
-
-// Now require database for regular users
 try {
-    require_once 'database.php';
-    
-    // Validation for regular users
+    // Validation
     $errors = [];
     
-    // Username validation
+    // Username validation (accepts email or username)
     if (empty($username)) {
-        $errors['username'] = 'Username is required.';
-    } elseif (strlen($username) < 4 || strlen($username) > 64) {
-        $errors['username'] = 'Username must be between 4 and 64 characters long.';
+        $errors['username'] = 'Username or email is required.';
+    } elseif (strlen($username) < 4 || strlen($username) > 128) {
+        $errors['username'] = 'Username must be between 4 and 128 characters long.';
     }
     
     // Password validation
@@ -85,10 +56,10 @@ try {
         exit;
     }
     
-    // Verify user credentials
+    // Verify user credentials (support both username and email login)
     $conn = get_db_connection();
-    $query = "SELECT * FROM users WHERE username = ?";
-    $result = execute_sql($conn, $query, [$username]);
+    $query = "SELECT * FROM users WHERE username = ? OR email = ?";
+    $result = execute_sql($conn, $query, [$username, $username]);
     
     if ($GLOBALS['use_postgres']) {
         $user = pg_fetch_assoc($result);
@@ -98,16 +69,7 @@ try {
     
     // Log for debugging
     if ($user) {
-        error_log("Login attempt - Username: " . $username . ", User ID: " . $user['id'] . ", Email: " . ($user['email'] ?? 'NOT FOUND'));
-        error_log("Login attempt - Stored password hash length: " . strlen($user['password_hash']));
-        error_log("Login attempt - Stored password hash (first 20 chars): " . substr($user['password_hash'], 0, 20));
-        $verify_result = password_verify($password, $user['password_hash']);
-        error_log("Login attempt - Password verify result: " . ($verify_result ? 'TRUE' : 'FALSE'));
-        
-        // Also try to verify with a test hash to see if password_verify is working
-        $test_hash = password_hash('test', PASSWORD_DEFAULT);
-        $test_verify = password_verify('test', $test_hash);
-        error_log("Login attempt - Test password_verify function: " . ($test_verify ? 'WORKING' : 'BROKEN'));
+        error_log("Login attempt - Username: " . $username . ", User ID: " . $user['id']);
     } else {
         error_log("Login attempt - User not found for username: " . $username);
     }
@@ -124,6 +86,13 @@ try {
             exit;
         }
 
+        // Auto-promote admin email users
+        $is_admin = (int)($user['is_admin'] ?? 0);
+        if ($is_admin === 0 && isConfiguredAdminEmail($user['email'] ?? '')) {
+            $is_admin = 1;
+            execute_sql($conn, "UPDATE users SET is_admin = 1 WHERE id = ?", [$user['id']]);
+        }
+
         // Update last login time
         $updateQuery = "UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE id = ?";
         execute_sql($conn, $updateQuery, [$user['id']]);
@@ -134,7 +103,7 @@ try {
         }
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['username'] = $user['username'];
-        $_SESSION['is_admin'] = $user['is_admin'] ?? 0;
+        $_SESSION['is_admin'] = $is_admin;
         
         // Set remember me cookie if checked
         if ($remember_me) {
@@ -145,7 +114,7 @@ try {
         close_connection($conn);
         
         // Check if user is admin and redirect accordingly
-        $redirect_url = ($user['is_admin'] ?? 0) ? 'admin/dashboard.html' : 'dashboard.html';
+        $redirect_url = $is_admin ? 'admin/dashboard.html' : 'dashboard.html';
         
         // Clear any output buffer before sending JSON
         ob_clean();
