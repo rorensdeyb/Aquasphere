@@ -178,7 +178,7 @@ if ($email_sent) {
 } else {
     // Email service not configured - still allow registration but show OTP in response for development
     // In production, this should be an error, but for development we'll proceed
-    $is_development = empty(get_system_setting('brevo_api_key'));
+    $is_development = empty(getenv('BREVO_API_KEY'));
     
     if ($is_development) {
         // Development mode: return OTP in response (will be shown on verify page)

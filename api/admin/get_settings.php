@@ -12,12 +12,13 @@ require_once '../sanitize.php';
 
 $settings = get_all_system_settings();
 
+// Brevo settings come from environment variables, not database
+$brevo_api_key = getenv('BREVO_API_KEY') ?: '';
+$brevo_sender_email = getenv('BREVO_SENDER_EMAIL') ?: '';
+$brevo_sender_name = getenv('BREVO_SENDER_NAME') ?: 'AquaSphere';
+
 // Set defaults for missing settings
 $defaults = [
-    'brevo_api_key' => '',
-    'brevo_sender_email' => '',
-    'brevo_sender_name' => 'AquaSphere',
-    'enable_email_notifications' => '0',
     'site_name' => 'AquaSphere',
     'site_description' => 'Clean water delivery service',
     'max_users' => '1000',
@@ -33,10 +34,11 @@ foreach ($defaults as $key => $default_value) {
     }
 }
 
-// Don't return the API key value for security (just indicate if it exists)
-if (isset($settings['brevo_api_key']) && !empty($settings['brevo_api_key'])) {
-    $settings['brevo_api_key'] = '***SAVED***'; // Placeholder to indicate key exists
-}
+// Add Brevo settings from environment variables
+$settings['brevo_api_key'] = !empty($brevo_api_key) ? '***SAVED***' : '';
+$settings['brevo_sender_email'] = $brevo_sender_email;
+$settings['brevo_sender_name'] = $brevo_sender_name;
+$settings['brevo_config_source'] = 'environment'; // Indicate settings come from env vars
 
 echo json_encode([
     'success' => true,

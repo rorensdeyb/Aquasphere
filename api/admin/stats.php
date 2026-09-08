@@ -110,10 +110,9 @@ if ($result !== false) {
     }
 }
 
-// Check email configuration
-$email_configured = !empty(get_system_setting('brevo_api_key')) && 
-                    !empty(get_system_setting('brevo_sender_email')) &&
-                    get_system_setting('enable_email_notifications', '0') === '1';
+// Check email configuration (from environment variables)
+$email_configured = !empty(getenv('BREVO_API_KEY')) && 
+                    !empty(getenv('BREVO_SENDER_EMAIL'));
 
 close_connection($conn);
 

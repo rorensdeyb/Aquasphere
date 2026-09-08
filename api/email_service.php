@@ -79,29 +79,19 @@ class BrevoEmailService {
 
 /**
  * Get configured Brevo email service
+ * Reads from environment variables (BREVO_API_KEY, BREVO_SENDER_EMAIL, BREVO_SENDER_NAME)
  */
 function get_brevo_service() {
-    // Force fresh database connection to avoid caching issues
-    $api_key = get_system_setting('brevo_api_key');
-    $sender_email = get_system_setting('brevo_sender_email');
-    $sender_name = get_system_setting('brevo_sender_name', 'AquaSphere');
-    $enable_notifications = get_system_setting('enable_email_notifications', '0');
+    $api_key = getenv('BREVO_API_KEY') ?: '';
+    $sender_email = getenv('BREVO_SENDER_EMAIL') ?: '';
+    $sender_name = getenv('BREVO_SENDER_NAME') ?: 'AquaSphere';
     
-    // Check both '1' and 'true' for compatibility
-    $enable_notifications = ($enable_notifications === '1' || $enable_notifications === 'true' || $enable_notifications === 1 || $enable_notifications === true);
-    
-    // Debug logging (remove in production)
-    error_log("Brevo service check - API key: " . (!empty($api_key) ? "SET (" . strlen($api_key) . " chars)" : "NOT SET"));
-    error_log("Brevo service check - Sender email: " . ($sender_email ?: "NOT SET"));
-    error_log("Brevo service check - Enable notifications raw: " . get_system_setting('enable_email_notifications', '0'));
-    error_log("Brevo service check - Enable notifications: " . ($enable_notifications ? "YES" : "NO"));
-    
-    if (!$enable_notifications || !$api_key || !$sender_email) {
-        error_log("Brevo service not available - enable: " . ($enable_notifications ? "yes" : "no") . ", api_key: " . (!empty($api_key) ? "yes" : "no") . ", sender_email: " . (!empty($sender_email) ? "yes" : "no"));
+    if (!$api_key || !$sender_email) {
+        error_log("Brevo service not available - API key: " . (!empty($api_key) ? "SET" : "NOT SET") . ", sender email: " . (!empty($sender_email) ? "SET" : "NOT SET"));
         return null;
     }
     
-    error_log("Brevo service initialized successfully");
+    error_log("Brevo service initialized from environment variables");
     return new BrevoEmailService($api_key, $sender_email, $sender_name);
 }
 

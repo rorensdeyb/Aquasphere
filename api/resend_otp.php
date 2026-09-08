@@ -82,7 +82,7 @@ $username = $_SESSION['pending_username'] ?? $pending_otp['username'];
 $email_sent = send_otp_email_brevo($email, $otp_code, $username);
 
 // Check if in development mode
-$is_development = empty(get_system_setting('brevo_api_key'));
+$is_development = empty(getenv('BREVO_API_KEY'));
 
 // Clear any output buffer before sending JSON
 ob_clean();

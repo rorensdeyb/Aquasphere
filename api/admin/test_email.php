@@ -21,18 +21,18 @@ if (!$data) {
     exit;
 }
 
-// Get test email from settings or use default
-$test_email = get_system_setting('brevo_test_email', $data['brevo_sender_email'] ?? 'test@example.com');
+// Get test email from request or use default
+$test_email = $data['brevo_sender_email'] ?? 'test@example.com';
 
-// Use provided API key or get from settings
-$api_key = $data['brevo_api_key'] ?? get_system_setting('brevo_api_key');
-$sender_email = $data['brevo_sender_email'] ?? get_system_setting('brevo_sender_email');
-$sender_name = $data['brevo_sender_name'] ?? get_system_setting('brevo_sender_name', 'AquaSphere');
+// Use environment variables for Brevo configuration
+$api_key = getenv('BREVO_API_KEY') ?: '';
+$sender_email = getenv('BREVO_SENDER_EMAIL') ?: '';
+$sender_name = getenv('BREVO_SENDER_NAME') ?: 'AquaSphere';
 
 if (!$api_key || !$sender_email) {
     echo json_encode([
         'success' => false,
-        'message' => 'Please provide API key and sender email to test'
+        'message' => 'Brevo not configured. Set BREVO_API_KEY and BREVO_SENDER_EMAIL environment variables.'
     ]);
     exit;
 }
