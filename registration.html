@@ -24,10 +24,6 @@
             box-sizing: border-box;
         }
         
-        html, body {
-            height: 100%;
-        }
-        
         body {
             font-family: Inter, system-ui, Segoe UI, sans-serif !important;
             background: #ffffff;
@@ -489,14 +485,15 @@
                             </div>
                             
                             <div class="col-md-6">
-                            <label for="birthday" class="form-label small fw-bold text-uppercase">Birthday</label>
-                            <div class="input-group">
-                                <input type="date" class="form-control custom-input border-end-0" id="birthday" name="birthday" required>
-                                <button class="btn btn-outline-light-blue date-icon-btn border-start-0" type="button" id="datePickerBtn">
-                                    <i class="fas fa-calendar-alt text-muted"></i>
-                                </button>
+                                <label for="birthday" class="form-label small fw-bold text-uppercase">Birthday</label>
+                                <div class="input-group">
+                                    <input type="date" class="form-control custom-input border-end-0" id="birthday" name="birthday" required>
+                                    <button class="btn btn-outline-light-blue date-icon-btn border-start-0" type="button" id="datePickerBtn">
+                                        <i class="fas fa-calendar-alt text-muted"></i>
+                                    </button>
+                                </div>
+                                <div class="custom-error" id="birthday-error">Birthday is required.</div>
                             </div>
-                            <div class="custom-error" id="birthday-error">Birthday is required.</div>
                         </div>
                         
                         <div class="row g-3 mb-4">
