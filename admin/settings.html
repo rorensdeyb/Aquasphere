@@ -249,68 +249,21 @@
             <h1><i class="fas fa-cog me-2"></i>System Settings</h1>
         </div>
 
-        <form id="settingsForm">
-            <!-- Email Settings (Brevo API) -->
-            <div class="settings-card">
-                <h5><i class="fas fa-envelope me-2"></i>Email Settings (Brevo API)</h5>
-                
-                <div class="alert alert-info">
-                    <i class="fas fa-info-circle me-2"></i>
-                    <strong>Brevo API Configuration:</strong> Configure your Brevo (formerly Sendinblue) API settings for sending emails. 
-                    Get your API key from your <a href="https://app.brevo.com/settings/keys/api" target="_blank" class="alert-link">Brevo dashboard</a>.
-                </div>
-                
-                <div class="row mb-5">
-                    <div class="col-md-12">
-                        <label for="brevo_api_key" class="form-label">Brevo API Key</label>
-                        <div class="input-group">
-                            <input type="password" class="form-control" id="brevo_api_key" name="brevo_api_key" 
-                                   placeholder="Enter your Brevo API key">
-                            <span class="input-group-text" id="api-key-status" style="display: none;">
-                                <i class="fas fa-check-circle text-success" title="API key is saved"></i>
-                            </span>
-                        </div>
-                        <small class="text-muted" id="api-key-help">Leave empty to keep current API key</small>
-                    </div>
-                </div>
-                
-                <div class="row mb-5">
-                    <div class="col-md-6">
-                        <label for="brevo_sender_email" class="form-label">Sender Email</label>
-                        <input type="email" class="form-control" id="brevo_sender_email" name="brevo_sender_email" 
-                               placeholder="noreply@aquasphere.com" required>
-                        <small class="text-muted">Email address to send from (must be verified in Brevo)</small>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="brevo_sender_name" class="form-label">Sender Name</label>
-                        <input type="text" class="form-control" id="brevo_sender_name" name="brevo_sender_name" 
-                               placeholder="AquaSphere" required>
-                        <small class="text-muted">Display name for email sender</small>
-                    </div>
-                </div>
-                
-                <div class="mb-5">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="enable_email_notifications" name="enable_email_notifications" value="1">
-                        <label class="form-check-label" for="enable_email_notifications">
-                            Enable Email Notifications
-                        </label>
-                    </div>
-                </div>
-                
-                <div class="mb-5">
-                    <button type="button" class="btn btn-test" id="testEmailBtn">
-                        <i class="fas fa-paper-plane me-2"></i>Test Email Configuration
-                    </button>
-                </div>
+        <div class="settings-card">
+            <h5><i class="fas fa-envelope me-2"></i>Email Configuration</h5>
+            
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle me-2"></i>
+                <strong>Brevo API Configuration:</strong> Email settings are configured via environment variables on the server.
+                Contact your administrator to update <code>BREVO_API_KEY</code>, <code>BREVO_SENDER_EMAIL</code>, and <code>BREVO_SENDER_NAME</code>.
             </div>
+        </div>
 
-            <div class="d-flex justify-content-end mt-5">
-                <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-save me-2"></i>Save Settings
-                </button>
-            </div>
-        </form>
+        <div class="d-flex justify-content-end mt-5">
+            <button type="button" class="btn btn-primary" onclick="window.location.href='dashboard.html'">
+                <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+            </button>
+        </div>
     </div>
 
     <!-- Toast Notification -->
@@ -327,129 +280,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
     <script>
-        function loadEmailSettings() {
-            fetch('../api/admin/get_settings.php')
-                .then(res => res.json())
-                .then(data => {
-                    if (!data.success) return;
-                    if (data.settings.brevo_api_key) {
-                        document.getElementById('brevo_api_key').placeholder = 'API key is saved - enter new key to change';
-                        document.getElementById('api-key-status').style.display = 'block';
-                        document.getElementById('api-key-help').textContent = 'API key is saved - enter new key to change';
-                        document.getElementById('api-key-help').className = 'text-success';
-                    }
-                    document.getElementById('brevo_sender_email').value = data.settings.brevo_sender_email || '';
-                    document.getElementById('brevo_sender_name').value = data.settings.brevo_sender_name || 'AquaSphere';
-                    document.getElementById('enable_email_notifications').checked =
-                        data.settings.enable_email_notifications === '1' || data.settings.enable_email_notifications === 'true';
-                })
-                .catch(err => console.error('Error loading settings:', err));
-        }
-
-        // API key input handler
-        document.getElementById('brevo_api_key').addEventListener('input', function() {
-            if (this.value.length > 0) {
-                document.getElementById('api-key-status').style.display = 'block';
-                document.getElementById('api-key-help').textContent = 'New API key entered';
-                document.getElementById('api-key-help').className = 'text-info';
-            } else {
-                if (this.placeholder.includes('API key is saved')) {
-                    document.getElementById('api-key-status').style.display = 'block';
-                    document.getElementById('api-key-help').textContent = 'API key is saved - enter new key to change';
-                    document.getElementById('api-key-help').className = 'text-success';
-                } else {
-                    document.getElementById('api-key-status').style.display = 'none';
-                    document.getElementById('api-key-help').textContent = 'Enter Brevo API key';
-                    document.getElementById('api-key-help').className = 'text-muted';
-                }
-            }
-        });
-
-        // Test email button
-        document.getElementById('testEmailBtn').addEventListener('click', function() {
-            const btn = this;
-            const originalText = btn.innerHTML;
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Testing...';
-            
-            fetch('../api/admin/test_email.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    brevo_api_key: document.getElementById('brevo_api_key').value,
-                    brevo_sender_email: document.getElementById('brevo_sender_email').value,
-                    brevo_sender_name: document.getElementById('brevo_sender_name').value
-                })
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    showToast('success', 'Email Test Successful', data.message || 'Test email sent successfully!');
-                } else {
-                    showToast('error', 'Email Test Failed', data.message || 'Failed to send test email.');
-                }
-            })
-            .catch(() => showToast('error', 'Error', 'An error occurred while testing email configuration.'))
-            .finally(() => {
-                btn.disabled = false;
-                btn.innerHTML = originalText;
-            });
-        });
-
-        // Form submission
-        document.getElementById('settingsForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const data = {
-                brevo_api_key: document.getElementById('brevo_api_key').value,
-                brevo_sender_email: document.getElementById('brevo_sender_email').value,
-                brevo_sender_name: document.getElementById('brevo_sender_name').value,
-                enable_email_notifications: document.getElementById('enable_email_notifications').checked ? '1' : '0'
-            };
-            
-            fetch('../api/admin/save_settings.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            })
-            .then(res => res.json())
-            .then(resp => {
-                if (resp.success) {
-                    showToast('success', 'Settings Saved', resp.message || 'Settings saved successfully');
-                    if (data.brevo_api_key) {
-                        document.getElementById('brevo_api_key').value = '';
-                        document.getElementById('brevo_api_key').placeholder = 'API key is saved - enter new key to change';
-                        document.getElementById('api-key-status').style.display = 'block';
-                        document.getElementById('api-key-help').textContent = 'API key is saved - enter new key to change';
-                        document.getElementById('api-key-help').className = 'text-success';
-                    }
-                    loadEmailSettings();
-                } else {
-                    showToast('error', 'Save Failed', resp.message || 'Failed to save settings');
-                }
-            })
-            .catch(() => showToast('error', 'Error', 'An error occurred while saving settings.'));
-        });
-
-        // Toast notification function
-        function showToast(type, title, message) {
-            const toast = document.getElementById('toast');
-            const toastTitle = document.getElementById('toast-title');
-            const toastBody = document.getElementById('toast-body');
-            
-            toastTitle.textContent = title;
-            toastBody.textContent = message;
-            
-            toast.className = 'toast';
-            if (type === 'success') toast.classList.add('bg-success', 'text-white');
-            else if (type === 'error') toast.classList.add('bg-danger', 'text-white');
-            else toast.classList.add('bg-info', 'text-white');
-            
-            new bootstrap.Toast(toast).show();
-        }
-
-        // Init
-        loadEmailSettings();
+        // Settings page - Email configuration now managed via environment variables
     </script>
 </body>
 </html>
