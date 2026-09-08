@@ -876,7 +876,7 @@
 
                     <form method="post" id="loginForm" novalidate>
                         <div class="mb-3">
-                            <label for="username" class="form-label">Username</label>
+                            <label for="username" class="form-label fw-semibold">Username</label>
                             <div class="input-group-custom">
                                 <i class="fas fa-user input-icon"></i>
                                 <input type="text" class="form-control custom-input" id="username" name="username" 
@@ -886,7 +886,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="password" class="form-label">Password</label>
+                            <label for="password" class="form-label fw-semibold">Password</label>
                             <div class="input-group-custom">
                                 <i class="fas fa-lock input-icon"></i>
                                 <input type="password" class="form-control custom-input" id="password" name="password" 
@@ -898,11 +898,7 @@
                             <div class="custom-error" id="password-error" style="display: none;">Password is required.</div>
                         </div>
 
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="rememberMe">
-                                <label class="form-check-label small text-muted" for="rememberMe">Remember me</label>
-                            </div>
+                        <div class="d-flex justify-content-end align-items-center mb-4">
                             <a href="#" class="forgot-link" onclick="showForgotPassword(); return false;">Forgot Password?</a>
                         </div>
 
@@ -915,6 +911,11 @@
                     </form>
 
                     <div class="register-footer text-center mt-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <hr class="flex-grow-1 border-secondary">
+                            <span class="px-3 text-muted small fw-semibold">OR</span>
+                            <hr class="flex-grow-1 border-secondary">
+                        </div>
                         <p class="mb-0">New to AquaSphere? <a href="registration.html" class="register-text">Create Account</a></p>
                     </div>
                 </div>
