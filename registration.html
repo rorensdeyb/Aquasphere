@@ -215,7 +215,7 @@
         }
 
         /* Flatten the left side of the toggle button */
-        .input-group > .btn-password-toggle.border-start-0 {
+        .input-group > .btn-password-toggle {
             border-top-left-radius: 0 !important;
             border-bottom-left-radius: 0 !important;
         }
@@ -228,7 +228,7 @@
         .input-group:focus-within .btn-password-toggle,
         .input-group:focus-within .date-icon-btn {
             border-color: #2383B5;
-            border-left-color: #2383B5;
+            border-left: 2px solid #2383B5;
         }
 
         .btn-password-toggle, .date-icon-btn {
@@ -282,6 +282,7 @@
         .form-select.error + .btn-password-toggle,
         .form-select.error + .date-icon-btn {
             border-color: #f59ca8 !important;
+            border-left: 2px solid #f59ca8 !important;
         }
 
         /* Equalize error-box gaps: when an error is visible in a row,
@@ -665,7 +666,7 @@
                                 <label for="birthday" class="form-label small fw-bold text-uppercase">Birthday</label>
                                 <div class="input-group">
                                     <input type="date" class="form-control custom-input border-end-0" id="birthday" name="birthday" required>
-                                    <button class="btn btn-outline-light-blue date-icon-btn border-start-0" type="button" id="datePickerBtn">
+                                    <button class="btn btn-outline-light-blue date-icon-btn" type="button" id="datePickerBtn">
                                         <i class="fas fa-calendar-alt text-muted"></i>
                                     </button>
                                 </div>
@@ -679,7 +680,7 @@
                                 <div class="input-group">
                                     <input type="password" class="form-control custom-input border-end-0" id="password" name="password" 
                                            placeholder="Min. 8 characters" required>
-                                    <button class="btn btn-password-toggle border-start-0" type="button" id="togglePassword">
+                                    <button class="btn btn-password-toggle" type="button" id="togglePassword">
                                         <i class="fas fa-eye text-muted" id="passwordIcon"></i>
                                     </button>
                                 </div>
@@ -691,7 +692,7 @@
                                 <div class="input-group">
                                     <input type="password" class="form-control custom-input border-end-0" id="confirm_password" name="confirm_password" 
                                            placeholder="Repeat password" required>
-                                    <button class="btn btn-password-toggle border-start-0" type="button" id="toggleConfirmPassword">
+                                    <button class="btn btn-password-toggle" type="button" id="toggleConfirmPassword">
                                         <i class="fas fa-eye text-muted" id="confirmPasswordIcon"></i>
                                     </button>
                                 </div>
