@@ -182,6 +182,27 @@
             outline: none;
         }
 
+        /* --- Left Icon Input Groups (match login page) --- */
+        .input-group-custom {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 16px;
+            color: #2383B5;
+            font-size: 1rem;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        .custom-input.has-left-icon {
+            padding-left: 48px !important;
+            width: 100%;
+        }
+
         /* --- Input Groups (Password & Date) --- */
         .input-group .custom-input {
             z-index: 1;
@@ -308,6 +329,68 @@
         .login-link-container a:hover {
             text-decoration: underline;
         }
+
+        /* --- Terms Notice & Login Redirect --- */
+        .terms-notice {
+            color: #607D8B;
+            font-size: 0.9rem;
+        }
+
+        .terms-notice .terms-link {
+            color: #2383B5;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .terms-notice .terms-link:hover {
+            color: #155A7A;
+            text-decoration: underline;
+        }
+
+        .login-redirect {
+            color: #607D8B;
+            font-size: 0.95rem;
+            margin-bottom: 0;
+        }
+
+        /* --- Terms & Privacy Modal (adapted from BondNest) --- */
+        .terms-overlay{position:fixed;inset:0;z-index:10050;display:none;align-items:center;justify-content:center;background:rgba(13,61,82,0.55);backdrop-filter:blur(3px);opacity:0;transition:opacity .25s ease;padding:16px}.terms-overlay.is-open{display:flex;opacity:1}
+        .terms-panel{display:flex;flex-direction:column;width:100%;max-width:34rem;max-height:min(88vh,40rem);background:#f8fafb;border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,0.18);overflow:hidden;border:1px solid rgba(35,131,181,0.10)}
+        .terms-header{background:linear-gradient(135deg,#EAF7FC 0%,#D5E5ED 100%);border-bottom:1px solid rgba(35,131,181,0.12);padding:18px 22px;display:flex;align-items:center;justify-content:space-between}
+        .terms-header-left{display:flex;align-items:center;gap:10px}
+        .terms-header-icon{width:36px;height:36px;background:linear-gradient(135deg,#2383B5,#155A7A);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:17px}
+        .terms-header h2{font-size:1.05rem;font-weight:700;color:#155A7A;margin:0}
+        .terms-close-btn{background:none;border:none;font-size:18px;color:#607D8B;cursor:pointer;padding:4px 8px;border-radius:6px;transition:all .2s;line-height:1}.terms-close-btn:hover{background:rgba(35,131,181,0.08);color:#2383B5}
+        .terms-progress{padding:10px 22px 0;display:flex;align-items:center;gap:8px}
+        .terms-progress-bar{flex:1;height:3px;background:rgba(35,131,181,0.10);border-radius:2px;overflow:hidden}
+        .terms-progress-fill{height:100%;width:0%;background:linear-gradient(90deg,#2383B5,#5BC0EB);border-radius:2px;transition:width .3s ease}
+        .terms-progress-text{font-size:.7rem;color:#607D8B;font-weight:500;white-space:nowrap}
+        .terms-body{flex:1;min-height:0;overflow-y:auto;padding:14px 22px 18px;scroll-behavior:smooth}
+        .terms-body::-webkit-scrollbar{width:5px}.terms-body::-webkit-scrollbar-track{background:rgba(35,131,181,0.04)}.terms-body::-webkit-scrollbar-thumb{background:rgba(35,131,181,0.2);border-radius:3px}
+        .terms-intro{font-size:.88rem;color:#163B53;margin:0 0 14px;line-height:1.55}
+        .terms-hint{font-size:.72rem;color:#2383B5;font-style:italic;margin-bottom:14px;display:flex;align-items:center;gap:5px}.terms-hint i{font-size:.68rem}
+        .terms-section{background:#fff;border-radius:10px;padding:16px 18px;margin-bottom:12px;border-left:3px solid #2383B5;box-shadow:0 1px 4px rgba(35,131,181,0.06);transition:border-color .3s}
+        .terms-section.scrolled-past{border-left-color:#5BC0EB}
+        .terms-section:last-child{margin-bottom:0}
+        .terms-section-head{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+        .terms-section-icon{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+        .terms-section-icon--aqua{background:rgba(35,131,181,0.10);color:#2383B5}
+        .terms-section-icon--amber{background:rgba(200,140,40,0.12);color:#9A7A20}
+        .terms-section-title{font-size:.92rem;font-weight:600;color:#163B53;flex:1;min-width:0;margin:0}
+        .terms-tag{font-size:.62rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;padding:2px 8px;border-radius:4px;flex-shrink:0}
+        .terms-tag--required{background:rgba(35,131,181,0.10);color:#2383B5}
+        .terms-tag--note{background:rgba(200,140,40,0.12);color:#9A7A20}
+        .terms-section-body{font-size:.82rem;line-height:1.6;color:#455858;margin:0}
+        .terms-footer{border-top:1px solid rgba(35,131,181,0.10);padding:16px 22px;background:#EAF7FC;display:flex;flex-direction:column;gap:14px}
+        .terms-check-label{display:flex;align-items:flex-start;gap:10px;font-size:.82rem;color:#163B53;cursor:pointer;line-height:1.45}
+        .terms-checkbox{accent-color:#2383B5;width:16px;height:16px;margin-top:2px;flex-shrink:0;cursor:pointer}
+        .terms-actions{display:flex;gap:10px;justify-content:flex-end}
+        .terms-btn{padding:9px 20px;border-radius:8px;font-size:.84rem;font-weight:600;cursor:pointer;transition:all .2s;border:none}
+        .terms-btn--cancel{background:#fff;color:#607D8B;border:1px solid #D5E5ED}.terms-btn--cancel:hover{background:#EAF7FC;border-color:#b8d2e0}
+        .terms-btn--agree{background:linear-gradient(135deg,#2383B5,#155A7A);color:#fff}.terms-btn--agree:hover{filter:brightness(1.1)}
+        .terms-btn--agree:disabled{background:#9DC3D9;color:rgba(255,255,255,0.85);cursor:not-allowed;opacity:.7}
+        html.terms-modal-open,body.terms-modal-open{overflow:hidden}
+        @media(max-width:480px){.terms-panel{max-height:min(92vh,100%);border-radius:10px}.terms-actions{flex-direction:column-reverse}.terms-btn{width:100%;text-align:center}}
 
         /* --- Responsive Adjustments --- */
         @media (max-width: 768px) {
@@ -467,16 +550,22 @@
                         <div class="row g-3 mb-3">
                             <div class="col-md-6">
                                 <label for="username" class="form-label small fw-bold text-uppercase">Username</label>
-                                <input type="text" class="form-control custom-input" id="username" name="username" 
-                                       placeholder="Choose a username" autocomplete="off" required>
+                                <div class="input-group-custom">
+                                    <i class="fas fa-user input-icon"></i>
+                                    <input type="text" class="form-control custom-input has-left-icon" id="username" name="username" 
+                                           placeholder="Choose a username" autocomplete="off" required>
+                                </div>
                                 <div class="custom-error" id="username-error">Username is required.</div>
                                 <div class="custom-error" id="username-unique-error" style="display: none;">Username already exists.</div>
                             </div>
                             
                             <div class="col-md-6">
                                 <label for="email" class="form-label small fw-bold text-uppercase">Email Address</label>
-                                <input type="email" class="form-control custom-input" id="email" name="email" 
-                                       placeholder="name@example.com" autocomplete="off" required>
+                                <div class="input-group-custom">
+                                    <i class="fas fa-envelope input-icon"></i>
+                                    <input type="email" class="form-control custom-input has-left-icon" id="email" name="email" 
+                                           placeholder="name@example.com" autocomplete="off" required>
+                                </div>
                                 <div class="custom-error" id="email-error">Email is required.</div>
                                 <div class="custom-error" id="email-unique-error" style="display: none;">Email already exists.</div>
                             </div>
@@ -485,15 +574,21 @@
                         <div class="row g-3 mb-3">
                             <div class="col-md-6">
                                 <label for="first_name" class="form-label small fw-bold text-uppercase">First Name</label>
-                                <input type="text" class="form-control custom-input" id="first_name" name="first_name" 
-                                       placeholder="John" required>
+                                <div class="input-group-custom">
+                                    <i class="fas fa-id-card input-icon"></i>
+                                    <input type="text" class="form-control custom-input has-left-icon" id="first_name" name="first_name" 
+                                           placeholder="John" required>
+                                </div>
                                 <div class="custom-error" id="first_name-error">First name is required.</div>
                             </div>
                             
                             <div class="col-md-6">
                                 <label for="last_name" class="form-label small fw-bold text-uppercase">Last Name</label>
-                                <input type="text" class="form-control custom-input" id="last_name" name="last_name" 
-                                       placeholder="Doe" required>
+                                <div class="input-group-custom">
+                                    <i class="fas fa-id-card input-icon"></i>
+                                    <input type="text" class="form-control custom-input has-left-icon" id="last_name" name="last_name" 
+                                           placeholder="Doe" required>
+                                </div>
                                 <div class="custom-error" id="last_name-error">Last name is required.</div>
                             </div>
                         </div>
@@ -501,11 +596,14 @@
                         <div class="row g-3 mb-3">
                             <div class="col-md-6">
                                 <label for="gender" class="form-label small fw-bold text-uppercase">Gender</label>
-                                <select class="form-select custom-input" id="gender" name="gender" required>
-                                    <option value="" disabled selected>Select Gender</option>
-                                    <option value="male">Male</option>
-                                    <option value="female">Female</option>
-                                </select>
+                                <div class="input-group-custom">
+                                    <i class="fas fa-venus-mars input-icon"></i>
+                                    <select class="form-select custom-input has-left-icon" id="gender" name="gender" required>
+                                        <option value="" disabled selected>Select Gender</option>
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                    </select>
+                                </div>
                                 <div class="custom-error" id="gender-error">Gender is required.</div>
                             </div>
                             
@@ -554,14 +652,89 @@
                         </div>
                     </form>
                     
-                    <div class="text-center mt-4 pt-2 border-top">
-                        <p class="text-muted small">Already have an account? <a href="login.html" class="text-aqua fw-bold text-decoration-none">Log in here</a></p>
+                    <div class="text-center mt-4 pt-3 border-top">
+                        <p class="terms-notice text-center mb-2">By joining, you agree to our <a href="#" class="terms-link">Terms</a> and <a href="#" class="terms-link">Privacy Policy</a></p>
+                        <p class="login-redirect">Already have an account? <a href="login.html" class="text-aqua fw-bold text-decoration-none">Log in here</a></p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+    <!-- Terms & Privacy Modal -->
+    <div id="termsPrivacyModal" class="terms-overlay" role="dialog" aria-modal="true" aria-labelledby="termsModalTitle" aria-hidden="true">
+        <div class="terms-panel" tabindex="-1">
+            <div class="terms-header">
+                <div class="terms-header-left">
+                    <div class="terms-header-icon"><i class="fas fa-file-contract"></i></div>
+                    <h2 id="termsModalTitle">Terms & Privacy Agreement</h2>
+                </div>
+                <button class="terms-close-btn" id="termsCloseBtn" aria-label="Close"><i class="fas fa-times"></i></button>
+            </div>
+
+            <div class="terms-progress">
+                <div class="terms-progress-bar"><div class="terms-progress-fill" id="termsProgressFill"></div></div>
+                <span class="terms-progress-text" id="termsProgressText">0% read</span>
+            </div>
+
+            <div class="terms-body" id="termsScrollArea">
+                <p class="terms-intro">Before creating your AquaSphere account, please review and agree to the following terms and policies.</p>
+                <p class="terms-hint"><i class="fas fa-arrow-down"></i> Scroll to read all sections</p>
+
+                <div class="terms-sections">
+
+                    <section class="terms-section" data-section="1">
+                        <div class="terms-section-head">
+                            <div class="terms-section-icon terms-section-icon--aqua"><i class="fas fa-scroll"></i></div>
+                            <h3 class="terms-section-title">Terms of Service</h3>
+                            <span class="terms-tag terms-tag--required">Required</span>
+                        </div>
+                        <p class="terms-section-body">By creating an account on AquaSphere, you agree to use the platform only for lawful purposes and in accordance with these Terms. You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account, including all water orders placed. AquaSphere reserves the right to suspend or terminate accounts that violate these Terms, engage in fraudulent activity, or compromise the security of the platform. You must be at least 18 years of age to use AquaSphere. We reserve the right to modify or discontinue any part of the service at any time with reasonable notice.</p>
+                    </section>
+
+                    <section class="terms-section" data-section="2">
+                        <div class="terms-section-head">
+                            <div class="terms-section-icon terms-section-icon--aqua"><i class="fas fa-shield-halved"></i></div>
+                            <h3 class="terms-section-title">Privacy Policy</h3>
+                            <span class="terms-tag terms-tag--required">Required</span>
+                        </div>
+                        <p class="terms-section-body">AquaSphere collects personal information you provide during registration, including your name, email address, date of birth, and gender, as well as your delivery address and order history. This data is used to operate and improve the AquaSphere experience, process and deliver your water orders, and communicate important account updates. We do not sell your personal data to third parties. Your information may be shared only with delivery partners who assist in fulfilling your orders, or when required by law. You have the right to access, correct, or delete your personal data at any time through your account settings.</p>
+                    </section>
+
+                    <section class="terms-section" data-section="3">
+                        <div class="terms-section-head">
+                            <div class="terms-section-icon terms-section-icon--amber"><i class="fas fa-truck-fast"></i></div>
+                            <h3 class="terms-section-title">Orders & Delivery</h3>
+                            <span class="terms-tag terms-tag--note">Important</span>
+                        </div>
+                        <p class="terms-section-body">All orders placed through AquaSphere are subject to product availability and delivery coverage in your area. Delivery schedules are estimates and may be affected by weather, traffic, or supply conditions. Please ensure your delivery address and contact details are accurate — failed deliveries due to incorrect information may incur additional charges. Cancellations are accepted while an order is still pending; once an order is out for delivery it can no longer be cancelled. Refunds for damaged or incorrect deliveries must be reported within 48 hours of receipt.</p>
+                    </section>
+
+                    <section class="terms-section" data-section="4">
+                        <div class="terms-section-head">
+                            <div class="terms-section-icon terms-section-icon--aqua"><i class="fas fa-lock"></i></div>
+                            <h3 class="terms-section-title">Data & Security</h3>
+                            <span class="terms-tag terms-tag--required">Required</span>
+                        </div>
+                        <p class="terms-section-body">We take the security of your data seriously. AquaSphere uses industry-standard encryption for data in transit and at rest. Your password is securely hashed and is never stored in plain text. In the event of a data breach that affects your personal information, we will notify you promptly via email and provide guidance on protective measures. While we implement robust security measures, no system is completely immune to threats — you are encouraged to use a strong, unique password for your account.</p>
+                    </section>
+
+                </div>
+            </div>
+
+            <div class="terms-footer">
+                <label class="terms-check-label" for="termsCheckbox">
+                    <input type="checkbox" id="termsCheckbox" class="terms-checkbox" autocomplete="off">
+                    <span>I have read all sections above and agree to AquaSphere's Terms of Service and Privacy Policy.</span>
+                </label>
+                <div class="terms-actions">
+                    <button class="terms-btn terms-btn--cancel" id="termsCancelBtn" type="button">Cancel</button>
+                    <button class="terms-btn terms-btn--agree" id="termsAgreeBtn" type="button" disabled>I Agree & Continue</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -942,6 +1115,12 @@
             // Form submission handler
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
+
+                // Require Terms & Privacy agreement first (same flow as BondNest)
+                if (!hasAgreedToTerms) {
+                    openTermsModal();
+                    return;
+                }
                 
                 // Validate form first
                 if (!validateForm()) {
@@ -1018,6 +1197,106 @@
                     submitBtn.innerHTML = originalBtnText;
                     alert('An error occurred. Please try again. Check console for details.');
                 });
+            });
+            
+            // --- Terms & Privacy Agreement (same flow as BondNest) ---
+            let hasAgreedToTerms = false;
+            const termsModal = document.getElementById('termsPrivacyModal');
+            const termsScrollArea = document.getElementById('termsScrollArea');
+            const termsCheckbox = document.getElementById('termsCheckbox');
+            const termsAgreeBtn = document.getElementById('termsAgreeBtn');
+            const termsCancelBtn = document.getElementById('termsCancelBtn');
+            const termsCloseBtn = document.getElementById('termsCloseBtn');
+            const termsProgressFill = document.getElementById('termsProgressFill');
+            const termsProgressText = document.getElementById('termsProgressText');
+            const termsLinks = document.querySelectorAll('.terms-link');
+            const termsSections = termsModal ? termsModal.querySelectorAll('.terms-section') : [];
+
+            function updateTermsProgress() {
+                if (!termsScrollArea || !termsProgressFill || !termsProgressText) return;
+                const scrollTop = termsScrollArea.scrollTop;
+                const scrollHeight = termsScrollArea.scrollHeight - termsScrollArea.clientHeight;
+                if (scrollHeight <= 0) {
+                    termsProgressFill.style.width = '100%';
+                    termsProgressText.textContent = '100% read';
+                    return;
+                }
+                const pct = Math.min(100, Math.round((scrollTop / scrollHeight) * 100));
+                termsProgressFill.style.width = pct + '%';
+                termsProgressText.textContent = pct + '% read';
+                const areaRect = termsScrollArea.getBoundingClientRect();
+                termsSections.forEach(sec => {
+                    const rect = sec.getBoundingClientRect();
+                    if (rect.top < areaRect.bottom - 60) sec.classList.add('scrolled-past');
+                });
+            }
+
+            function syncTermsAgreeBtn() {
+                if (!termsAgreeBtn || !termsCheckbox) return;
+                termsAgreeBtn.disabled = !termsCheckbox.checked;
+            }
+
+            function openTermsModal() {
+                if (!termsModal) return;
+                if (termsCheckbox) termsCheckbox.checked = false;
+                syncTermsAgreeBtn();
+                if (termsScrollArea) termsScrollArea.scrollTop = 0;
+                termsSections.forEach(sec => sec.classList.remove('scrolled-past'));
+                termsModal.classList.add('is-open');
+                termsModal.setAttribute('aria-hidden', 'false');
+                document.documentElement.classList.add('terms-modal-open');
+                document.body.classList.add('terms-modal-open');
+                updateTermsProgress();
+            }
+
+            function closeTermsModal() {
+                if (!termsModal || !termsModal.classList.contains('is-open')) return;
+                termsModal.classList.remove('is-open');
+                termsModal.setAttribute('aria-hidden', 'true');
+                document.documentElement.classList.remove('terms-modal-open');
+                document.body.classList.remove('terms-modal-open');
+                if (termsCheckbox) termsCheckbox.checked = false;
+                syncTermsAgreeBtn();
+            }
+
+            if (termsCheckbox) termsCheckbox.addEventListener('change', syncTermsAgreeBtn);
+            if (termsCancelBtn) termsCancelBtn.addEventListener('click', closeTermsModal);
+            if (termsCloseBtn) termsCloseBtn.addEventListener('click', closeTermsModal);
+            if (termsScrollArea) termsScrollArea.addEventListener('scroll', updateTermsProgress);
+            if (termsModal) termsModal.addEventListener('click', function(e) {
+                if (e.target === termsModal) closeTermsModal();
+            });
+            document.addEventListener('keydown', function(ev) {
+                if (ev.key !== 'Escape') return;
+                if (!termsModal || !termsModal.classList.contains('is-open')) return;
+                ev.preventDefault();
+                closeTermsModal();
+            });
+            termsLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    openTermsModal();
+                });
+            });
+            if (termsAgreeBtn) termsAgreeBtn.addEventListener('click', function() {
+                if (!termsCheckbox || !termsCheckbox.checked) return;
+                hasAgreedToTerms = true;
+                closeTermsModal();
+                // Validate the whole form so empty/partial inputs show
+                // their inline errors instead of silently exiting.
+                // Only proceeds to submit when every field is valid.
+                if (!validateForm()) {
+                    const firstError = form.querySelector('.error');
+                    if (firstError && firstError.scrollIntoView) {
+                        firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                    return;
+                }
+                if (typeof form.requestSubmit === 'function') {
+                    form.requestSubmit();
+                } else {
+                    form.dispatchEvent(new Event('submit', { cancelable: true }));
+                }
             });
             
             // Navbar scroll effect
