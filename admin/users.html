@@ -418,8 +418,9 @@
             position: fixed;
             top: 0;
             right: 0;
-            width: 75vw;
-            max-width: 90vw;
+            width: 25vw;
+            min-width: 320px;
+            max-width: 400px;
             height: 100vh;
             background: #ffffff;
             z-index: 3001;
@@ -560,9 +561,9 @@
             line-height: 1.5;
         }
         .user-panel-content-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
         }
         .user-panel-section {
             margin-bottom: 0;
