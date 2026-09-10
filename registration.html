@@ -227,8 +227,7 @@
 
         .input-group:focus-within .btn-password-toggle,
         .input-group:focus-within .date-icon-btn {
-            border-color: #2383B5;
-            border-left: 2px solid #2383B5;
+            border: 2px solid #2383B5 !important;
         }
 
         .btn-password-toggle, .date-icon-btn {
@@ -240,7 +239,7 @@
             padding: 0 16px;
             display: flex;
             align-items: center;
-            transition: all 0.2s;
+            transition: background-color 0.2s;
         }
 
         .btn-password-toggle:hover, .date-icon-btn:hover {
@@ -281,8 +280,7 @@
         .custom-input.error + .date-icon-btn,
         .form-select.error + .btn-password-toggle,
         .form-select.error + .date-icon-btn {
-            border-color: #f59ca8 !important;
-            border-left: 2px solid #f59ca8 !important;
+            border: 2px solid #f59ca8 !important;
         }
 
         /* Equalize error-box gaps: when an error is visible in a row,
