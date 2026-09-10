@@ -184,6 +184,8 @@
         .password-toggle {
             position: absolute;
             right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
             background: none;
             border: none;
             color: #94a3b8;
@@ -241,6 +243,21 @@
             transform: translateY(-3px);
             box-shadow: 0 12px 24px rgba(35, 131, 181, 0.3);
             color: white;
+        }
+
+        .btn-login-submit:disabled {
+            background: linear-gradient(135deg, #2383B5 0%, #155A7A 100%);
+            color: white !important;
+            opacity: 1;
+            transform: none;
+            box-shadow: none;
+            cursor: wait;
+        }
+
+        .btn-login-submit:disabled span,
+        .btn-login-submit:disabled i {
+            color: white !important;
+            opacity: 1;
         }
 
         /* --- Links & Footer --- */
