@@ -497,6 +497,7 @@
         /* Hide login card when forgot password modal is open */
         .login-card.hidden {
             opacity: 0;
+            visibility: hidden;
             transform: scale(0.95);
             pointer-events: none;
             transition: all 0.3s ease;
@@ -1337,6 +1338,20 @@
         let resetOTPCode = ''; // Store OTP code globally
         let otpTimer = null;
         let isTransitioning = false; // True when moving between forgot-password phases
+        function hideLoginCard() {
+            const loginCard = document.querySelector('.login-card');
+            if (loginCard) loginCard.classList.add('hidden');
+        }
+        function showLoginCard() {
+            const loginCard = document.querySelector('.login-card');
+            if (loginCard) loginCard.classList.remove('hidden');
+        }
+        function anyResetModalOpen() {
+            return ['forgotPasswordModal', 'otpVerificationModal', 'newPasswordModal'].some(id => {
+                const el = document.getElementById(id);
+                return el && el.classList.contains('show');
+            });
+        }
         
         // Forgot Password function (global scope - must be available immediately)
         function showForgotPassword() {
@@ -1365,10 +1380,7 @@
         
         function openForgotPasswordModal() {
             // Hide login card
-            const loginCard = document.querySelector('.login-card');
-            if (loginCard) {
-                loginCard.classList.add('hidden');
-            }
+            hideLoginCard();
             
             // Reset the modal first
             const resetEmailEl = document.getElementById('resetEmail');
@@ -1438,18 +1450,12 @@
         
         // Wait for DOM to be ready before attaching event listeners
         document.addEventListener('DOMContentLoaded', function() {
-            // Show login card helper
-            function showLoginCard() {
-                const loginCard = document.querySelector('.login-card');
-                if (loginCard) loginCard.classList.remove('hidden');
-            }
-        
             // Reset modals when hidden
             const forgotPasswordModal = document.getElementById('forgotPasswordModal');
             if (forgotPasswordModal) {
                 forgotPasswordModal.addEventListener('hidden.bs.modal', function() {
                     resetForgotPasswordModal();
-                    if (!isTransitioning) showLoginCard();
+                    if (!isTransitioning && !anyResetModalOpen()) showLoginCard();
                 });
             }
         
@@ -1480,7 +1486,7 @@
                     const timerSpan = document.getElementById('otpTimer');
                     if (timerSpan) timerSpan.textContent = '';
                     if (otpTimer) clearInterval(otpTimer);
-                    if (!isTransitioning) showLoginCard();
+                    if (!isTransitioning && !anyResetModalOpen()) showLoginCard();
                 });
             }
             
@@ -1609,6 +1615,10 @@
                             setTimeout(() => {
                                 const otpModalElement = document.getElementById('otpVerificationModal');
                                 if (otpModalElement) {
+                                    hideLoginCard();
+                                    otpModalElement.addEventListener('shown.bs.modal', function() {
+                                        isTransitioning = false;
+                                    }, { once: true });
                                     try {
                                         const otpModal = new bootstrap.Modal(otpModalElement, {
                                             backdrop: true,
@@ -1616,7 +1626,6 @@
                                         });
                                         otpModal.show();
                                         startOTPTimer();
-                                        isTransitioning = false;
                                     } catch (error) {
                                         console.error('Error showing OTP modal:', error);
                                         // Fallback: show modal directly
@@ -1627,6 +1636,7 @@
                                         backdrop.className = 'modal-backdrop fade show';
                                         document.body.appendChild(backdrop);
                                         startOTPTimer();
+                                        isTransitioning = false;
                                     }
                                 } else {
                                     console.error('OTP modal element not found');
@@ -2015,13 +2025,16 @@
                             setTimeout(() => {
                                 const newPasswordModalElement = document.getElementById('newPasswordModal');
                                 if (newPasswordModalElement) {
+                                    hideLoginCard();
+                                    newPasswordModalElement.addEventListener('shown.bs.modal', function() {
+                                        isTransitioning = false;
+                                    }, { once: true });
                                     try {
                                         const newPasswordModal = new bootstrap.Modal(newPasswordModalElement, {
                                             backdrop: true,
                                             keyboard: true
                                         });
                                         newPasswordModal.show();
-                                        isTransitioning = false;
                                     } catch (error) {
                                         console.error('Error showing new password modal:', error);
                                         // Fallback: show modal directly
@@ -2031,6 +2044,7 @@
                                         const backdrop = document.createElement('div');
                                         backdrop.className = 'modal-backdrop fade show';
                                         document.body.appendChild(backdrop);
+                                        isTransitioning = false;
                                     }
                                 }
                             }, 300);
