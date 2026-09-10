@@ -504,6 +504,16 @@
             border: 1px solid rgba(255, 255, 255, 0.3);
         }
         
+        /* Equalize error-box gaps in forgot-password modals: when the error
+           is visible, drop the field wrapper's bottom margin so the box's
+           own 10px margins set equal spacing above and below it. */
+        #forgotPasswordModal .mb-4:has(.custom-error[style*="display: block"]),
+        #otpVerificationModal .mb-4:has(.custom-error[style*="display: block"]),
+        #newPasswordModal .mb-3:has(.custom-error[style*="display: block"]),
+        #newPasswordModal .mb-4:has(.custom-error[style*="display: block"]) {
+            margin-bottom: 0 !important;
+        }
+        
         /* Hide login card when forgot password modal is open */
         .login-card.hidden {
             opacity: 0;
