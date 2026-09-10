@@ -203,47 +203,28 @@
             width: 100%;
         }
 
-        /* --- Input Groups (Password & Date) --- */
-        .input-group .custom-input {
-            z-index: 1;
+        /* --- Password Toggle & Date Icon (absolutely positioned inside input) --- */
+        .password-toggle-icon {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #94a3b8;
+            padding: 5px;
+            cursor: pointer;
+            z-index: 5;
+            transition: color 0.2s;
         }
 
-        /* Flatten the right side of the input */
-        .input-group > .custom-input.border-end-0 {
-            border-top-right-radius: 0 !important;
-            border-bottom-right-radius: 0 !important;
+        .password-toggle-icon:hover {
+            color: #2383B5;
         }
 
-        /* Flatten the left side of the toggle button */
-        .input-group > .btn-password-toggle {
-            border-top-left-radius: 0 !important;
-            border-bottom-left-radius: 0 !important;
-        }
-
-        /* Match the border colors during focus */
-        .input-group:focus-within .custom-input {
-            border-color: #2383B5;
-        }
-
-        .input-group:focus-within .btn-password-toggle,
-        .input-group:focus-within .date-icon-btn {
-            border: 2px solid #2383B5 !important;
-        }
-
-        .btn-password-toggle, .date-icon-btn {
-            border: 2px solid #D5E5ED;
-            border-left: none;
-            background-color: #EAF7FC;
-            border-top-right-radius: 12px !important;
-            border-bottom-right-radius: 12px !important;
-            padding: 0 16px;
-            display: flex;
-            align-items: center;
-            transition: background-color 0.2s;
-        }
-
-        .btn-password-toggle:hover, .date-icon-btn:hover {
-            background-color: #EAF7FC;
+        /* Add right padding to inputs with right icons */
+        .input-group-custom .custom-input {
+            padding-right: 40px;
         }
 
         /* --- Error States (boxed inline validation) --- */
@@ -272,15 +253,6 @@
         .form-control.error:focus, .form-select.error:focus {
             border-color: #f59ca8 !important;
             box-shadow: 0 0 0 4px rgba(245, 156, 168, 0.16) !important;
-        }
-
-        /* Error borders must extend to input-group addon buttons
-           (birthday calendar, password eye toggles) */
-        .custom-input.error + .btn-password-toggle,
-        .custom-input.error + .date-icon-btn,
-        .form-select.error + .btn-password-toggle,
-        .form-select.error + .date-icon-btn {
-            border: 2px solid #f59ca8 !important;
         }
 
         /* Equalize error-box gaps: when an error is visible in a row,
@@ -337,18 +309,10 @@
             color: white !important;
         }
 
-        /* --- Date Picker specific hack --- */
+        /* --- Date Picker indicator --- */
         input[type="date"]::-webkit-calendar-picker-indicator {
-            background: transparent;
-            bottom: 0;
-            color: transparent;
+            opacity: 0.4;
             cursor: pointer;
-            height: auto;
-            left: 0;
-            position: absolute;
-            right: 0;
-            top: 0;
-            width: auto;
         }
 
         /* --- Login Link Section --- */
@@ -662,10 +626,10 @@
                             
                             <div class="col-md-6">
                                 <label for="birthday" class="form-label small fw-bold text-uppercase">Birthday</label>
-                                <div class="input-group">
-                                    <input type="date" class="form-control custom-input border-end-0" id="birthday" name="birthday" required>
-                                    <button class="btn btn-outline-light-blue date-icon-btn" type="button" id="datePickerBtn">
-                                        <i class="fas fa-calendar-alt text-muted"></i>
+                                <div class="input-group-custom">
+                                    <input type="date" class="form-control custom-input" id="birthday" name="birthday" required>
+                                    <button class="password-toggle-icon" type="button" id="datePickerBtn">
+                                        <i class="fas fa-calendar-alt"></i>
                                     </button>
                                 </div>
                                 <div class="custom-error" id="birthday-error">Birthday is required.</div>
@@ -675,11 +639,11 @@
                         <div class="row g-3 mb-4">
                             <div class="col-md-6">
                                 <label for="password" class="form-label small fw-bold text-uppercase">Password</label>
-                                <div class="input-group">
-                                    <input type="password" class="form-control custom-input border-end-0" id="password" name="password" 
+                                <div class="input-group-custom">
+                                    <input type="password" class="form-control custom-input" id="password" name="password" 
                                            placeholder="Min. 8 characters" required>
-                                    <button class="btn btn-password-toggle" type="button" id="togglePassword">
-                                        <i class="fas fa-eye text-muted" id="passwordIcon"></i>
+                                    <button class="password-toggle-icon" type="button" id="togglePassword">
+                                        <i class="fas fa-eye" id="passwordIcon"></i>
                                     </button>
                                 </div>
                                 <div class="custom-error" id="password-error">Password is required.</div>
@@ -687,11 +651,11 @@
                             
                             <div class="col-md-6">
                                 <label for="confirm_password" class="form-label small fw-bold text-uppercase">Confirm Password</label>
-                                <div class="input-group">
-                                    <input type="password" class="form-control custom-input border-end-0" id="confirm_password" name="confirm_password" 
+                                <div class="input-group-custom">
+                                    <input type="password" class="form-control custom-input" id="confirm_password" name="confirm_password" 
                                            placeholder="Repeat password" required>
-                                    <button class="btn btn-password-toggle" type="button" id="toggleConfirmPassword">
-                                        <i class="fas fa-eye text-muted" id="confirmPasswordIcon"></i>
+                                    <button class="password-toggle-icon" type="button" id="toggleConfirmPassword">
+                                        <i class="fas fa-eye" id="confirmPasswordIcon"></i>
                                     </button>
                                 </div>
                                 <div class="custom-error" id="confirm_password-error">Confirmation is required.</div>
@@ -1145,7 +1109,7 @@
             togglePasswordVisibility('confirm_password', 'toggleConfirmPassword', 'confirmPasswordIcon');
             
             // Date picker button trigger
-            const datePickerBtn = document.querySelector('.date-icon-btn');
+            const datePickerBtn = document.getElementById('datePickerBtn');
             if (datePickerBtn && birthdayInput) {
                 datePickerBtn.addEventListener('click', function(e) {
                     e.preventDefault();
