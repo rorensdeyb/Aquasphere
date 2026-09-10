@@ -93,7 +93,11 @@ if ($action === 'suspend') {
     }
 
     // Notify user via email (best-effort)
-    send_suspension_email_brevo($user['email'], $user['username'], $reason);
+    try {
+        send_suspension_email_brevo($user['email'], $user['username'], $reason);
+    } catch (Exception $e) {
+        error_log("Suspension email failed: " . $e->getMessage());
+    }
 
     echo json_encode(['success' => true, 'message' => 'User suspended successfully']);
     exit;
@@ -109,8 +113,13 @@ if ($ok === false) {
     exit;
 }
 
-send_unsuspension_email_brevo($user['email'], $user['username']);
+    // Notify user via email (best-effort)
+    try {
+        send_unsuspension_email_brevo($user['email'], $user['username']);
+    } catch (Exception $e) {
+        error_log("Unsuspension email failed: " . $e->getMessage());
+    }
 
-echo json_encode(['success' => true, 'message' => 'Suspension lifted successfully']);
+    echo json_encode(['success' => true, 'message' => 'Suspension lifted successfully']);
 ?>
 
