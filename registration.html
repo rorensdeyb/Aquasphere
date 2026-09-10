@@ -273,6 +273,22 @@
             box-shadow: 0 0 0 4px rgba(245, 156, 168, 0.16) !important;
         }
 
+        /* Error borders must extend to input-group addon buttons
+           (birthday calendar, password eye toggles) */
+        .custom-input.error + .btn-password-toggle,
+        .custom-input.error + .date-icon-btn,
+        .form-select.error + .btn-password-toggle,
+        .form-select.error + .date-icon-btn {
+            border-color: #f59ca8 !important;
+        }
+
+        /* Equalize error-box gaps: when an error is visible in a row,
+           drop the row's bottom margin so the box's own 10px margins
+           set equal spacing above and below it. */
+        #registerForm .row:has(.custom-error[style*="display: block"]) {
+            margin-bottom: 0 !important;
+        }
+
         /* Success state for valid inputs */
         .form-control.success {
             border-color: #2383B5;
