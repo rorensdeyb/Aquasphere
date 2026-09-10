@@ -1336,6 +1336,7 @@
         let resetEmail = '';
         let resetOTPCode = ''; // Store OTP code globally
         let otpTimer = null;
+        let isTransitioning = false; // True when moving between forgot-password phases
         
         // Forgot Password function (global scope - must be available immediately)
         function showForgotPassword() {
@@ -1448,7 +1449,7 @@
             if (forgotPasswordModal) {
                 forgotPasswordModal.addEventListener('hidden.bs.modal', function() {
                     resetForgotPasswordModal();
-                    showLoginCard();
+                    if (!isTransitioning) showLoginCard();
                 });
             }
         
@@ -1479,7 +1480,7 @@
                     const timerSpan = document.getElementById('otpTimer');
                     if (timerSpan) timerSpan.textContent = '';
                     if (otpTimer) clearInterval(otpTimer);
-                    showLoginCard();
+                    if (!isTransitioning) showLoginCard();
                 });
             }
             
@@ -1586,6 +1587,7 @@
                         
                         if (data.success) {
                             resetEmail = email;
+                            isTransitioning = true;
                             
                             // Hide forgot password modal first
                             const forgotModalElement = document.getElementById('forgotPasswordModal');
@@ -1614,6 +1616,7 @@
                                         });
                                         otpModal.show();
                                         startOTPTimer();
+                                        isTransitioning = false;
                                     } catch (error) {
                                         console.error('Error showing OTP modal:', error);
                                         // Fallback: show modal directly
@@ -1997,6 +2000,7 @@
                         if (data.success) {
                             // Store the OTP code before closing the modal
                             resetOTPCode = otpCode;
+                            isTransitioning = true;
                             
                             // Hide OTP modal and show new password modal
                             const otpModalElement = document.getElementById('otpVerificationModal');
@@ -2017,6 +2021,7 @@
                                             keyboard: true
                                         });
                                         newPasswordModal.show();
+                                        isTransitioning = false;
                                     } catch (error) {
                                         console.error('Error showing new password modal:', error);
                                         // Fallback: show modal directly
