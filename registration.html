@@ -264,11 +264,13 @@
         }
 
         .form-control.error, .form-select.error {
-            border-color: #E53935;
+            border-color: #f59ca8;
+            box-shadow: 0 0 0 3px rgba(245, 156, 168, 0.16);
         }
 
-        .form-control.error:focus {
-            box-shadow: 0 0 0 4px rgba(225, 29, 72, 0.1);
+        .form-control.error:focus, .form-select.error:focus {
+            border-color: #f59ca8 !important;
+            box-shadow: 0 0 0 4px rgba(245, 156, 168, 0.16) !important;
         }
 
         /* Success state for valid inputs */

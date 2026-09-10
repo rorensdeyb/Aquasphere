@@ -199,12 +199,14 @@
         }
         
         .otp-input.error {
-            border-color: #E53935;
+            border-color: #f59ca8;
+            box-shadow: 0 0 0 3px rgba(245, 156, 168, 0.16);
             animation: shake 0.5s ease-in-out;
         }
         
         .otp-input.error:focus {
-            box-shadow: 0 0 0 4px rgba(225, 29, 72, 0.1);
+            border-color: #f59ca8 !important;
+            box-shadow: 0 0 0 4px rgba(245, 156, 168, 0.16) !important;
         }
         
         @keyframes shake {
