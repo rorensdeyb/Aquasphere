@@ -417,17 +417,17 @@
         .user-panel {
             position: fixed;
             top: 0;
-            left: 0;
-            width: 420px;
+            right: 0;
+            width: 75vw;
             max-width: 90vw;
             height: 100vh;
             background: #ffffff;
             z-index: 3001;
-            transform: translateX(-100%);
+            transform: translateX(100%);
             transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             flex-direction: column;
-            box-shadow: 4px 0 30px rgba(0, 0, 0, 0.15);
+            box-shadow: -4px 0 30px rgba(0, 0, 0, 0.15);
         }
         .user-panel.is-open {
             transform: translateX(0);
@@ -558,6 +558,14 @@
             font-size: 0.85rem;
             color: #4a1523;
             line-height: 1.5;
+        }
+        .user-panel-content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+        .user-panel-section {
+            margin-bottom: 0;
         }
 
         /* Center notice */
@@ -1466,56 +1474,55 @@
                     <i class="fas fa-user"></i>
                 </div>
 
-                <div class="user-panel-section">
-                    <div class="user-panel-section-title">Account Info</div>
-                    <div class="user-panel-field">
-                        <span class="user-panel-field-label">User ID</span>
-                        <span class="user-panel-field-value">#${user.id}</span>
+                <div class="user-panel-content-grid">
+                    <div class="user-panel-section">
+                        <div class="user-panel-section-title">Account Info</div>
+                        <div class="user-panel-field">
+                            <span class="user-panel-field-label">User ID</span>
+                            <span class="user-panel-field-value">#${user.id}</span>
+                        </div>
+                        <div class="user-panel-field">
+                            <span class="user-panel-field-label">Username</span>
+                            <span class="user-panel-field-value">${escapeHtml(user.username || 'N/A')}</span>
+                        </div>
+                        <div class="user-panel-field">
+                            <span class="user-panel-field-label">Email</span>
+                            <span class="user-panel-field-value">${escapeHtml(user.email || 'N/A')}</span>
+                        </div>
+                        <div class="user-panel-field">
+                            <span class="user-panel-field-label">Role</span>
+                            <span class="user-panel-field-value">${user.is_admin == 1 ? '<span class="badge bg-danger">Admin</span>' : '<span class="badge bg-secondary">User</span>'}</span>
+                        </div>
+                        <div class="user-panel-field">
+                            <span class="user-panel-field-label">Status</span>
+                            <span class="user-panel-field-value">${statusHtml}</span>
+                        </div>
+                        ${reasonHtml}
                     </div>
-                    <div class="user-panel-field">
-                        <span class="user-panel-field-label">Username</span>
-                        <span class="user-panel-field-value">${escapeHtml(user.username || 'N/A')}</span>
-                    </div>
-                    <div class="user-panel-field">
-                        <span class="user-panel-field-label">Email</span>
-                        <span class="user-panel-field-value">${escapeHtml(user.email || 'N/A')}</span>
-                    </div>
-                    <div class="user-panel-field">
-                        <span class="user-panel-field-label">Role</span>
-                        <span class="user-panel-field-value">${user.is_admin == 1 ? '<span class="badge bg-danger">Admin</span>' : '<span class="badge bg-secondary">User</span>'}</span>
-                    </div>
-                    <div class="user-panel-field">
-                        <span class="user-panel-field-label">Status</span>
-                        <span class="user-panel-field-value">${statusHtml}</span>
-                    </div>
-                    ${reasonHtml}
-                </div>
 
-                <div class="user-panel-section">
-                    <div class="user-panel-section-title">Personal Info</div>
-                    <div class="user-panel-field">
-                        <span class="user-panel-field-label">Full Name</span>
-                        <span class="user-panel-field-value">${escapeHtml(fullName)}</span>
-                    </div>
-                    <div class="user-panel-field">
-                        <span class="user-panel-field-label">Gender</span>
-                        <span class="user-panel-field-value">${formatGender(user.gender)}</span>
-                    </div>
-                    <div class="user-panel-field">
-                        <span class="user-panel-field-label">Birthday</span>
-                        <span class="user-panel-field-value">${user.date_of_birth ? formatDate(user.date_of_birth) : 'N/A'}</span>
-                    </div>
-                </div>
-
-                <div class="user-panel-section">
-                    <div class="user-panel-section-title">Activity</div>
-                    <div class="user-panel-field">
-                        <span class="user-panel-field-label">Joined</span>
-                        <span class="user-panel-field-value">${formatDate(user.created_at)}</span>
-                    </div>
-                    <div class="user-panel-field">
-                        <span class="user-panel-field-label">Last Login</span>
-                        <span class="user-panel-field-value">${user.last_login ? formatDate(user.last_login) : 'Never'}</span>
+                    <div class="user-panel-section">
+                        <div class="user-panel-section-title">Personal Info</div>
+                        <div class="user-panel-field">
+                            <span class="user-panel-field-label">Full Name</span>
+                            <span class="user-panel-field-value">${escapeHtml(fullName)}</span>
+                        </div>
+                        <div class="user-panel-field">
+                            <span class="user-panel-field-label">Gender</span>
+                            <span class="user-panel-field-value">${formatGender(user.gender)}</span>
+                        </div>
+                        <div class="user-panel-field">
+                            <span class="user-panel-field-label">Birthday</span>
+                            <span class="user-panel-field-value">${user.date_of_birth ? formatDate(user.date_of_birth) : 'N/A'}</span>
+                        </div>
+                        <div class="user-panel-section-title" style="margin-top: 20px;">Activity</div>
+                        <div class="user-panel-field">
+                            <span class="user-panel-field-label">Joined</span>
+                            <span class="user-panel-field-value">${formatDate(user.created_at)}</span>
+                        </div>
+                        <div class="user-panel-field">
+                            <span class="user-panel-field-label">Last Login</span>
+                            <span class="user-panel-field-value">${user.last_login ? formatDate(user.last_login) : 'Never'}</span>
+                        </div>
                     </div>
                 </div>
             `;
@@ -1569,9 +1576,8 @@
         // Show notification (top-right)
         function showNotification(message, type = 'success') {
             const notification = document.createElement('div');
-            // Use alert-info (blue) for success notifications instead of alert-success (green)
             notification.className = `alert alert-${type === 'success' ? 'info' : 'danger'}`;
-            notification.style.cssText = 'position: fixed; top: 20px; right: 20px; z-index: 9999; min-width: 300px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 8px;';
+            notification.style.cssText = 'position: fixed; top: 20px; right: 20px; z-index: 9999; min-width: 300px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 8px; transform: translateX(120%); transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s;';
             
             const icon = document.createElement('i');
             icon.className = `fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'} me-2`;
@@ -1583,10 +1589,13 @@
             notification.appendChild(text);
             document.body.appendChild(notification);
             
+            requestAnimationFrame(() => {
+                notification.style.transform = 'translateX(0)';
+            });
+            
             setTimeout(() => {
-                notification.style.opacity = '0';
-                notification.style.transition = 'opacity 0.3s';
-                setTimeout(() => notification.remove(), 300);
+                notification.style.transform = 'translateX(120%)';
+                setTimeout(() => notification.remove(), 350);
             }, 3000);
         }
 
