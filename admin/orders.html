@@ -297,7 +297,7 @@
 
         /* Order details modal - Enhanced Design */
         .order-details-modal .modal-dialog {
-            max-width: 1200px;
+            max-width: 1400px;
         }
         .order-details-modal .modal-header {
             background: linear-gradient(135deg, #2383B5 0%, #155A7A 100%);
@@ -323,18 +323,18 @@
         }
         .detail-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 0.75rem;
             margin-bottom: 1rem;
         }
-        .detail-grid.three-col {
-            grid-template-columns: 1fr 1fr 1fr;
+        .detail-grid.top-row {
+            grid-template-columns: 2fr 1fr;
         }
         .detail-card {
             background: linear-gradient(135deg, #ffffff 0%, #EAF7FC 100%);
             border: 1.5px solid #D5E5ED;
             border-radius: 10px;
-            padding: 0.75rem;
+            padding: 0.75rem 1rem;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -357,10 +357,6 @@
             box-shadow: 0 2px 10px rgba(14, 165, 233, 0.12);
             border-color: #2383B5;
         }
-        .detail-card.spacious {
-            padding: 0.75rem;
-            grid-column: auto;
-        }
         .detail-label {
             font-size: 0.68rem;
             text-transform: uppercase;
@@ -382,14 +378,14 @@
             line-height: 1.4;
             word-break: break-word;
             overflow-wrap: anywhere;
-            font-size: 0.9rem;
+            font-size: 0.92rem;
         }
         .detail-value small {
             display: block;
             margin-top: 0.15rem;
             color: #6b7280;
             font-weight: 500;
-            font-size: 0.8rem;
+            font-size: 0.82rem;
             word-break: break-word;
             overflow-wrap: anywhere;
         }
@@ -397,7 +393,7 @@
             font-size: 0.9rem;
             font-weight: 700;
             color: #0f172a;
-            margin: 1rem 0 0.5rem;
+            margin: 0.75rem 0 0.5rem;
             padding-bottom: 0.5rem;
             border-bottom: 2px solid #D5E5ED;
             display: flex;
@@ -410,18 +406,46 @@
         .section-title:first-of-type {
             margin-top: 0;
         }
-        .address-block {
-            white-space: pre-wrap;
-            margin: 0;
-            font-family: inherit;
-            color: #0f172a;
-            line-height: 1.6;
-            font-weight: 500;
-            background: linear-gradient(135deg, #EAF7FC 0%, #ffffff 100%);
-            padding: 0.75rem 1rem;
-            border-radius: 8px;
+        .address-card {
+            background: linear-gradient(135deg, #ffffff 0%, #EAF7FC 100%);
             border: 1.5px solid #D5E5ED;
-            font-size: 0.88rem;
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+            position: relative;
+            overflow: hidden;
+        }
+        .address-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #2383B5 0%, #155A7A 100%);
+        }
+        .address-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.4rem 1.5rem;
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            color: #0f172a;
+            line-height: 1.5;
+        }
+        .address-grid .addr-item {
+            display: flex;
+            gap: 0.4rem;
+        }
+        .address-grid .addr-label {
+            font-weight: 700;
+            color: #155A7A;
+            white-space: nowrap;
+        }
+        .address-grid .addr-value {
+            font-weight: 500;
+            color: #0f172a;
+            word-break: break-word;
         }
         .order-details-modal .table {
             background: white;
@@ -884,7 +908,7 @@
             
             document.getElementById('modalOrderId').textContent = order.id;
             document.getElementById('orderDetailsContent').innerHTML = `
-                <div class="detail-grid">
+                <div class="detail-grid top-row">
                     <div class="detail-card">
                         <div class="detail-label"><i class="fas fa-user"></i>Customer</div>
                         <div class="detail-value">
@@ -893,27 +917,36 @@
                         </div>
                     </div>
                     <div class="detail-card">
+                        <div class="detail-label"><i class="fas fa-info-circle"></i>Status</div>
+                        <div class="detail-value"><span class="status-badge ${status}">${statusLabel}</span></div>
+                    </div>
+                </div>
+                <div class="detail-grid">
+                    <div class="detail-card">
                         <div class="detail-label"><i class="fas fa-calendar-alt"></i>Order Date</div>
                         <div class="detail-value">${formatDate(order.order_date)}</div>
                     </div>
-                </div>
-                <div class="detail-grid three-col">
                     <div class="detail-card">
                         <div class="detail-label"><i class="fas fa-truck"></i>Delivery Date</div>
                         <div class="detail-value">${deliveryInfo}</div>
                     </div>
                     <div class="detail-card">
-                        <div class="detail-label"><i class="fas fa-credit-card"></i>Payment Method</div>
+                        <div class="detail-label"><i class="fas fa-credit-card"></i>Payment</div>
                         <div class="detail-value">${escapeHtml(order.payment_method || 'COD')}</div>
-                    </div>
-                    <div class="detail-card">
-                        <div class="detail-label"><i class="fas fa-info-circle"></i>Status</div>
-                        <div class="detail-value"><span class="status-badge ${status}">${statusLabel}</span></div>
                     </div>
                 </div>
                 
-                <h6 class="section-title"><i class="fas fa-map-marker-alt"></i>Delivery Address</h6>
-                <div class="address-block">${escapeHtml(addressText)}</div>
+                <div class="address-card">
+                    <div class="section-title" style="margin:0; padding-bottom:0.4rem;"><i class="fas fa-map-marker-alt"></i>Delivery Address</div>
+                    <div class="address-grid">
+                        <div class="addr-item"><span class="addr-label">Name:</span><span class="addr-value">${escapeHtml(address.name || '')}</span></div>
+                        <div class="addr-item"><span class="addr-label">Phone:</span><span class="addr-value">${escapeHtml(address.phone || '')}</span></div>
+                        <div class="addr-item"><span class="addr-label">Street:</span><span class="addr-value">${escapeHtml(address.street || '')}, ${escapeHtml(address.barangay || '')}</span></div>
+                        <div class="addr-item"><span class="addr-label">City:</span><span class="addr-value">${escapeHtml(address.city || '')}, ${escapeHtml(address.province || '')}</span></div>
+                        <div class="addr-item"><span class="addr-label">Region:</span><span class="addr-value">${escapeHtml(address.region || '')} ${escapeHtml(address.postal_code || '')}</span></div>
+                        ${address.label ? `<div class="addr-item"><span class="addr-label">Label:</span><span class="addr-value">${escapeHtml(address.label)}</span></div>` : ''}
+                    </div>
+                </div>
                 
                 <h6 class="section-title"><i class="fas fa-box"></i>Order Items</h6>
                 <div class="table-responsive">
