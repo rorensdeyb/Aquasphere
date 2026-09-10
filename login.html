@@ -1063,22 +1063,6 @@
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.getElementById('loginForm');
             
-            // Success timers to revert the green glow after 3s
-            const successTimers = {};
-            function markSuccess(fieldName) {
-                const field = document.getElementById(fieldName);
-                if (!field) return;
-                field.classList.remove('error');
-                field.classList.add('success');
-                if (successTimers[fieldName]) clearTimeout(successTimers[fieldName]);
-                successTimers[fieldName] = setTimeout(() => {
-                    field.classList.remove('success');
-                }, 3000);
-            }
-
-            // Required fields
-            const requiredFields = ['username', 'password'];
-            
         // Suspended notice helpers
         function showSuspendedNotice(message) {
             const overlay = document.getElementById('suspendedOverlay');
@@ -1116,103 +1100,21 @@
                 }
             }
             
-            // Function to validate individual field
-            function validateField(fieldName) {
-                const field = document.getElementById(fieldName);
-                if (!field) return true;
-                
-                const value = field.value.trim();
-                
-                if (!value) {
-                    showError(fieldName, getFieldLabel(fieldName) + ' is required.');
-                    return false;
-                }
-                
-                // Additional validations
-                if (fieldName === 'username') {
-                    if (value.length < 4 || value.length > 64) {
-                        showError(fieldName, 'Username must be between 4 and 64 characters long.');
-                        return false;
-                    } else {
-                        hideError(fieldName);
-                        markSuccess(fieldName);
-                    }
-                }
-                
-                if (fieldName === 'password') {
-                    // Check if this is admin login - admin can bypass ALL password validation
-                    const usernameField = document.getElementById('username');
-                    const isAdmin = usernameField && usernameField.value.trim().toLowerCase() === 'aquasphereph@gmail.com';
-                    
-                    // Admin bypass - no validation required
-                    if (isAdmin) {
-                        hideError(fieldName);
-                        markSuccess(fieldName);
-                        return true;
-                    }
-                    
-                    // Regular user validation
-                    if (value.length < 8) {
-                        showError(fieldName, 'Min 8 chars with upper, lower, number, special.');
-                        return false;
-                    } else {
-                        // Require strong password for non-admin users
-                        const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[ !"#$%&'()*+,\-\.\/:;<=>?@\[\]^_`{|}~]).{8,}$/;
-                        if (!strongPasswordRegex.test(value)) {
-                            showError(fieldName, 'Min 8 chars with upper, lower, number, special.');
-                            return false;
-                        }
-                    }
-                    // Valid strong password - allow
-                    hideError(fieldName);
-                    markSuccess(fieldName);
-                }
-                
-                return true;
+            // DCore behavior: no per-field inline validation on login.
+            // Typing only clears the auth error state.
+            function clearSignInValidation() {
+                hideError('username');
+                hideError('password');
+                const usernameField = document.getElementById('username');
+                const passwordField = document.getElementById('password');
+                if (usernameField) usernameField.classList.remove('error');
+                if (passwordField) passwordField.classList.remove('error');
             }
             
-            // Function to get field label
-            function getFieldLabel(fieldName) {
-                const labels = {
-                    'username': 'Username',
-                    'password': 'Password'
-                };
-                return labels[fieldName] || fieldName;
-            }
-            
-            // Function to validate all fields
-            function validateForm() {
-                let isValid = true;
-                
-                requiredFields.forEach(fieldName => {
-                    if (!validateField(fieldName)) {
-                        isValid = false;
-                    }
-                });
-                
-                return isValid;
-            }
-            
-            // Add event listeners to all required fields
-            requiredFields.forEach(fieldName => {
-                const field = document.getElementById(fieldName);
-                if (field) {
-                    field.addEventListener('blur', () => validateField(fieldName));
-                    field.addEventListener('input', () => {
-                        // Always validate on input to show errors in real-time
-                        validateField(fieldName);
-                        
-                        // If username field changes, re-validate password to check for admin bypass
-                        if (fieldName === 'username') {
-                            validateField('password');
-                        }
-                    });
-                    // Also validate on focus to show errors immediately when user clicks on field
-                    field.addEventListener('focus', () => {
-                        validateField(fieldName);
-                    });
-                }
-            });
+            const signInUsernameField = document.getElementById('username');
+            const signInPasswordField = document.getElementById('password');
+            if (signInUsernameField) signInUsernameField.addEventListener('input', clearSignInValidation);
+            if (signInPasswordField) signInPasswordField.addEventListener('input', clearSignInValidation);
             
             // Password toggle functionality
             function togglePasswordVisibility(passwordFieldId, toggleButtonId, iconId) {
@@ -1698,8 +1600,8 @@
                 });
             }
             
-            // Password validation is handled by the main validateField function
-            // No separate validation needed here - it's already set up in the event listeners above
+            // Login fields use DCore behavior: no per-field validation.
+            // Only the single auth error below password is ever shown.
             
             // New Password Form Handler
             const newPasswordForm = document.getElementById('newPasswordForm');
