@@ -477,6 +477,61 @@
             border: 1px solid rgba(255, 255, 255, 0.3);
         }
         
+        /* Hide login card when forgot password modal is open */
+        .login-card.hidden {
+            opacity: 0;
+            transform: scale(0.95);
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+        
+        /* Button contrast fixes */
+        .btn-verify-submit {
+            background: #155A7A;
+            color: white !important;
+            border: none;
+        }
+        
+        .btn-verify-submit:hover {
+            background: #0D3D52;
+            color: white !important;
+        }
+        
+        .btn-verify-submit:disabled,
+        .btn-verify-submit.disabled {
+            background: #155A7A;
+            color: white !important;
+            opacity: 0.7;
+        }
+        
+        .btn-forgot-password:disabled,
+        .btn-forgot-password.disabled {
+            background: #155A7A;
+            color: white !important;
+            opacity: 0.7;
+        }
+        
+        /* New Password Modal consistent styling */
+        .new-password-input-group {
+            position: relative;
+        }
+        
+        .new-password-input {
+            border-radius: 12px;
+            border: 2px solid #D5E5ED;
+            padding: 12px 48px 12px 16px;
+            background: #EAF7FC;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+        
+        .new-password-input:focus {
+            border-color: #2383B5;
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(35, 131, 181, 0.1);
+            outline: none;
+        }
+        
         .forgot-password-modal-content {
             background: linear-gradient(135deg, #ffffff 0%, #EAF7FC 50%, #f0f9ff 100%);
             border-radius: 28px;
@@ -1291,6 +1346,12 @@
         }
         
         function openForgotPasswordModal() {
+            // Hide login card
+            const loginCard = document.querySelector('.login-card');
+            if (loginCard) {
+                loginCard.classList.add('hidden');
+            }
+            
             // Reset the modal first
             const resetEmailEl = document.getElementById('resetEmail');
             const errorDiv = document.getElementById('resetEmail-error');
@@ -1359,11 +1420,18 @@
         
         // Wait for DOM to be ready before attaching event listeners
         document.addEventListener('DOMContentLoaded', function() {
+            // Show login card helper
+            function showLoginCard() {
+                const loginCard = document.querySelector('.login-card');
+                if (loginCard) loginCard.classList.remove('hidden');
+            }
+        
             // Reset modals when hidden
             const forgotPasswordModal = document.getElementById('forgotPasswordModal');
             if (forgotPasswordModal) {
                 forgotPasswordModal.addEventListener('hidden.bs.modal', function() {
                     resetForgotPasswordModal();
+                    showLoginCard();
                 });
             }
         
@@ -1394,6 +1462,7 @@
                     const timerSpan = document.getElementById('otpTimer');
                     if (timerSpan) timerSpan.textContent = '';
                     if (otpTimer) clearInterval(otpTimer);
+                    showLoginCard();
                 });
             }
             
@@ -1415,6 +1484,7 @@
                         proceedButton.disabled = false;
                         if (spinner) spinner.style.display = 'none';
                     }
+                    showLoginCard();
                 });
             }
             
@@ -2341,7 +2411,7 @@
                     <div class="d-grid gap-2">
                         <button type="submit" class="btn btn-verify-submit py-3" id="verifyButton">
                             <i class="fas fa-spinner fa-spin me-2" style="display: none;"></i>
-                            <span>Verify and Continue</span>
+                            <span>Verify & Continue</span>
                         </button>
                         
                         <div class="text-center mt-3">
@@ -2369,23 +2439,20 @@
     <div class="modal fade" id="newPasswordModal" tabindex="-1" aria-labelledby="newPasswordModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content" style="background: #ffffff; border-radius: 24px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.3);">
-                <div class="modal-header border-0 pb-0">
-                    <h5 class="modal-title fw-bold" style="color: #155A7A;" id="newPasswordModalLabel">Reset Password</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body px-lg-5 pb-lg-5">
+                <div class="modal-body px-lg-5 pb-lg-5 pt-4">
                     <div class="text-center mb-4">
                         <div class="otp-icon-circle mb-3">
                             <i class="fas fa-lock"></i>
                         </div>
+                        <h4 class="fw-bold text-dark mb-2">Reset Password</h4>
                         <p class="text-muted small px-3">Your new password must be different from your previous password.</p>
                     </div>
                     <form id="newPasswordForm">
                         <div class="mb-3">
-                            <label for="newPassword" class="form-label forgot-password-label">New Password</label>
-                            <div class="input-group forgot-password-input-group">
-                                <input type="password" class="form-control forgot-password-input" id="newPassword" placeholder="Enter new password" autocomplete="off">
-                                <button class="btn btn-password-toggle" type="button" id="toggleNewPassword">
+                            <label for="newPassword" class="form-label fw-bold text-dark small">New Password</label>
+                            <div class="new-password-input-group">
+                                <input type="password" class="form-control new-password-input" id="newPassword" placeholder="Enter new password" autocomplete="off">
+                                <button class="password-toggle" type="button" id="toggleNewPassword" style="right: 12px;">
                                     <i class="fas fa-eye" id="newPasswordIcon"></i>
                                 </button>
                             </div>
@@ -2393,20 +2460,24 @@
                         </div>
                         
                         <div class="mb-4">
-                            <label for="confirmPassword" class="form-label forgot-password-label">Confirm New Password</label>
-                            <div class="input-group forgot-password-input-group">
-                                <input type="password" class="form-control forgot-password-input" id="confirmPassword" placeholder="Confirm new password" autocomplete="off">
-                                <button class="btn btn-password-toggle" type="button" id="toggleConfirmPassword">
+                            <label for="confirmPassword" class="form-label fw-bold text-dark small">Confirm New Password</label>
+                            <div class="new-password-input-group">
+                                <input type="password" class="form-control new-password-input" id="confirmPassword" placeholder="Confirm new password" autocomplete="off">
+                                <button class="password-toggle" type="button" id="toggleConfirmPassword" style="right: 12px;">
                                     <i class="fas fa-eye" id="confirmPasswordIcon"></i>
                                 </button>
                             </div>
-                            <div class="custom-error" id="confirmPassword-error" style="display: none;">Min 8 chars with upper, lower, number, special.</div>
+                            <div class="custom-error" id="confirmPassword-error" style="display: none;">Passwords do not match.</div>
                         </div>
                         
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-forgot-password" id="proceedButton">
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-verify-submit py-3" id="proceedButton">
                                 <i class="fas fa-spinner fa-spin me-2" style="display: none;"></i>
-                                Reset Password
+                                <span>Reset Password</span>
+                            </button>
+                            
+                            <button type="button" class="btn btn-link text-decoration-none text-muted small mt-2" data-bs-dismiss="modal">
+                                <i class="fas fa-arrow-left me-1"></i> Back to Login
                             </button>
                         </div>
                     </form>
