@@ -292,12 +292,30 @@
 
         .btn-register:hover {
             background: #155A7A;
+            color: white !important;
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(35, 131, 181, 0.3);
         }
 
+        .btn-register:hover i,
+        .btn-register:active i {
+            color: white !important;
+        }
+
         .btn-register:active {
+            color: white !important;
             transform: translateY(0);
+        }
+
+        .btn-register:disabled {
+            background: #2383B5;
+            color: white !important;
+            opacity: 1;
+            cursor: wait;
+        }
+
+        .btn-register:disabled i {
+            color: white !important;
         }
 
         /* --- Date Picker specific hack --- */
@@ -359,6 +377,14 @@
             color: #607D8B;
             font-size: 0.95rem;
             margin-bottom: 0;
+        }
+
+        .login-redirect a {
+            color: #2383B5;
+        }
+
+        .login-redirect a:hover {
+            color: #155A7A;
         }
 
         /* --- Terms & Privacy Modal (adapted from BondNest) --- */
@@ -662,7 +688,7 @@
                     
                     <div class="text-center mt-4 pt-3 border-top">
                         <p class="terms-notice text-center mb-2">By joining, you agree to our <a href="#" class="terms-link">Terms</a> and <a href="#" class="terms-link">Privacy Policy</a></p>
-                        <p class="login-redirect">Already have an account? <a href="login.html" class="text-aqua fw-bold text-decoration-none">Log in here</a></p>
+                        <p class="login-redirect">Already have an account? <a href="login.html" class="fw-bold text-decoration-none">Log in here</a></p>
                     </div>
                 </div>
             </div>
