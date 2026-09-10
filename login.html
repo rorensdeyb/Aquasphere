@@ -1237,17 +1237,40 @@
             
             togglePasswordVisibility('password', 'togglePassword', 'passwordIcon');
             
-            // Form submission handler
+            // Single auth error below password (DCore behavior).
+            // Marks username with a red border only, clears password,
+            // and shows one boxed message under the password field.
+            function showAuthError(message) {
+                const usernameField = document.getElementById('username');
+                const passwordField = document.getElementById('password');
+                if (usernameField) {
+                    usernameField.classList.add('error');
+                    usernameField.classList.remove('success');
+                    hideError('username');
+                }
+                if (passwordField) {
+                    passwordField.value = '';
+                    passwordField.classList.remove('success');
+                    showError('password', message);
+                    passwordField.focus();
+                }
+            }
+            
+            // Form submission handler (DCore behavior: empty submit returns
+            // silently with no per-field errors; wrong credentials show one
+            // "Incorrect username or password." message below password)
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
                 
-                // Validate form first
-                if (!validateForm()) {
-                    // Scroll to first error
-                    const firstError = form.querySelector('.error');
-                    if (firstError && firstError.scrollIntoView) {
-                        firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    }
+                const usernameVal = document.getElementById('username').value.trim();
+                const passwordVal = document.getElementById('password').value;
+                
+                // Clear any previous errors first
+                hideError('username');
+                hideError('password');
+                
+                // Empty fields: silently return, no inline validation
+                if (!usernameVal || !passwordVal) {
                     return;
                 }
                 
@@ -1258,59 +1281,38 @@
                     body: formData
                 })
                 .then(response => {
-                    // Always try to parse as JSON first
+                    // Always try to parse as JSON first, keep status code
                     return response.text().then(text => {
+                        let jsonData = null;
                         try {
-                            const jsonData = JSON.parse(text);
-                            return jsonData;
-                        } catch (e) {
-                            // If not JSON, check response status
-                            if (!response.ok) {
-                                throw new Error('Server error: ' + text);
-                            }
-                            throw new Error('Invalid response format: ' + text);
+                            jsonData = JSON.parse(text);
+                        } catch (err) {
+                            // Non-JSON response
                         }
+                        return { status: response.status, data: jsonData, raw: text };
                     });
                 })
-                .then(data => {
+                .then(({ status, data, raw }) => {
                     if (data && data.success === true) {
                         // Redirect to dashboard or home
                         const redirectUrl = data.redirect || 'dashboard.html';
                         // Force redirect immediately
                         window.location.replace(redirectUrl);
+                    } else if (data && (data.suspended || (data.message && data.message.toLowerCase().includes('suspend')))) {
+                        showSuspendedNotice();
+                        return;
+                    } else if (status === 400 || status === 401) {
+                        // Wrong password or non-existent user: single message below password
+                        showAuthError('Incorrect username or password.');
+                    } else if (data && data.message) {
+                        showAuthError(data.message);
                     } else {
-                        // Show error messages
-                        if (data.errors) {
-                            Object.keys(data.errors).forEach(field => {
-                                showError(field, data.errors[field]);
-                            });
-                        } else if (data.suspended || (data.message && data.message.toLowerCase().includes('suspend'))) {
-                            showSuspendedNotice();
-                            return;
-                        } else if (data.message) {
-                            // Show authentication error below password field
-                            const usernameField = document.getElementById('username');
-                            const passwordField = document.getElementById('password');
-                            
-                            // Show error under password field
-                            showError('password', data.message);
-                            // Also mark username field as error
-                            if (usernameField) {
-                                usernameField.classList.add('error');
-                                usernameField.classList.remove('success');
-                            }
-                        }
+                        showAuthError('An error occurred. Please try again.');
                     }
                 })
                 .catch(error => {
-                    // Show error messages
-                    const usernameField = document.getElementById('username');
-                    const passwordField = document.getElementById('password');
-                    
-                    // Show error under password field
-                    showError('password', 'An error occurred. Please try again.');
-                    if (usernameField) usernameField.classList.add('error');
-                    if (passwordField) passwordField.classList.add('error');
+                    // Network failure: keep inputs, show generic message
+                    showAuthError('An error occurred. Please try again.');
                     
                     // If it's a network error but we got a response, try to redirect anyway
                     if (error.message && error.message.includes('Invalid response format')) {
