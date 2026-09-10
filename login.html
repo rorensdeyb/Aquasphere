@@ -199,14 +199,22 @@
             color: #2383B5;
         }
 
-        /* --- Error Styling --- */
+        /* --- Error Styling (boxed inline validation) --- */
          .custom-error {
-            color: #E53935;
-            font-size: 0.8rem;
+            background: #fef2f2;
+            border: 1px solid #f8b4bf;
+            color: #b84252;
+            padding: 8px 10px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            line-height: 1.25;
             margin-top: 6px;
-            font-weight: 600;
+            margin-bottom: 0;
             display: none;
-            padding-left: 4px;
+            box-sizing: border-box;
+            width: 100%;
+            text-align: left;
         }
 
         .form-control.error, .form-select.error, .custom-input.error {

@@ -341,22 +341,41 @@
             box-shadow: 0 14px 34px rgba(225,29,72,0.45);
         }
 
-        /* Inline error banners (match profile page style) */
+        /* Inline error banners (boxed inline validation) */
         .field-error {
             display: block;
-            margin-top: 6px;
-            background: #fee2e2;
-            color: #b91c1c;
-            border: 1px solid #fecdd3;
-            border-left: 4px solid #f87171;
+            background: #fef2f2;
+            border: 1px solid #f8b4bf;
+            color: #b84252;
             border-radius: 8px;
-            padding: 6px 10px;
-            font-size: 0.9rem;
-            font-weight: 600;
+            padding: 8px 10px;
+            font-size: 13px;
+            font-weight: 500;
+            line-height: 1.25;
+            margin-top: 6px;
+            margin-bottom: 0;
+            box-sizing: border-box;
+            width: 100%;
+            text-align: left;
         }
         .field-error i {
             margin-right: 6px;
-            color: #dc2626;
+            color: #b84252;
+        }
+
+        /* Bootstrap invalid-feedback inside modals (same boxed style) */
+        .modal .invalid-feedback.d-block {
+            background: #fef2f2;
+            border: 1px solid #f8b4bf;
+            color: #b84252;
+            border-radius: 8px;
+            padding: 8px 10px;
+            font-size: 13px;
+            font-weight: 500;
+            line-height: 1.25;
+            margin-top: 6px;
+            margin-bottom: 0;
+            text-align: left;
         }
 
         /* Suspended reason hover */

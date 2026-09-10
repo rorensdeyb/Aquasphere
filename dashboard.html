@@ -1019,17 +1019,21 @@
         
         .form-group .error-message {
             display: none;
-            margin-top: 0.4rem;
-            padding: 0.5rem 0.75rem;
-            background: linear-gradient(135deg, #fee2e2, #fecaca);
-            border: 1px solid #fca5a5;
+            background: #fef2f2;
+            border: 1px solid #f8b4bf;
             border-radius: 8px;
-            color: #991b1b;
-            font-size: 0.85rem;
+            color: #b84252;
+            font-size: 13px;
             font-weight: 500;
+            line-height: 1.25;
+            padding: 8px 10px;
+            margin-top: 6px;
+            margin-bottom: 0;
+            box-sizing: border-box;
+            width: 100%;
+            text-align: left;
             position: relative;
             animation: errorSlideIn 0.3s ease;
-            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.15);
         }
         
         @keyframes errorSlideIn {
@@ -1045,12 +1049,6 @@
         
         .form-group.error .error-message {
             display: block;
-        }
-        
-        .form-group .error-message::before {
-            content: '⚠️';
-            margin-right: 0.5rem;
-            font-size: 0.9rem;
         }
         
         .form-group label {

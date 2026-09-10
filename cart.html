@@ -1614,18 +1614,23 @@
             transform: none;
         }
         
-        /* Match login validation bar design */
+        /* Match login validation bar design (boxed inline validation) */
         .form-group .error-message,
         .custom-error {
-            background-color: #fee;
-            color: #c33;
-            padding: 6px 10px;
-            border-radius: 6px;
+            background: #fef2f2;
+            border: 1px solid #f8b4bf;
+            color: #b84252;
+            padding: 8px 10px;
+            border-radius: 8px;
             font-size: 13px;
-            margin-top: 8px;
-            display: none;
-            border-left: 3px solid #dc3545;
             font-weight: 500;
+            line-height: 1.25;
+            margin-top: 6px;
+            margin-bottom: 0;
+            display: none;
+            box-sizing: border-box;
+            width: 100%;
+            text-align: left;
         }
         
         .form-group.error .error-message {
