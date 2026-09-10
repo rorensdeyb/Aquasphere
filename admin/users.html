@@ -1205,7 +1205,8 @@
                 }
                 
                 if (result.success) {
-                    showCenterNotice(result.message || 'Updated successfully', 1200);
+                    hideCenterNotice();
+                    showNotification(result.message || 'Updated successfully', 'success');
                     loadUsers(currentPage);
                 } else {
                     hideCenterNotice();

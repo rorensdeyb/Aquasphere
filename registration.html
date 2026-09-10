@@ -309,10 +309,11 @@
             color: white !important;
         }
 
-        /* --- Date Picker indicator --- */
-        input[type="date"]::-webkit-calendar-picker-indicator {
-            opacity: 0.4;
-            cursor: pointer;
+        /* --- Hide native date picker indicator (custom icon is used instead) --- */
+        input[type="date"]::-webkit-calendar-picker-indicator,
+        input[type="date"]::-webkit-calendar-picker-indicator:hover {
+            opacity: 0;
+            pointer-events: none;
         }
 
         /* --- Login Link Section --- */
