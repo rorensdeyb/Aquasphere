@@ -1150,7 +1150,9 @@
                 if (usernameField) {
                     usernameField.classList.add('error');
                     usernameField.classList.remove('success');
-                    hideError('username');
+                    // Hide the message box only - keep the red border on the field
+                    const usernameError = document.getElementById('username-error');
+                    if (usernameError) usernameError.style.display = 'none';
                 }
                 if (passwordField) {
                     passwordField.value = '';
