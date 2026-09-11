@@ -1104,8 +1104,10 @@ if ($upload_base_dir) {
 }
 
 /**
- * Seed default products if the products table is empty.
- * Copies bundled images to uploads directory and inserts product records.
+ * Seed default products exactly once (guarded by a system_settings flag).
+ * Copies bundled images to uploads directory on every run (idempotent),
+ * but only inserts product rows a single time so that admin renames and
+ * deletes of predefined products are never resurrected.
  */
 function seed_default_products() {
     global $use_postgres;
@@ -1211,7 +1213,15 @@ function seed_default_products() {
         error_log("Copied $copy_count seed images to uploads directory");
     }
     
-    // Step 2: Insert any missing products
+    // Step 2: Insert missing products, but only once ever.
+    // A persistent flag ensures admin renames/deletes of predefined
+    // products are respected and never resurrected on later requests.
+    $seed_flag = get_system_setting('default_products_seeded', null);
+    if ($seed_flag === '1') {
+        close_connection($conn);
+        return;
+    }
+
     foreach ($default_products as $product) {
         // Check if this product already exists by label
         $check = execute_sql($conn, "SELECT id FROM products WHERE label = ?", [$product['label']]);
@@ -1253,6 +1263,8 @@ function seed_default_products() {
     if ($seeded > 0) {
         error_log("Seeded $seeded new default products");
     }
+    // Mark seeding complete so renames/deletes are never resurrected
+    update_system_setting('default_products_seeded', '1');
 }
 
 // Run seed after database init and symlink setup
