@@ -1112,25 +1112,7 @@ function seed_default_products() {
     
     $conn = get_db_connection();
     
-    // Check if products table has any rows
-    $count_result = execute_sql($conn, "SELECT COUNT(*) as cnt FROM products");
-    if ($count_result === false) {
-        close_connection($conn);
-        return;
-    }
-    
-    if ($use_postgres) {
-        $row = pg_fetch_assoc($count_result);
-    } else {
-        $row = $count_result->fetchArray(SQLITE3_ASSOC);
-    }
-    
-    if ($row && intval($row['cnt']) > 0) {
-        close_connection($conn);
-        return; // Products already seeded
-    }
-    
-    error_log("Seeding default products...");
+    error_log("Checking default products...");
     
     // Determine uploads directory
     $upload_base = '';
@@ -1217,7 +1199,24 @@ function seed_default_products() {
         ]
     ];
     
+    $seeded = 0;
+    
     foreach ($default_products as $product) {
+        // Check if this product already exists by label
+        $check = execute_sql($conn, "SELECT id FROM products WHERE label = ?", [$product['label']]);
+        $exists = false;
+        if ($check !== false) {
+            if ($use_postgres) {
+                $exists = pg_fetch_assoc($check) !== false;
+            } else {
+                $exists = $check->fetchArray(SQLITE3_ASSOC) !== false;
+            }
+        }
+        
+        if ($exists) {
+            continue; // Skip, already exists
+        }
+        
         $source_file = $source_images_dir . DIRECTORY_SEPARATOR . $product['image_file'];
         $dest_file = $products_dir . DIRECTORY_SEPARATOR . $product['image_file'];
         $image_url = 'uploads/products/' . $product['image_file'];
@@ -1239,13 +1238,18 @@ function seed_default_products() {
             $product['unit']
         ]);
         
-        if ($result === false) {
+        if ($result !== false) {
+            $seeded++;
+            error_log("Seeded product: " . $product['label']);
+        } else {
             error_log("Failed to seed product: " . $product['label']);
         }
     }
     
     close_connection($conn);
-    error_log("Seeded " . count($default_products) . " default products");
+    if ($seeded > 0) {
+        error_log("Seeded $seeded new default products");
+    }
 }
 
 // Run seed after database init and symlink setup
