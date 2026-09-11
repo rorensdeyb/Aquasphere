@@ -1194,6 +1194,24 @@ function seed_default_products() {
     
     $seeded = 0;
     
+    // Step 1: Always ensure seed images exist in uploads directory
+    // (images may be lost on redeploy if not on volume)
+    $copy_count = 0;
+    foreach ($default_products as $product) {
+        $source_file = $source_images_dir . DIRECTORY_SEPARATOR . $product['image_file'];
+        $dest_file = $products_dir . DIRECTORY_SEPARATOR . $product['image_file'];
+        
+        if (file_exists($source_file) && !file_exists($dest_file)) {
+            @copy($source_file, $dest_file);
+            $copy_count++;
+            error_log("Copied seed image: " . $product['image_file']);
+        }
+    }
+    if ($copy_count > 0) {
+        error_log("Copied $copy_count seed images to uploads directory");
+    }
+    
+    // Step 2: Insert any missing products
     foreach ($default_products as $product) {
         // Check if this product already exists by label
         $check = execute_sql($conn, "SELECT id FROM products WHERE label = ?", [$product['label']]);
@@ -1210,15 +1228,7 @@ function seed_default_products() {
             continue; // Skip, already exists
         }
         
-        $source_file = $source_images_dir . DIRECTORY_SEPARATOR . $product['image_file'];
-        $dest_file = $products_dir . DIRECTORY_SEPARATOR . $product['image_file'];
         $image_url = 'uploads/products/' . $product['image_file'];
-        
-        // Copy image if source exists and dest doesn't
-        if (file_exists($source_file) && !file_exists($dest_file)) {
-            @copy($source_file, $dest_file);
-            error_log("Copied seed image: " . $product['image_file']);
-        }
         
         // Insert product
         $query = "INSERT INTO products (label, description, price, image_url, category, unit, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)";
