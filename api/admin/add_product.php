@@ -58,20 +58,20 @@ if (isset($_FILES['image'])) {
     }
     
     // Upload directory - check for Railway volume or persistent storage path
-    // Priority: 1) RAILWAY_VOLUME_PATH, 2) UPLOAD_DIR env var, 3) default to web root
+    // Priority: 1) UPLOADS_DIR env var, 2) RAILWAY_VOLUME_PATH, 3) default to web root
     $upload_base = '';
     $is_volume = false;
     
-    if (!empty($_ENV['RAILWAY_VOLUME_PATH'])) {
+    if (!empty($_ENV['UPLOADS_DIR'])) {
+        // Custom upload directory from environment variable (e.g., Railway volume mount)
+        $upload_base = rtrim($_ENV['UPLOADS_DIR'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        $is_volume = true;
+        error_log("Using UPLOADS_DIR: " . $upload_base);
+    } elseif (!empty($_ENV['RAILWAY_VOLUME_PATH'])) {
         // Railway Volume mount path (persistent storage)
-        // Volume should be mounted at /app/uploads or similar web-accessible path
         $upload_base = rtrim($_ENV['RAILWAY_VOLUME_PATH'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
         $is_volume = true;
         error_log("Using Railway Volume path: " . $upload_base);
-    } elseif (!empty($_ENV['UPLOAD_DIR'])) {
-        // Custom upload directory from environment variable
-        $upload_base = rtrim($_ENV['UPLOAD_DIR'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
-        error_log("Using custom UPLOAD_DIR: " . $upload_base);
     } else {
         // Default: web root level (ephemeral - will be lost on redeploy)
         $root_dir = dirname(__DIR__, 2); // Go from api/admin/ to root
@@ -79,14 +79,16 @@ if (isset($_FILES['image'])) {
         error_log("WARNING: Using ephemeral storage at web root: " . $upload_base . " - Files will be lost on redeploy!");
     }
     
-    // If using volume, files go directly to volume root (no 'uploads' subdirectory needed)
-    // If using web root, use 'uploads/products/' structure
+    // Build upload directory and URL path
     if ($is_volume) {
-        // Volume is mounted at the base path, so we create 'products' subdirectory
+        // Volume: store directly in the volume path, URL maps to /uploads/products/
         $upload_dir = $upload_base . 'products' . DIRECTORY_SEPARATOR;
+        // URL path - files are served from the volume via web server
+        $image_url = 'uploads/products/' . $filename;
     } else {
         // Web root: use 'uploads/products/' structure
         $upload_dir = $upload_base . 'uploads' . DIRECTORY_SEPARATOR . 'products' . DIRECTORY_SEPARATOR;
+        $image_url = 'uploads/products/' . $filename;
     }
     
     // Normalize path separators for logging
@@ -128,19 +130,7 @@ if (isset($_FILES['image'])) {
     
     // Move uploaded file
     if (move_uploaded_file($_FILES['image']['tmp_name'], $file_path)) {
-        // Always store relative path from web root for database
-        // The file is stored in the volume (if configured), but we reference it relatively
-        // Railway volumes are mounted and accessible via the web server, so relative paths work
-        if ($is_volume) {
-            // If using volume mounted at /app/uploads, the URL path should be /uploads/products/
-            // But we need to check if volume is mounted at root or at /app/uploads
-            // For Railway, if volume is mounted at /app/uploads, files are accessible at /uploads/
-            $image_url = 'uploads/products/' . $filename;
-        } else {
-            // Standard web root structure
-            $image_url = 'uploads/products/' . $filename;
-        }
-        
+        // image_url is already set above based on volume or web root
         error_log("Image uploaded successfully: " . $image_url . " to " . $file_path . " (Volume: " . ($is_volume ? 'Yes' : 'No') . ", File exists: " . (file_exists($file_path) ? 'Yes' : 'No') . ")");
         
         // Verify file exists after move

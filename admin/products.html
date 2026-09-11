@@ -395,36 +395,43 @@
         .image-preview-wrapper img.image-preview {
             display: block;
         }
+        .image-preview-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+        }
+        .image-preview-wrapper:hover .image-preview-overlay {
+            opacity: 1;
+        }
         .image-fullscreen-btn,
         .image-close-btn {
-            position: absolute;
-            width: 30px;
-            height: 30px;
+            width: 34px;
+            height: 34px;
             border-radius: 50%;
-            border: none;
+            border: 2px solid rgba(255, 255, 255, 0.8);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             color: white;
-            z-index: 10;
+            background: rgba(21, 90, 122, 0.8);
             transition: all 0.2s;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-        }
-        .image-fullscreen-btn {
-            top: 5px;
-            right: 40px;
-            background: rgba(21, 90, 122, 0.85);
+            backdrop-filter: blur(4px);
         }
         .image-fullscreen-btn:hover {
             background: #155A7A;
             transform: scale(1.1);
         }
         .image-close-btn {
-            top: 5px;
-            right: 5px;
-            background: rgba(184, 66, 82, 0.85);
+            background: rgba(184, 66, 82, 0.8);
         }
         .image-close-btn:hover {
             background: #b84252;
@@ -481,6 +488,44 @@
             max-height: 3em;
             color: #475569;
             font-size: 0.88rem;
+        }
+        .action-btn {
+            display: inline-flex !important;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 14px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            vertical-align: middle !important;
+            white-space: nowrap;
+        }
+        .action-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+            color: white;
+        }
+        .action-btn.view-btn {
+            background: #2383B5;
+        }
+        .action-btn.view-btn:hover {
+            background: #1a6a96;
+        }
+        .action-btn.edit-btn {
+            background: #2E8B70;
+        }
+        .action-btn.edit-btn:hover {
+            background: #247259;
+        }
+        .action-btn.delete-btn {
+            background: #dc3545;
+        }
+        .action-btn.delete-btn:hover {
+            background: #c82333;
         }
 
         /* Product View Panel */
@@ -1512,13 +1557,13 @@
                         <td>₱${parseFloat(product.price).toFixed(2)}${product.unit ? '<span style="color: #2383B5; font-weight: 700;">' + escapeHtml(product.unit) + '</span>' : ''}</td>
                         <td><span class="badge bg-secondary">${escapeHtml(product.category || 'N/A')}</span></td>
               <td style="white-space: nowrap !important;">
-                  <button class="btn btn-info btn-sm" onclick="viewProduct(${product.id})" title="View product" style="display: inline-block !important; margin-right: 5px !important; vertical-align: middle !important; color: white;">
+                  <button class="action-btn view-btn" onclick="viewProduct(${product.id})" title="View product">
                       <i class="fas fa-eye"></i> View
                   </button>
-                  <button class="btn btn-primary btn-sm" onclick="editProduct(${product.id})" title="Edit product" style="display: inline-block !important; margin-right: 5px !important; vertical-align: middle !important;">
+                  <button class="action-btn edit-btn" onclick="editProduct(${product.id})" title="Edit product">
                       <i class="fas fa-edit"></i> Edit
                   </button>
-                  <button class="btn btn-danger btn-sm" onclick="deleteProduct(${product.id})" style="display: inline-block !important; vertical-align: middle !important;">
+                  <button class="action-btn delete-btn" onclick="deleteProduct(${product.id})" title="Delete product">
                       <i class="fas fa-trash"></i> Delete
                   </button>
               </td>
@@ -1644,8 +1689,10 @@
                     preview.innerHTML = `
                         <div class="image-preview-wrapper">
                             <img src="${e.target.result}" class="image-preview" alt="Preview" onclick="openFullscreenImage(this.src)">
-                            <button type="button" class="image-fullscreen-btn" onclick="openFullscreenImage(this.previousElementSibling.src)" title="Fullscreen"><i class="fas fa-expand"></i></button>
-                            <button type="button" class="image-close-btn" onclick="removeImagePreview()" title="Remove"><i class="fas fa-times"></i></button>
+                            <div class="image-preview-overlay">
+                                <button type="button" class="image-fullscreen-btn" onclick="openFullscreenImage(this.closest('.image-preview-wrapper').querySelector('img').src)" title="Fullscreen"><i class="fas fa-expand"></i></button>
+                                <button type="button" class="image-close-btn" onclick="removeImagePreview()" title="Remove"><i class="fas fa-times"></i></button>
+                            </div>
                         </div>`;
                 };
                 reader.readAsDataURL(file);

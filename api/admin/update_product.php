@@ -58,11 +58,12 @@ if ($is_multipart) {
         $upload_base = '';
         $is_volume = false;
         
-        if (!empty($_ENV['RAILWAY_VOLUME_PATH'])) {
+        if (!empty($_ENV['UPLOADS_DIR'])) {
+            $upload_base = rtrim($_ENV['UPLOADS_DIR'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+            $is_volume = true;
+        } elseif (!empty($_ENV['RAILWAY_VOLUME_PATH'])) {
             $upload_base = rtrim($_ENV['RAILWAY_VOLUME_PATH'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
             $is_volume = true;
-        } elseif (!empty($_ENV['UPLOAD_DIR'])) {
-            $upload_base = rtrim($_ENV['UPLOAD_DIR'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
         } else {
             $root_dir = dirname(__DIR__, 2);
             $upload_base = $root_dir . DIRECTORY_SEPARATOR;
