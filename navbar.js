@@ -197,23 +197,50 @@ function loadUserData() {
         });
 }
 
-// Update cart count in navbar
-async function updateCartCount() {
-    // Use UserState if available, otherwise fallback to localStorage
-    let cart = [];
-    if (typeof UserState !== 'undefined') {
-        await UserState.loadState();
-        cart = UserState.getCart();
-    } else {
-        cart = JSON.parse(localStorage.getItem('cart') || '[]');
-    }
-    const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 0), 0);
+// Paint the cart badge instantly from the local cart (no network wait)
+function paintCartBadge(totalItems) {
     const cartCountEl = document.getElementById('cartCount');
     if (cartCountEl) {
         cartCountEl.textContent = totalItems;
         // Hide badge when count is 0, only show when there are items
         cartCountEl.style.display = totalItems > 0 ? 'flex' : 'none';
     }
+}
+
+function getLocalCartCount() {
+    try {
+        const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        return cart.reduce((sum, item) => sum + (item.quantity || 0), 0);
+    } catch (_) {
+        return 0;
+    }
+}
+
+// Single shared sync so parallel callers (navbar + page scripts) reuse
+// one request instead of each firing their own fetch-and-paint cycle
+let __cartSyncPromise = null;
+
+// Update cart count in navbar
+async function updateCartCount() {
+    // Instant paint first so the badge never appears late
+    paintCartBadge(getLocalCartCount());
+    if (__cartSyncPromise) return __cartSyncPromise;
+    __cartSyncPromise = (async () => {
+        try {
+            // Use UserState if available, otherwise fallback to localStorage
+            let cart = [];
+            if (typeof UserState !== 'undefined') {
+                await UserState.loadState();
+                cart = UserState.getCart();
+            } else {
+                cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            }
+            paintCartBadge(cart.reduce((sum, item) => sum + (item.quantity || 0), 0));
+        } catch (_) {
+            // Keep the instantly-painted local value on error
+        }
+    })().finally(() => { __cartSyncPromise = null; });
+    return __cartSyncPromise;
 }
 
 // Make updateCartCount available globally so pages can call it
@@ -275,14 +302,25 @@ function updateOrderCount() {
     fetchOrdersInBackground();
 }
 
+// Shared in-flight guard: parallel callers (navbar + page scripts) reuse one
+// request instead of each firing their own fetch-and-paint cycle
+let __ordersFetchPromise = null;
+
 // Fetch orders in background and update cache
 function fetchOrdersInBackground() {
-    fetch('api/get_orders.php?limit=1000')
+    if (__ordersFetchPromise) return __ordersFetchPromise;
+    __ordersFetchPromise = doFetchOrders().finally(() => { __ordersFetchPromise = null; });
+    return __ordersFetchPromise;
+}
+
+function doFetchOrders() {
+    return fetch('api/get_orders.php?limit=1000')
         .then(response => {
             if (!response.ok) {
                 // If 401, user is not logged in - hide badge
                 if (response.status === 401) {
-                    ordersCountEl.style.display = 'none';
+                    const badge401 = document.getElementById('ordersCount');
+                    if (badge401) badge401.style.display = 'none';
                     return null;
                 }
                 throw new Error('Failed to fetch orders: ' + response.status);
@@ -542,13 +580,23 @@ function loadNotifications(force = false) {
     fetchNotificationsInBackground();
 }
 
+// Shared in-flight guard: parallel callers reuse one request instead of
+// each firing their own fetch-and-paint cycle
+let __notifFetchPromise = null;
+
 // Fetch notifications in background and update cache
 function fetchNotificationsInBackground() {
+    if (__notifFetchPromise) return __notifFetchPromise;
+    __notifFetchPromise = doFetchNotifications().finally(() => { __notifFetchPromise = null; });
+    return __notifFetchPromise;
+}
+
+function doFetchNotifications() {
     const badge = document.getElementById('notificationCount');
     const list = document.getElementById('notificationList');
     const wrapper = document.getElementById('navNotificationsWrapper');
     
-    fetch('api/get_notifications.php?limit=200')
+    return fetch('api/get_notifications.php?limit=200')
         .then(resp => {
             if (!resp.ok) {
                 if (resp.status === 401) {

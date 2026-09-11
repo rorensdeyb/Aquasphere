@@ -1527,6 +1527,12 @@
                 if (data.success && data.products) {
                     products = data.products;
                     console.log('Loaded products:', products);
+                    // Warm the image cache first (bounded wait) so product
+                    // cards appear with images instead of loading piecemeal
+                    await Promise.race([
+                        preloadProductImages(products),
+                        new Promise(resolve => setTimeout(resolve, 2500))
+                    ]);
                     renderProducts(products);
                 } else {
                     console.log('No products or success=false:', data);
@@ -1536,6 +1542,40 @@
                 console.error('Error loading products:', error);
                 document.getElementById('productsGrid').innerHTML = '<div class="text-center text-muted" style="padding: 3rem;"><p>Failed to load products. Please refresh the page.</p><p style="font-size: 0.9rem; color: #607D8B;">Error: ' + error.message + '</p></div>';
             }
+        }
+        
+        // Normalize a product image URL (same rules used when rendering)
+        function resolveProductImageUrl(product, verbose) {
+            let imageUrl = (product && product.image_url) || '';
+            if (imageUrl) {
+                // Remove leading slash if present, then add it back
+                imageUrl = imageUrl.replace(/^\/+/, '');
+                if (!imageUrl.startsWith('http')) {
+                    imageUrl = '/' + imageUrl;
+                }
+                // Encode the URL properly to handle spaces and special characters
+                imageUrl = encodeURI(imageUrl);
+                if (verbose) console.log('Product image URL:', product.id, imageUrl);
+            } else if (verbose) {
+                console.log('Product has no image URL:', product.id, product);
+            }
+            return imageUrl;
+        }
+        
+        // Preload product images into the browser cache so cards render
+        // with images already available instead of popping in one by one
+        function preloadProductImages(productsList) {
+            const urls = [...new Set((productsList || []).map(p => resolveProductImageUrl(p)).filter(Boolean))];
+            return Promise.allSettled(urls.map(url => new Promise(resolve => {
+                const done = () => resolve();
+                try {
+                    const img = new Image();
+                    img.onload = done;
+                    img.onerror = done;
+                    img.src = url;
+                    setTimeout(done, 6000); // never hang the render on one file
+                } catch (_) { done(); }
+            })));
         }
         
         // Render products
@@ -1550,21 +1590,7 @@
             productsGrid.innerHTML = productsList.map(product => {
                 const category = product.category || '';
                 const unit = product.unit || '';
-                let imageUrl = product.image_url || '';
-                
-                // Ensure image URL has correct path and encode it properly
-                if (imageUrl) {
-                    // Remove leading slash if present, then add it back
-                    imageUrl = imageUrl.replace(/^\/+/, '');
-                    if (!imageUrl.startsWith('http')) {
-                        imageUrl = '/' + imageUrl;
-                    }
-                    // Encode the URL properly to handle spaces and special characters
-                    imageUrl = encodeURI(imageUrl);
-                    console.log('Product image URL:', product.id, imageUrl);
-                } else {
-                    console.log('Product has no image URL:', product.id, product);
-                }
+                const imageUrl = resolveProductImageUrl(product, true);
                 
                 // Build the style string for the image - use contain so the whole product is visible without cropping
                 let imageStyle = '';
