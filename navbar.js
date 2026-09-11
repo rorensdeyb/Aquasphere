@@ -42,9 +42,11 @@ async function loadNavbar() {
             loadNotifications();
         })();
 
-        // Refresh notifications when dropdown is opened
+        // Refresh notifications when dropdown is opened, and mark as seen
+        // so the badge clears once the user has viewed them
         document.addEventListener('shown.bs.dropdown', (event) => {
             if (event.target && event.target.id === 'navNotifications') {
+                markNotificationsSeen();
                 loadNotifications(true);
         }
         });
@@ -384,6 +386,8 @@ window.updateOrderCount = updateOrderCount;
 window.loadNotifications = loadNotifications;
 window.clearNotificationBadge = clearNotificationBadge;
 window.paginateNotifications = paginateNotifications;
+window.markNotificationsSeen = markNotificationsSeen;
+window.openNotificationOrder = openNotificationOrder;
 
 // ---------------- Notifications ----------------
 let __notifData = [];
@@ -411,6 +415,29 @@ function getNotifCleared() {
         }
     } catch (_) {}
     return ts;
+}
+
+const NOTIF_SEEN_KEY = 'notifSeenAt';
+
+function setNotifSeen(ts) {
+    try { localStorage.setItem(NOTIF_SEEN_KEY, String(ts)); } catch (_) {}
+}
+
+function getNotifSeen() {
+    try { return parseInt(localStorage.getItem(NOTIF_SEEN_KEY) || '0', 10) || 0; }
+    catch (_) { return 0; }
+}
+
+// Opening the bell marks everything as seen: badge clears, list stays visible
+function markNotificationsSeen() {
+    setNotifSeen(Date.now());
+    paintCountBadge('notificationCount', 0);
+}
+
+// Clicking a notification marks seen and takes the user to their orders
+function openNotificationOrder(orderId) {
+    markNotificationsSeen();
+    window.location.href = 'orders.html';
 }
 
 function clearNotificationBadge() {
@@ -679,13 +706,19 @@ function doFetchNotifications() {
             // Get badge fresh each time to ensure we have the latest element
             const badgeEl = document.getElementById('notificationCount');
             if (badgeEl) {
-                // When user cleared locally, honor filtered count (post-clear)
-                // Otherwise prefer API total if provided.
+                // Badge shows UNSEEN count: items created after the user last
+                // opened the bell. Falls back to API total on first ever load.
                 const apiTotal = data.pagination?.total;
-                const filteredCount = notifications.length;
-                const totalCount = clearedAt > 0
-                    ? filteredCount
-                    : (typeof apiTotal === 'number' && apiTotal >= 0 ? apiTotal : filteredCount);
+                const seenAt = getNotifSeen();
+                let totalCount;
+                if (clearedAt <= 0 && seenAt <= 0 && typeof apiTotal === 'number' && apiTotal >= 0) {
+                    totalCount = apiTotal;
+                } else {
+                    totalCount = notifications.filter(n => {
+                        const ts = parseToManilaDate(n.when || '').getTime() || 0;
+                        return ts <= 0 || ts > seenAt;
+                    }).length;
+                }
                 
                 // Cache the count in localStorage for fast loading next time
                 try {
@@ -754,7 +787,7 @@ function renderNotificationPage() {
     const current = __notifData.slice(start, start + __notifPageSize);
 
     list.innerHTML = current.map(n => `
-        <div class="notification-item">
+        <div class="notification-item" onclick="openNotificationOrder(${parseInt(n.orderId, 10) || 0})" title="View order">
             <div class="notification-icon" style="background:${n.color};">
                 <i class="${n.icon}"></i>
             </div>
