@@ -1197,13 +1197,21 @@ function seed_default_products() {
     $seeded = 0;
     
     // Step 1: Always ensure seed images exist in uploads directory
-    // (images may be lost on redeploy if not on volume)
+    // (images may be lost on redeploy if not on volume).
+    // Overwrites the destination when the bundled image changed so that
+    // replacing a file in products/ actually refreshes it on deploy.
     $copy_count = 0;
     foreach ($default_products as $product) {
         $source_file = $source_images_dir . DIRECTORY_SEPARATOR . $product['image_file'];
         $dest_file = $products_dir . DIRECTORY_SEPARATOR . $product['image_file'];
         
-        if (file_exists($source_file) && !file_exists($dest_file)) {
+        if (!file_exists($source_file)) {
+            continue;
+        }
+        $needs_copy = !file_exists($dest_file)
+            || @filesize($source_file) !== @filesize($dest_file)
+            || @md5_file($source_file) !== @md5_file($dest_file);
+        if ($needs_copy) {
             @copy($source_file, $dest_file);
             $copy_count++;
             error_log("Copied seed image: " . $product['image_file']);
