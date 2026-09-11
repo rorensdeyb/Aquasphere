@@ -26,9 +26,11 @@ async function loadNavbar() {
         window.dispatchEvent(new Event('navbarLoaded'));
         
         // Load all badges immediately (no delays) - similar to dashboard.html and cart.html
+        // NOTE: cart uses the alias because pages may declare their own
+        // global updateCartCount() which would shadow window.updateCartCount
         (async () => {
             // Load cart count immediately
-            await updateCartCount();
+            await window.__navbarUpdateCartCount();
             
             // Load order count immediately
             updateOrderCount();
@@ -197,14 +199,20 @@ function loadUserData() {
         });
 }
 
+// Paint a count badge only when something actually changed, so duplicate
+// paint calls from different sources never cause a visible flicker/reload
+function paintCountBadge(id, count) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const text = String(count);
+    const display = count > 0 ? 'flex' : 'none';
+    if (el.textContent !== text) el.textContent = text;
+    if (el.style.display !== display) el.style.display = display;
+}
+
 // Paint the cart badge instantly from the local cart (no network wait)
 function paintCartBadge(totalItems) {
-    const cartCountEl = document.getElementById('cartCount');
-    if (cartCountEl) {
-        cartCountEl.textContent = totalItems;
-        // Hide badge when count is 0, only show when there are items
-        cartCountEl.style.display = totalItems > 0 ? 'flex' : 'none';
-    }
+    paintCountBadge('cartCount', totalItems);
 }
 
 function getLocalCartCount() {
@@ -243,8 +251,12 @@ async function updateCartCount() {
     return __cartSyncPromise;
 }
 
-// Make updateCartCount available globally so pages can call it
+// Make updateCartCount available globally so pages can call it.
+// The alias is shadowing-proof: pages that declare their own global
+// updateCartCount() overwrite window.updateCartCount, so page scripts
+// must call window.__navbarUpdateCartCount() instead.
 window.updateCartCount = updateCartCount;
+window.__navbarUpdateCartCount = updateCartCount;
 
 // Update order count in navbar
 function updateOrderCount() {
@@ -273,8 +285,7 @@ function updateOrderCount() {
             return status !== 'cancelled' && status !== 'delivered';
         });
         const orderCount = filteredOrders.length;
-        ordersCountEl.textContent = orderCount;
-        ordersCountEl.style.display = orderCount > 0 ? 'flex' : 'none';
+        paintCountBadge('ordersCount', orderCount);
         // Still fetch in background to sync, but don't wait for it
         fetchOrdersInBackground();
         return;
@@ -288,8 +299,7 @@ function updateOrderCount() {
         // Use cache if it's less than 30 seconds old
         if (cachedCount !== null && cacheTimestamp && (now - parseInt(cacheTimestamp)) < 30000) {
             const orderCount = parseInt(cachedCount, 10);
-            ordersCountEl.textContent = orderCount;
-            ordersCountEl.style.display = orderCount > 0 ? 'flex' : 'none';
+            paintCountBadge('ordersCount', orderCount);
             // Fetch in background to sync, but don't wait for it
             fetchOrdersInBackground();
             return;
@@ -404,11 +414,7 @@ function getNotifCleared() {
 }
 
 function clearNotificationBadge() {
-    const badge = document.getElementById('notificationCount');
-    if (badge) {
-        badge.style.display = 'none';
-        badge.textContent = '0';
-    }
+    paintCountBadge('notificationCount', 0);
     
     // Clear cache when user manually clears notifications
     try {
@@ -525,8 +531,7 @@ function loadNotificationBadgeFast() {
         // Use cache if it's less than 30 seconds old
         if (cachedCount !== null && cacheTimestamp && (now - parseInt(cacheTimestamp)) < 30000) {
             const notifCount = parseInt(cachedCount, 10);
-            badge.textContent = notifCount;
-            badge.style.display = notifCount > 0 ? 'flex' : 'none';
+            paintCountBadge('notificationCount', notifCount);
             return; // Badge updated, full load will happen in background
         }
     } catch (e) {
@@ -563,10 +568,7 @@ function loadNotifications(force = false) {
             // Use cache if it's less than 30 seconds old
             if (cachedCount !== null && cacheTimestamp && (now - parseInt(cacheTimestamp)) < 30000) {
                 const notifCount = parseInt(cachedCount, 10);
-                if (badge) {
-                    badge.textContent = notifCount;
-                    badge.style.display = notifCount > 0 ? 'flex' : 'none';
-                }
+                paintCountBadge('notificationCount', notifCount);
                 // Fetch in background to sync, but don't wait for it
                 fetchNotificationsInBackground();
                 return;
@@ -627,10 +629,7 @@ function doFetchNotifications() {
                     // Ignore localStorage errors
                 }
                 
-                if (badge) {
-                    badge.style.display = 'none';
-                    badge.textContent = '0';
-                }
+                paintCountBadge('notificationCount', 0);
                 return;
             }
 
@@ -696,9 +695,7 @@ function doFetchNotifications() {
                     // Ignore localStorage errors
                 }
                 
-                badgeEl.textContent = totalCount;
-                // Always set display explicitly - use 'flex' when count > 0, 'none' when 0
-                badgeEl.style.display = totalCount > 0 ? 'flex' : 'none';
+                paintCountBadge('notificationCount', totalCount);
                 
                 // Force visibility - ensure badge is shown
                 if (totalCount > 0) {

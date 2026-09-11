@@ -1383,11 +1383,9 @@
         
         function updateCartCount() {
             cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
-            const cartCountEl = document.getElementById('cartCount');
-            if (cartCountEl) {
-                cartCountEl.textContent = cartCount;
-                // Hide badge when count is 0, only show when there are items
-                cartCountEl.style.display = cartCount > 0 ? 'flex' : 'none';
+            // Badge painting is owned by navbar.js - delegate to avoid double paints
+            if (typeof window.__navbarUpdateCartCount === 'function') {
+                window.__navbarUpdateCartCount();
             }
         }
         
@@ -1426,21 +1424,12 @@
                 // Update localStorage immediately (synchronous, fast)
                 localStorage.setItem('cart', JSON.stringify(cart));
                 
-                // Update cart count immediately (synchronous, fast)
-                cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
-                const cartCountEl = document.getElementById('cartCount');
-                if (cartCountEl) {
-                    cartCountEl.textContent = cartCount;
-                    cartCountEl.style.display = cartCount > 0 ? 'flex' : 'none';
-                }
+                // Update local count and delegate badge painting to navbar.js
+                // (single owner - avoids double paints)
+                updateCartCount();
                 
                 // Save to server (non-blocking)
                 UserState.setCart(cart);
-                
-                // Update navbar cart count (global function from navbar.js)
-                if (typeof window.updateCartCount === 'function') {
-                    window.updateCartCount();
-                }
                 
                 // Show notification immediately
                 showNotificationFast(`${quantity}x ${productName} added to cart!`, 'success');

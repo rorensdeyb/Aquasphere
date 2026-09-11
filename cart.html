@@ -2744,16 +2744,8 @@
                 const cartCount = cart.reduce((sum, item) => sum + (item.quantity || 0), 0);
                 const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 0), 0);
                 
-                // Update cart count badge in navbar
-                const cartCountElement = document.getElementById('cartCount');
-                if (cartCountElement) {
-                    cartCountElement.textContent = cartCount;
-                    if (cartCount === 0) {
-                        cartCountElement.style.display = 'none';
-                    } else {
-                        cartCountElement.style.display = 'flex';
-                    }
-                }
+                // Delegate navbar badge painting to navbar.js (single owner)
+                updateCartCount();
                 
                 // Update item count badge
                 const itemCountElement = document.getElementById('itemCount');
@@ -3389,19 +3381,10 @@
             }, `Are you sure you want to delete ${selectedCount} selected item${selectedCount !== 1 ? 's' : ''}?`);
         }
         
-        // Update cart count in navbar
+        // Badge painting is owned by navbar.js - delegate to avoid double paints
         function updateCartCount() {
-            const cart = UserState.getCart();
-            const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
-            const cartCountElement = document.getElementById('cartCount');
-            if (cartCountElement) {
-                cartCountElement.textContent = cartCount;
-                // Hide badge if count is 0
-                if (cartCount === 0) {
-                    cartCountElement.style.display = 'none';
-                } else {
-                    cartCountElement.style.display = 'flex';
-                }
+            if (typeof window.__navbarUpdateCartCount === 'function') {
+                window.__navbarUpdateCartCount();
             }
         }
         
