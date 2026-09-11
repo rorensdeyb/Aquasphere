@@ -11,14 +11,27 @@ const UserState = {
                !window.location.hostname.startsWith('192.168.');
     },
 
+    // Monotonic save counter: bumped whenever local state is saved (or a
+    // debounced save is scheduled). loadState() uses it to avoid hydrating
+    // localStorage with a stale server snapshot when a save happened
+    // mid-fetch (this is what made the cart badge revert to the old count).
+    _saveSeq: 0,
+
     // Load state from server, fallback to localStorage
     async loadState() {
+        const seqAtStart = UserState._saveSeq;
         try {
             const resp = await fetch('api/user_state_get.php');
             if (resp.ok) {
                 const data = await resp.json();
                 if (data.success) {
-                    // Hydrate localStorage from server (for compatibility)
+                    // Hydrate localStorage from server (for compatibility) -
+                    // but only if nothing was saved while fetching, otherwise
+                    // we'd clobber newer local data with a stale snapshot
+                    if (UserState._saveSeq !== seqAtStart) {
+                        console.log('Skipping server hydration - local changes are newer');
+                        return data;
+                    }
                     if (data.cart) localStorage.setItem('cart', JSON.stringify(data.cart));
                     if (data.delivery_address !== undefined) {
                         if (data.delivery_address === null) {
@@ -88,6 +101,7 @@ const UserState = {
 
     // Save state to server (and localStorage for local dev)
     async saveState(stateUpdates) {
+        UserState._saveSeq++;
         // Always update localStorage first (for immediate UI updates and local dev)
         if (stateUpdates.cart !== undefined) {
             localStorage.setItem('cart', JSON.stringify(stateUpdates.cart));
@@ -192,6 +206,9 @@ const UserState = {
     debouncedSave: (() => {
         let timer = null;
         return function(stateUpdates, delay = 700) {
+            // Mark the pending save immediately so a concurrent loadState()
+            // won't hydrate over the newer local data while waiting
+            UserState._saveSeq++;
             if (timer) clearTimeout(timer);
             timer = setTimeout(() => {
                 UserState.saveState(stateUpdates);

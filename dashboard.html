@@ -1389,7 +1389,7 @@
             }
         }
         
-        function addToCart(productId, productName, price, event) {
+        async function addToCart(productId, productName, price, event) {
             console.log('addToCart called with:', { productId, productName, price });
             
             // Prevent any default behavior that might interfere
@@ -1424,12 +1424,14 @@
                 // Update localStorage immediately (synchronous, fast)
                 localStorage.setItem('cart', JSON.stringify(cart));
                 
-                // Update local count and delegate badge painting to navbar.js
+                // Persist to server immediately and wait, so the badge sync
+                // below reads the fresh cart instead of a stale snapshot
+                // (prevents the badge reverting to the previous count)
+                await UserState.saveState({ cart });
+                
+                // Update local count and badge painting to navbar.js
                 // (single owner - avoids double paints)
                 updateCartCount();
-                
-                // Save to server (non-blocking)
-                UserState.setCart(cart);
                 
                 // Show notification immediately
                 showNotificationFast(`${quantity}x ${productName} added to cart!`, 'success');
