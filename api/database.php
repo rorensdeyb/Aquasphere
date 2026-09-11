@@ -1102,5 +1102,153 @@ if ($upload_base_dir) {
         }
     }
 }
+
+/**
+ * Seed default products if the products table is empty.
+ * Copies bundled images to uploads directory and inserts product records.
+ */
+function seed_default_products() {
+    global $use_postgres;
+    
+    $conn = get_db_connection();
+    
+    // Check if products table has any rows
+    $count_result = execute_sql($conn, "SELECT COUNT(*) as cnt FROM products");
+    if ($count_result === false) {
+        close_connection($conn);
+        return;
+    }
+    
+    if ($use_postgres) {
+        $row = pg_fetch_assoc($count_result);
+    } else {
+        $row = $count_result->fetchArray(SQLITE3_ASSOC);
+    }
+    
+    if ($row && intval($row['cnt']) > 0) {
+        close_connection($conn);
+        return; // Products already seeded
+    }
+    
+    error_log("Seeding default products...");
+    
+    // Determine uploads directory
+    $upload_base = '';
+    if (!empty($_ENV['UPLOADS_DIR'])) {
+        $upload_base = rtrim($_ENV['UPLOADS_DIR'], DIRECTORY_SEPARATOR);
+    } elseif (!empty($_ENV['RAILWAY_VOLUME_PATH'])) {
+        $upload_base = rtrim($_ENV['RAILWAY_VOLUME_PATH'], DIRECTORY_SEPARATOR);
+    } else {
+        $upload_base = dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'uploads';
+    }
+    
+    $products_dir = $upload_base . DIRECTORY_SEPARATOR . 'products';
+    if (!is_dir($products_dir)) {
+        @mkdir($products_dir, 0777, true);
+    }
+    
+    // Source images from the bundled products/ folder
+    $source_images_dir = dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'products';
+    
+    $default_products = [
+        [
+            'label' => '1L Pure Water',
+            'description' => 'Your perfect everyday hydration companion. Lightweight, ergonomic, and easy to carry, it provides all-day refreshment on the go.',
+            'price' => 20.00,
+            'category' => 'Bottle',
+            'unit' => '/unit',
+            'image_file' => 'single-1L.png'
+        ],
+        [
+            'label' => '500ml Water (Pack of 24)',
+            'description' => 'Grab-and-go hydration for the whole family. Perfect for school lunches, road trips, and daily errands, this 24-pack ensures you stay refreshed wherever the day takes you.',
+            'price' => 240.00,
+            'category' => 'Bottled',
+            'unit' => '/pack',
+            'image_file' => '500ml-pack-of-24.png'
+        ],
+        [
+            'label' => '500ml Water (Pack of 48)',
+            'description' => 'Bulk hydration built for events, offices, and large households. Keep everyone refreshed with a generous supply of pure, clean drinking water.',
+            'price' => 460.00,
+            'category' => 'Bottle',
+            'unit' => '/pack',
+            'image_file' => '500ml-pack-of-48.png'
+        ],
+        [
+            'label' => '1L Water (Pack of 12)',
+            'description' => 'Double the hydration in every bottle. Great for workouts, long workdays, or stocking up your pantry, this 12-pack delivers maximum refreshment with fewer refills.',
+            'price' => 210.00,
+            'category' => 'Bottle',
+            'unit' => '/pack',
+            'image_file' => '1L-pack-of-12.png'
+        ],
+        [
+            'label' => '5-Gallon Pure Water Refill',
+            'description' => 'The ultimate high-capacity solution for homes and offices. Designed for standard water coolers, it offers a continuous supply of crisp, clean drinking water.',
+            'price' => 50.00,
+            'category' => 'Refill Gallon',
+            'unit' => '/refill',
+            'image_file' => '5-gallon.png'
+        ],
+        [
+            'label' => '5-Gallon Container with Tap (New Set)',
+            'description' => 'Hydration made effortless. Featuring a built-in faucet and easy-carry handle, this portable jug is ideal for countertops, outdoor BBQs, and camping trips—no cooler required.',
+            'price' => 350.00,
+            'category' => 'Gallon',
+            'unit' => '/unit',
+            'image_file' => '5-gallon-faucet.png'
+        ],
+        [
+            'label' => '5-Gallon Round Jug (New Set)',
+            'description' => 'Includes a brand new heavy-duty 5-gallon jug filled with fresh, purified drinking water. Perfect for new customers or adding extra capacity to your home or office setup.',
+            'price' => 300.00,
+            'category' => 'Gallon',
+            'unit' => '/unit',
+            'image_file' => '5-gallon.png'
+        ],
+        [
+            'label' => '5-Gallon Tap Container Refill',
+            'description' => 'Refill service for your existing 5-gallon tap container. Enjoy the same clean, pure drinking water refilled directly into your portable dispensing jug.',
+            'price' => 50.00,
+            'category' => 'Refill Gallon',
+            'unit' => '/refill',
+            'image_file' => '5-gallon-faucet.png'
+        ]
+    ];
+    
+    foreach ($default_products as $product) {
+        $source_file = $source_images_dir . DIRECTORY_SEPARATOR . $product['image_file'];
+        $dest_file = $products_dir . DIRECTORY_SEPARATOR . $product['image_file'];
+        $image_url = 'uploads/products/' . $product['image_file'];
+        
+        // Copy image if source exists and dest doesn't
+        if (file_exists($source_file) && !file_exists($dest_file)) {
+            @copy($source_file, $dest_file);
+            error_log("Copied seed image: " . $product['image_file']);
+        }
+        
+        // Insert product
+        $query = "INSERT INTO products (label, description, price, image_url, category, unit, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)";
+        $result = execute_sql($conn, $query, [
+            $product['label'],
+            $product['description'],
+            $product['price'],
+            $image_url,
+            $product['category'],
+            $product['unit']
+        ]);
+        
+        if ($result === false) {
+            error_log("Failed to seed product: " . $product['label']);
+        }
+    }
+    
+    close_connection($conn);
+    error_log("Seeded " . count($default_products) . " default products");
+}
+
+// Run seed after database init and symlink setup
+seed_default_products();
 ?>
 
