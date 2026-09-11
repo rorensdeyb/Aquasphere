@@ -1116,7 +1116,7 @@ function seed_default_products() {
     
     // Always use local uploads directory (committed to repo with .htaccess)
     // The volume symlink approach doesn't work when uploads/ already exists in the repo
-    $root_dir = dirname(__DIR__, 2);
+    $root_dir = dirname(__DIR__);
     $products_dir = $root_dir . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'products';
     if (!is_dir($products_dir)) {
         @mkdir($products_dir, 0777, true);
