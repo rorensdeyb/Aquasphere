@@ -527,7 +527,8 @@
         
         /* Ensure inline background-image takes precedence over CSS gradient */
         .product-image[style*="background-image"] {
-            background-color: transparent;
+            background-color: #ffffff;
+            background-size: contain;
         }
         
         .product-image i {
@@ -1565,11 +1566,10 @@
                     console.log('Product has no image URL:', product.id, product);
                 }
                 
-                // Build the style string for the image - use background shorthand to override CSS gradient
+                // Build the style string for the image - use contain so the whole product is visible without cropping
                 let imageStyle = '';
                 if (imageUrl) {
-                    // Use background-size: cover to fill entire container without white spaces
-                    imageStyle = `background-image: url('${imageUrl}') !important; background-size: cover !important; background-position: center center !important; background-repeat: no-repeat !important; background-color: transparent !important;`;
+                    imageStyle = `background-image: url('${imageUrl}') !important; background-size: contain !important; background-position: center center !important; background-repeat: no-repeat !important; background-color: #ffffff !important;`;
                 }
                 
                 return `
