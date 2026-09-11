@@ -83,12 +83,9 @@ if (isset($_FILES['image'])) {
     if ($is_volume) {
         // Volume: store directly in the volume path, URL maps to /uploads/products/
         $upload_dir = $upload_base . 'products' . DIRECTORY_SEPARATOR;
-        // URL path - files are served from the volume via web server
-        $image_url = 'uploads/products/' . $filename;
     } else {
         // Web root: use 'uploads/products/' structure
         $upload_dir = $upload_base . 'uploads' . DIRECTORY_SEPARATOR . 'products' . DIRECTORY_SEPARATOR;
-        $image_url = 'uploads/products/' . $filename;
     }
     
     // Normalize path separators for logging
@@ -101,23 +98,6 @@ if (isset($_FILES['image'])) {
             ob_end_clean();
             echo json_encode(['success' => false, 'message' => 'Failed to create upload directory: ' . $upload_dir]);
             exit;
-        }
-    }
-    
-    // If using a volume, create symlink from web root so files are accessible via URL
-    if ($is_volume) {
-        $root_dir = dirname(__DIR__, 2); // Go from api/admin/ to root
-        $web_uploads = $root_dir . DIRECTORY_SEPARATOR . 'uploads';
-        if (!file_exists($web_uploads)) {
-            // Try to create symlink from web root uploads/ -> volume uploads/
-            @symlink($upload_base, $web_uploads);
-            error_log("Created symlink: " . $web_uploads . " -> " . $upload_base);
-        } elseif (is_dir($web_uploads)) {
-            // If it's a real directory (not symlink), check if it has a products subfolder
-            $web_products = $web_uploads . DIRECTORY_SEPARATOR . 'products';
-            if (!file_exists($web_products)) {
-                @mkdir($web_products, 0777, true);
-            }
         }
     }
     
@@ -144,6 +124,7 @@ if (isset($_FILES['image'])) {
     // Generate unique filename
     $filename = uniqid('product_', true) . '.' . $file_extension;
     $file_path = $upload_dir . $filename;
+    $image_url = 'uploads/products/' . $filename;
     
     // Move uploaded file
     if (move_uploaded_file($_FILES['image']['tmp_name'], $file_path)) {

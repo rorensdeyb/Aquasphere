@@ -1031,5 +1031,76 @@ function cleanup_expired_password_reset() {
 if (!$GLOBALS['use_postgres'] && !file_exists($GLOBALS['db_path'])) {
     init_db();
 }
+
+// Create symlink for uploads if using a different upload directory (Railway volume)
+$upload_base_dir = '';
+if (!empty($_ENV['UPLOADS_DIR'])) {
+    $upload_base_dir = rtrim($_ENV['UPLOADS_DIR'], DIRECTORY_SEPARATOR);
+} elseif (!empty($_ENV['RAILWAY_VOLUME_PATH'])) {
+    $upload_base_dir = rtrim($_ENV['RAILWAY_VOLUME_PATH'], DIRECTORY_SEPARATOR);
+}
+
+if ($upload_base_dir) {
+    $local_uploads = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'uploads';
+    
+    if (!is_link($local_uploads)) {
+        // If it's a real directory, move it into the volume first
+        if (is_dir($local_uploads)) {
+            $volume_products = $upload_base_dir . DIRECTORY_SEPARATOR . 'products';
+            if (!is_dir($volume_products)) {
+                @mkdir($volume_products, 0777, true);
+            }
+            
+            // Move any existing files from local uploads to volume
+            $iterator = new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator($local_uploads, RecursiveDirectoryIterator::SKIP_DOTS),
+                RecursiveIteratorIterator::SELF_FIRST
+            );
+            foreach ($iterator as $item) {
+                $rel_path = substr($item->getPathname(), strlen($local_uploads) + 1);
+                $dest = $upload_base_dir . DIRECTORY_SEPARATOR . $rel_path;
+                if ($item->isDir() && !is_dir($dest)) {
+                    @mkdir($dest, 0777, true);
+                } elseif ($item->isFile()) {
+                    @copy($item->getPathname(), $dest);
+                }
+            }
+            
+            // Remove the real directory (now that files are in volume)
+            $this_dir = $local_uploads;
+            $iterator2 = new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator($this_dir, RecursiveDirectoryIterator::SKIP_DOTS),
+                RecursiveIteratorIterator::CHILD_FIRST
+            );
+            foreach ($iterator2 as $item) {
+                if ($item->isDir()) {
+                    @rmdir($item->getPathname());
+                } else {
+                    @unlink($item->getPathname());
+                }
+            }
+            @rmdir($this_dir);
+            error_log("Moved existing uploads to volume and removed local directory");
+        }
+        
+        // Create symlink
+        if (!is_dir($local_uploads) && !is_link($local_uploads)) {
+            $result = @symlink($upload_base_dir, $local_uploads);
+            if ($result) {
+                error_log("Created symlink: " . $local_uploads . " -> " . $upload_base_dir);
+            } else {
+                error_log("Failed to create symlink: " . $local_uploads . " -> " . $upload_base_dir);
+            }
+        }
+    } elseif (is_link($local_uploads)) {
+        // Symlink exists, verify it points to the right place
+        $target = readlink($local_uploads);
+        if ($target !== $upload_base_dir) {
+            @unlink($local_uploads);
+            @symlink($upload_base_dir, $local_uploads);
+            error_log("Recreated symlink: " . $local_uploads . " -> " . $upload_base_dir);
+        }
+    }
+}
 ?>
 
