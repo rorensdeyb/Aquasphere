@@ -3,6 +3,14 @@
  * Loads the navbar HTML and initializes it
  */
 
+// Guards: the navbar HTML must inject exactly once per page load.
+// The boot code below can invoke loadNavbar() up to 3 times (immediate +
+// IIFE + DOMContentLoaded); without this guard every call wipes and
+// re-creates the navbar DOM, resetting badges/username and causing the
+// visible multiple-reload flicker.
+let __navbarLoadingPromise = null;
+let __navbarInjected = false;
+
 // Load navbar HTML (async, non-blocking)
 async function loadNavbar() {
     const navbarContainer = document.getElementById('navbar-container');
@@ -10,7 +18,16 @@ async function loadNavbar() {
         console.error('Navbar container not found');
         return;
     }
-    
+    if (__navbarInjected) return; // already live - never wipe it
+    if (__navbarLoadingPromise) return __navbarLoadingPromise;
+    __navbarLoadingPromise = doLoadNavbar(navbarContainer)
+        .then((ok) => { if (ok !== false) __navbarInjected = true; })
+        .finally(() => { __navbarLoadingPromise = null; });
+    return __navbarLoadingPromise;
+}
+
+// Actual navbar fetch + init (runs at most once per page load)
+async function doLoadNavbar(navbarContainer) {
     try {
         const resp = await fetch('navbar.html', { cache: 'no-cache' });
         if (!resp.ok) throw new Error(`Failed to load navbar: ${resp.status}`);
@@ -50,8 +67,10 @@ async function loadNavbar() {
                 loadNotifications(true);
         }
         });
+        return true;
     } catch (error) {
         console.error('Error loading navbar:', error);
+        return false;
     }
 }
 
