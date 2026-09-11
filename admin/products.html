@@ -381,6 +381,268 @@
             margin-top: 10px;
             border-radius: 8px;
             border: 2px solid #D5E5ED;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .image-preview:hover {
+            transform: scale(1.02);
+        }
+        .image-preview-wrapper {
+            position: relative;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .image-preview-wrapper img.image-preview {
+            display: block;
+        }
+        .image-fullscreen-btn,
+        .image-close-btn {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            color: white;
+            z-index: 10;
+            transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        .image-fullscreen-btn {
+            top: 5px;
+            right: 40px;
+            background: rgba(21, 90, 122, 0.85);
+        }
+        .image-fullscreen-btn:hover {
+            background: #155A7A;
+            transform: scale(1.1);
+        }
+        .image-close-btn {
+            top: 5px;
+            right: 5px;
+            background: rgba(184, 66, 82, 0.85);
+        }
+        .image-close-btn:hover {
+            background: #b84252;
+            transform: scale(1.1);
+        }
+        .image-fullscreen-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .image-fullscreen-overlay img {
+            max-width: 90vw;
+            max-height: 90vh;
+            border-radius: 12px;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+        }
+        .image-fullscreen-overlay .fullscreen-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(255, 255, 255, 0.9);
+            color: #163B53;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+            transition: all 0.2s;
+        }
+        .image-fullscreen-overlay .fullscreen-close:hover {
+            background: white;
+            transform: scale(1.1);
+        }
+        .description-cell {
+            max-width: 250px;
+        }
+        .description-text {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.5;
+            max-height: 3em;
+            color: #475569;
+            font-size: 0.88rem;
+        }
+
+        /* Product View Panel */
+        .product-panel-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(6px);
+            z-index: 3000;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .product-panel-overlay.is-open {
+            display: block;
+            opacity: 1;
+        }
+        .product-panel {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 42vw;
+            min-width: 480px;
+            max-width: 600px;
+            height: 100vh;
+            background: #ffffff;
+            z-index: 3001;
+            transform: translateX(100%);
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            box-shadow: -4px 0 30px rgba(0, 0, 0, 0.15);
+        }
+        .product-panel.is-open {
+            transform: translateX(0);
+        }
+        .product-panel-header {
+            background: linear-gradient(135deg, #2383B5, #155A7A);
+            color: white;
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-shrink: 0;
+        }
+        .product-panel-back {
+            background: rgba(255,255,255,0.15);
+            border: none;
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s;
+            flex-shrink: 0;
+        }
+        .product-panel-back:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        .product-panel-header-info h3 {
+            margin: 0;
+            font-size: 1.15rem;
+            font-weight: 700;
+        }
+        .product-panel-header-info small {
+            opacity: 0.8;
+            font-size: 0.82rem;
+        }
+        .product-panel-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+        }
+        .product-panel-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 16px;
+            overflow: hidden;
+            margin: 0 auto 20px;
+            box-shadow: 0 4px 14px rgba(14, 165, 233, 0.25);
+            background: #f0f9ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .product-panel-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .product-panel-avatar i {
+            font-size: 2.5rem;
+            color: #155A7A;
+        }
+        .product-panel-section {
+            background: #f8fbfe;
+            border: 1px solid #e8f1f8;
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin-bottom: 12px;
+        }
+        .product-panel-section:last-child {
+            margin-bottom: 0;
+        }
+        .product-panel-section-title {
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #2383B5;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #D5E5ED;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .product-panel-section-title i {
+            font-size: 0.7rem;
+            color: #155A7A;
+        }
+        .product-panel-field {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 8px 0;
+        }
+        .product-panel-field:not(:last-child) {
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .product-panel-field-label {
+            font-size: 0.82rem;
+            color: #607D8B;
+            font-weight: 500;
+            flex-shrink: 0;
+            margin-right: 12px;
+        }
+        .product-panel-field-value {
+            font-size: 0.88rem;
+            color: #0f172a;
+            font-weight: 600;
+            text-align: right;
+            word-break: break-word;
+        }
+        .product-panel-desc {
+            font-size: 0.9rem;
+            color: #334155;
+            line-height: 1.7;
+            white-space: pre-wrap;
+            margin: 0;
+        }
+        .product-panel-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 600;
         }
 
         /* Pagination Styles */
@@ -950,14 +1212,8 @@
                     Product Management
                 </a>
             </li>
-            <li>
-                <a href="../api/logout.php?redirect=index.html">
-                    <i class="fas fa-home"></i>
-                    Back to Site
-                </a>
-            </li>
-            <li>
-                <a href="../api/logout.php">
+        <li>
+            <a href="../api/logout.php">
                     <i class="fas fa-sign-out-alt"></i>
                     Logout
                 </a>
@@ -1121,7 +1377,7 @@
                             </label>
                             <input type="text" class="edit-form-control" id="editProductUnit" required placeholder="e.g., /refill, /unit, /pack">
                         </div>
-                        <div class="col-12">
+            <div class="col-12 d-flex justify-content-end">
                             <div class="edit-product-actions">
                                 <button type="submit" class="btn-edit-submit" id="editProductSubmitBtn">
                                     <span class="edit-btn-text">
@@ -1167,6 +1423,20 @@
                     <button class="btn-delete-cancel" id="deleteCancelBtn">Cancel</button>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Product View Panel -->
+    <div class="product-panel-overlay" id="productPanelOverlay" onclick="closeProductPanel()"></div>
+    <div class="product-panel" id="productPanel">
+        <div class="product-panel-header">
+            <button class="product-panel-back" onclick="closeProductPanel()"><i class="fas fa-arrow-left"></i></button>
+            <div class="product-panel-header-info">
+                <h3 id="panelProductName">Product Name</h3>
+                <small id="panelProductCategory">Category</small>
+            </div>
+        </div>
+        <div class="product-panel-body" id="productPanelBody">
         </div>
     </div>
 
@@ -1236,19 +1506,22 @@
                     <tr>
                         <td>${product.id}</td>
                         <td><strong>${escapeHtml(product.label)}</strong></td>
-                        <td class="description-cell">
-                            <span class="description-text">${description}</span>
-                        </td>
+              <td class="description-cell">
+                  <span class="description-text" title="${description}">${description}</span>
+              </td>
                         <td>₱${parseFloat(product.price).toFixed(2)}${product.unit ? '<span style="color: #2383B5; font-weight: 700;">' + escapeHtml(product.unit) + '</span>' : ''}</td>
                         <td><span class="badge bg-secondary">${escapeHtml(product.category || 'N/A')}</span></td>
-                        <td style="white-space: nowrap !important;">
-                            <button class="btn btn-primary btn-sm" onclick="editProduct(${product.id})" title="Edit product" style="display: inline-block !important; margin-right: 5px !important; vertical-align: middle !important;">
-                                <i class="fas fa-edit"></i> Edit
-                            </button>
-                            <button class="btn btn-danger btn-sm" onclick="deleteProduct(${product.id})" style="display: inline-block !important; vertical-align: middle !important;">
-                                <i class="fas fa-trash"></i> Delete
-                            </button>
-                        </td>
+              <td style="white-space: nowrap !important;">
+                  <button class="btn btn-info btn-sm" onclick="viewProduct(${product.id})" title="View product" style="display: inline-block !important; margin-right: 5px !important; vertical-align: middle !important; color: white;">
+                      <i class="fas fa-eye"></i> View
+                  </button>
+                  <button class="btn btn-primary btn-sm" onclick="editProduct(${product.id})" title="Edit product" style="display: inline-block !important; margin-right: 5px !important; vertical-align: middle !important;">
+                      <i class="fas fa-edit"></i> Edit
+                  </button>
+                  <button class="btn btn-danger btn-sm" onclick="deleteProduct(${product.id})" style="display: inline-block !important; vertical-align: middle !important;">
+                      <i class="fas fa-trash"></i> Delete
+                  </button>
+              </td>
                     </tr>
                 `;
             }).join('');
@@ -1364,17 +1637,40 @@
         document.getElementById('productImage').addEventListener('change', function(e) {
             const file = e.target.files[0];
             const preview = document.getElementById('imagePreview');
-            
+
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    preview.innerHTML = `<img src="${e.target.result}" class="image-preview" alt="Preview">`;
+                    preview.innerHTML = `
+                        <div class="image-preview-wrapper">
+                            <img src="${e.target.result}" class="image-preview" alt="Preview" onclick="openFullscreenImage(this.src)">
+                            <button type="button" class="image-fullscreen-btn" onclick="openFullscreenImage(this.previousElementSibling.src)" title="Fullscreen"><i class="fas fa-expand"></i></button>
+                            <button type="button" class="image-close-btn" onclick="removeImagePreview()" title="Remove"><i class="fas fa-times"></i></button>
+                        </div>`;
                 };
                 reader.readAsDataURL(file);
             } else {
                 preview.innerHTML = '';
             }
         });
+
+        function openFullscreenImage(src) {
+            const overlay = document.createElement('div');
+            overlay.className = 'image-fullscreen-overlay';
+            overlay.innerHTML = `
+                <img src="${src}" alt="Full preview">
+                <button class="fullscreen-close" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
+            `;
+            overlay.addEventListener('click', function(e) {
+                if (e.target === this) this.remove();
+            });
+            document.body.appendChild(overlay);
+        }
+
+        function removeImagePreview() {
+            document.getElementById('imagePreview').innerHTML = '';
+            document.getElementById('productImage').value = '';
+        }
 
         // Add product
         async function addProduct() {
@@ -1463,6 +1759,89 @@
                 showNotification('Failed to add product', 'error');
             }
         }
+
+        // View product panel
+        function viewProduct(productId) {
+            const id = parseInt(productId);
+            const product = allProducts.find(p => parseInt(p.id) === id);
+            if (!product) {
+                showNotification('Product not found', 'error');
+                return;
+            }
+
+            let imageUrl = product.image_url || '';
+            if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
+                imageUrl = '../' + imageUrl;
+            } else if (imageUrl && imageUrl.startsWith('/')) {
+                imageUrl = '..' + imageUrl;
+            }
+
+            document.getElementById('panelProductName').textContent = product.label || 'N/A';
+            document.getElementById('panelProductCategory').textContent = product.category || 'N/A';
+
+            const body = document.getElementById('productPanelBody');
+            body.innerHTML = `
+                <div class="product-panel-avatar">
+                    ${imageUrl ? `<img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(product.label)}" onerror="this.parentElement.innerHTML='<i class=\\'fas fa-box\\'></i>'">` : '<i class="fas fa-box"></i>'}
+                </div>
+
+                <div class="product-panel-section">
+                    <div class="product-panel-section-title"><i class="fas fa-tag"></i> Product Info</div>
+                    <div class="product-panel-field">
+                        <span class="product-panel-field-label">ID</span>
+                        <span class="product-panel-field-value">#${product.id}</span>
+                    </div>
+                    <div class="product-panel-field">
+                        <span class="product-panel-field-label">Label</span>
+                        <span class="product-panel-field-value">${escapeHtml(product.label || 'N/A')}</span>
+                    </div>
+                    <div class="product-panel-field">
+                        <span class="product-panel-field-label">Price</span>
+                        <span class="product-panel-field-value">₱${parseFloat(product.price).toFixed(2)}<span style="color:#2383B5; font-weight:700;">${escapeHtml(product.unit || '')}</span></span>
+                    </div>
+                    <div class="product-panel-field">
+                        <span class="product-panel-field-label">Category</span>
+                        <span class="product-panel-field-value"><span class="product-panel-badge" style="background:#dbeafe; color:#1e40af;">${escapeHtml(product.category || 'N/A')}</span></span>
+                    </div>
+                </div>
+
+                <div class="product-panel-section">
+                    <div class="product-panel-section-title"><i class="fas fa-align-left"></i> Description</div>
+                    <p class="product-panel-desc">${escapeHtml(product.description || 'No description')}</p>
+                </div>
+            `;
+
+            const overlay = document.getElementById('productPanelOverlay');
+            const panel = document.getElementById('productPanel');
+            overlay.style.display = 'block';
+            panel.style.display = 'flex';
+            requestAnimationFrame(() => {
+                overlay.classList.add('is-open');
+                panel.classList.add('is-open');
+            });
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeProductPanel() {
+            const overlay = document.getElementById('productPanelOverlay');
+            const panel = document.getElementById('productPanel');
+            overlay.classList.remove('is-open');
+            panel.classList.remove('is-open');
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                panel.style.display = 'none';
+                document.body.style.overflow = '';
+            }, 350);
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const panel = document.getElementById('productPanel');
+                if (panel && panel.classList.contains('is-open')) {
+                    closeProductPanel();
+                }
+            }
+        });
 
         // Edit product
         function editProduct(productId) {
