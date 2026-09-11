@@ -1851,9 +1851,25 @@
             }
         }
         
+        // Track fields the user actually typed in, so success (green)
+        // styling never appears on untouched pre-filled inputs when an
+        // unrelated field (e.g. password) triggers full-form validation
+        const markProfileDirty = (e) => {
+            const t = e && e.target;
+            if (t && (t.tagName === 'INPUT' || t.tagName === 'SELECT' || t.tagName === 'TEXTAREA')) {
+                t.dataset.dirty = '1';
+            }
+        };
+        document.addEventListener('input', markProfileDirty);
+        document.addEventListener('change', markProfileDirty);
+        
         function markProfileSuccess(el, key) {
             if (!el) return;
             if (isInitialProfileLoad) {
+                return;
+            }
+            if (!el.dataset.dirty) {
+                markProfileClear(el);
                 return;
             }
             el.classList.remove('error');
@@ -2858,10 +2874,14 @@
                             document.body.style.overflow = 'hidden';
                         }
                         
-                        // Redirect after giving user time to read (5 seconds)
-                        setTimeout(() => {
+                        // Redirect after giving user time to read (5 seconds).
+                        // The server session must be destroyed first: login.html
+                        // auto-redirects live sessions (admins to admin side),
+                        // so without logout the user never actually lands on login.
+                        setTimeout(async () => {
                             localStorage.removeItem('loggedInUser');
                             sessionStorage.removeItem('userData');
+                            try { await fetch('api/logout.php', { credentials: 'include' }); } catch (_) {}
                             window.location.href = 'login.html';
                         }, 5000);
                     } else {
