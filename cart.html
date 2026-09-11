@@ -170,7 +170,27 @@
             transform: translateY(-1px);
         }
         
-        /* Cart Items */
+        /* Cart Items - inner scroll so the page itself doesn't need scrolling */
+        .cart-items-scroll {
+            flex: 1;
+            max-height: max(320px, calc(100vh - 380px));
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding-right: 6px;
+            scrollbar-width: thin;
+            scrollbar-color: #2383B5 #EAF7FC;
+        }
+        .cart-items-scroll::-webkit-scrollbar {
+            width: 8px;
+        }
+        .cart-items-scroll::-webkit-scrollbar-track {
+            background: #EAF7FC;
+            border-radius: 8px;
+        }
+        .cart-items-scroll::-webkit-scrollbar-thumb {
+            background: #2383B5;
+            border-radius: 8px;
+        }
         .cart-item {
             display: flex;
             align-items: center;
@@ -2203,7 +2223,7 @@
     <main class="main-content">
         <div class="container">
             
-            <div class="row" style="display: flex; align-items: stretch;">
+            <div class="row" style="display: flex; align-items: flex-start;">
                 <!-- Cart Items -->
                 <div class="col-lg-8" style="display: flex;">
                     <div class="cart-container" style="flex: 1; display: flex; flex-direction: column;">
@@ -2225,7 +2245,7 @@
                         </div>
                         
                         <!-- Cart Items List -->
-                        <div id="cartItemsList" style="flex: 1;">
+                        <div id="cartItemsList" class="cart-items-scroll">
                             <!-- Items will be dynamically inserted here -->
                         </div>
                         
@@ -2291,13 +2311,13 @@
                         </div>
                         
                         <!-- Delivery Address Section -->
-                        <div class="cart-summary" style="flex: 1; display: flex; flex-direction: column;margin-top: 3rem;">
-                            <div class="delivery-address-section" id="deliveryAddressSection" style="flex: 1; display: flex; flex-direction: column;">
+                        <div class="cart-summary" style="display: flex; flex-direction: column; margin-top: 1rem;">
+                            <div class="delivery-address-section" id="deliveryAddressSection" style="display: flex; flex-direction: column;">
                             <div class="address-header">
                                 <i class="fas fa-map-marker-alt"></i>
                                 <span>Delivery Address</span>
                             </div>
-                            <div id="addressContent" class="address-content" style="flex: 1;">
+                            <div id="addressContent" class="address-content">
                                 <div class="empty-address" id="emptyAddress">
                                     <p>No delivery address set</p>
                                     <button class="btn-add-address" onclick="openAddressModal()">
