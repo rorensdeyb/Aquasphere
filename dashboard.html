@@ -1487,7 +1487,7 @@
                     card.style.display = 'flex';
                 } else {
                     const category = card.getAttribute('data-category');
-                    if (category.includes(filterValue)) {
+                    if (category && category.toLowerCase().includes(filterValue.toLowerCase())) {
                         card.style.display = 'flex';
                     } else {
                         card.style.display = 'none';

@@ -1114,23 +1114,16 @@ function seed_default_products() {
     
     error_log("Checking default products...");
     
-    // Determine uploads directory
-    $upload_base = '';
-    if (!empty($_ENV['UPLOADS_DIR'])) {
-        $upload_base = rtrim($_ENV['UPLOADS_DIR'], DIRECTORY_SEPARATOR);
-    } elseif (!empty($_ENV['RAILWAY_VOLUME_PATH'])) {
-        $upload_base = rtrim($_ENV['RAILWAY_VOLUME_PATH'], DIRECTORY_SEPARATOR);
-    } else {
-        $upload_base = dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'uploads';
-    }
-    
-    $products_dir = $upload_base . DIRECTORY_SEPARATOR . 'products';
+    // Always use local uploads directory (committed to repo with .htaccess)
+    // The volume symlink approach doesn't work when uploads/ already exists in the repo
+    $root_dir = dirname(__DIR__, 2);
+    $products_dir = $root_dir . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'products';
     if (!is_dir($products_dir)) {
         @mkdir($products_dir, 0777, true);
     }
     
     // Source images from the bundled products/ folder
-    $source_images_dir = dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . 'products';
+    $source_images_dir = $root_dir . DIRECTORY_SEPARATOR . 'products';
     
     $default_products = [
         [
