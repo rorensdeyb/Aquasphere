@@ -17,6 +17,11 @@ async function loadNavbar() {
         const html = await resp.text();
         navbarContainer.innerHTML = html;
         
+        // Paint cached user instantly (before any network round-trip) so the
+        // navbar never flashes the "User" empty state on refresh.
+        // loadUserData() below still verifies against the server.
+        paintCachedUser();
+        
         initializeNavbar();
         window.dispatchEvent(new Event('navbarLoaded'));
         
@@ -76,8 +81,32 @@ function initializeNavbar() {
     // Badges are now loaded immediately in loadNavbar() - no delays needed here
 }
 
+// Paint the last-known user from localStorage synchronously.
+// Called immediately after navbar HTML injection so refreshes show the
+// real username instantly instead of flashing the "User" empty state.
+function paintCachedUser() {
+    let cached = null;
+    try {
+        cached = JSON.parse(localStorage.getItem('loggedInUser') || localStorage.getItem('userData') || 'null');
+    } catch (_) {
+        cached = null;
+    }
+    if (cached && (cached.username || cached.first_name)) {
+        const usernameDisplay = document.getElementById('usernameDisplay');
+        if (usernameDisplay) {
+            usernameDisplay.textContent = cached.username || cached.first_name;
+        }
+        const navNotificationsWrapper = document.getElementById('navNotificationsWrapper');
+        if (navNotificationsWrapper) {
+            navNotificationsWrapper.style.display = '';
+        }
+    }
+}
+
 // Load user data for navbar
 function loadUserData() {
+    // Optimistic paint first - server response below will verify/correct it
+    paintCachedUser();
     // Try to fetch from server first, then fallback to localStorage
     fetch('api/get_current_user.php')
         .then(response => {

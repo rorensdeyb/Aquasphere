@@ -10,6 +10,20 @@ body {
     font-family: Inter, system-ui, Segoe UI, sans-serif;
 }
 
+/* Reserve navbar space so async injection never shifts page content */
+#navbar-container {
+    display: block;
+    min-height: 70px;
+}
+
+/* Reserve username width so "User" -> real name swap doesn't reflow the navbar */
+#usernameDisplay {
+    display: inline-block;
+    min-width: 3.5rem;
+    min-height: 1em;
+    white-space: nowrap;
+}
+
 /* Navbar Styles - Match index.html thickness */
 .navbar {
     background: rgba(255, 255, 255, 0.95) !important;
