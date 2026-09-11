@@ -104,6 +104,23 @@ if (isset($_FILES['image'])) {
         }
     }
     
+    // If using a volume, create symlink from web root so files are accessible via URL
+    if ($is_volume) {
+        $root_dir = dirname(__DIR__, 2); // Go from api/admin/ to root
+        $web_uploads = $root_dir . DIRECTORY_SEPARATOR . 'uploads';
+        if (!file_exists($web_uploads)) {
+            // Try to create symlink from web root uploads/ -> volume uploads/
+            @symlink($upload_base, $web_uploads);
+            error_log("Created symlink: " . $web_uploads . " -> " . $upload_base);
+        } elseif (is_dir($web_uploads)) {
+            // If it's a real directory (not symlink), check if it has a products subfolder
+            $web_products = $web_uploads . DIRECTORY_SEPARATOR . 'products';
+            if (!file_exists($web_products)) {
+                @mkdir($web_products, 0777, true);
+            }
+        }
+    }
+    
     // Check if directory is writable
     if (!is_writable($upload_dir)) {
         // Try to make it writable
