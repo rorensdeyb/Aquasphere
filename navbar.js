@@ -190,6 +190,9 @@ function loadUserData() {
                 localStorage.setItem('loggedInUser', JSON.stringify(userData));
                 localStorage.setItem('userData', JSON.stringify(userData));
                 
+                // Restore server-persisted notification state (survives logout/login)
+                mergeServerNotifState(userData);
+                
                 const usernameDisplay = document.getElementById('usernameDisplay');
                 if (usernameDisplay) {
                     usernameDisplay.textContent = userData.username || 'User';
@@ -446,6 +449,37 @@ function setNotifCleared(ts) {
     try {
         document.cookie = `${NOTIF_CLEARED_COOKIE}=${ts}; path=/; max-age=${60 * 60 * 24 * 30}`;
     } catch (_) {}
+    persistNotifStateToServer();
+}
+
+// Fire-and-forget persist of notification state so seen/cleared survives
+// logout/login and redeploys (stored per-user in the database)
+function persistNotifStateToServer() {
+    try {
+        const seen = parseInt(localStorage.getItem(NOTIF_SEEN_KEY) || '0', 10) || 0;
+        const cleared = getNotifCleared();
+        if (!seen && !cleared) return;
+        fetch('api/save_notification_state.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ seen_at: seen, cleared_at: cleared })
+        }).catch(() => {});
+    } catch (_) {}
+}
+
+// Restore server-persisted state on login (takes the newer of each side)
+function mergeServerNotifState(userData) {
+    try {
+        const serverSeen = parseInt((userData && userData.notif_seen_at) || '0', 10) || 0;
+        const serverCleared = parseInt((userData && userData.notif_cleared_at) || '0', 10) || 0;
+        const localSeen = getNotifSeen();
+        if (serverSeen > localSeen) {
+            try { localStorage.setItem(NOTIF_SEEN_KEY, String(serverSeen)); } catch (_) {}
+        }
+        if (serverCleared > getNotifCleared()) {
+            try { localStorage.setItem(NOTIF_CLEARED_KEY, String(serverCleared)); } catch (_) {}
+        }
+    } catch (_) {}
 }
 
 function getNotifCleared() {
@@ -464,6 +498,7 @@ const NOTIF_SEEN_KEY = 'notifSeenAt';
 
 function setNotifSeen(ts) {
     try { localStorage.setItem(NOTIF_SEEN_KEY, String(ts)); } catch (_) {}
+    persistNotifStateToServer();
 }
 
 function getNotifSeen() {

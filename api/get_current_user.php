@@ -30,14 +30,14 @@ $conn = get_db_connection();
 $user_id = intval($_SESSION['user_id']);
 
 if ($GLOBALS['use_postgres']) {
-    $query = "SELECT id, username, email, first_name, last_name, gender, date_of_birth, is_admin, created_at, last_login 
-              FROM users 
+    $query = "SELECT id, username, email, first_name, last_name, gender, date_of_birth, is_admin, created_at, last_login, notif_seen_at, notif_cleared_at
+              FROM users
               WHERE id = $1";
     $result = pg_query_params($conn, $query, [$user_id]);
     $user = $result ? pg_fetch_assoc($result) : null;
 } else {
-    $query = "SELECT id, username, email, first_name, last_name, gender, date_of_birth, is_admin, created_at, last_login 
-              FROM users 
+    $query = "SELECT id, username, email, first_name, last_name, gender, date_of_birth, is_admin, created_at, last_login, notif_seen_at, notif_cleared_at
+              FROM users
               WHERE id = ?";
     $stmt = $conn->prepare($query);
     $stmt->bindValue(1, $user_id, SQLITE3_INTEGER);
@@ -66,7 +66,9 @@ echo json_encode([
         'date_of_birth' => $user['date_of_birth'] ?? '',
         'is_admin' => $user['is_admin'] ?? 0,
         'created_at' => $user['created_at'] ?? null,
-        'last_login' => $user['last_login'] ?? null
+        'last_login' => $user['last_login'] ?? null,
+        'notif_seen_at' => $user['notif_seen_at'] ?? null,
+        'notif_cleared_at' => $user['notif_cleared_at'] ?? null
     ]
 ]);
 ?>

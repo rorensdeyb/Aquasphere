@@ -213,6 +213,8 @@ function init_db() {
         execute_sql($conn, "ALTER TABLE users ADD COLUMN IF NOT EXISTS suspension_reason TEXT");
         execute_sql($conn, "ALTER TABLE users ADD COLUMN IF NOT EXISTS suspended_at TIMESTAMP");
         execute_sql($conn, "ALTER TABLE users ADD COLUMN IF NOT EXISTS suspension_lifted_at TIMESTAMP");
+        execute_sql($conn, "ALTER TABLE users ADD COLUMN IF NOT EXISTS notif_seen_at TEXT");
+        execute_sql($conn, "ALTER TABLE users ADD COLUMN IF NOT EXISTS notif_cleared_at TEXT");
     } else {
         // SQLite: add columns if missing (ignore errors if they exist)
         @execute_sql($conn, "ALTER TABLE users ADD COLUMN saved_cart TEXT");
@@ -230,6 +232,8 @@ function init_db() {
         @execute_sql($conn, "ALTER TABLE users ADD COLUMN suspension_reason TEXT");
         @execute_sql($conn, "ALTER TABLE users ADD COLUMN suspended_at TEXT");
         @execute_sql($conn, "ALTER TABLE users ADD COLUMN suspension_lifted_at TEXT");
+        @execute_sql($conn, "ALTER TABLE users ADD COLUMN notif_seen_at TEXT");
+        @execute_sql($conn, "ALTER TABLE users ADD COLUMN notif_cleared_at TEXT");
     }
     
     // Create system_settings table

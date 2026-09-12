@@ -5910,14 +5910,20 @@
         
         // Perform Logout
         function performLogout() {
-            // Clear user session data
-            localStorage.removeItem('loggedInUser');
-            sessionStorage.removeItem('userData');
-            // Optionally clear cart and other user-specific data
-            // localStorage.removeItem('cart');
-            // localStorage.removeItem('deliveryAddress');
-            
-            window.location.href = 'index.html';
+            // Destroy the server session first, otherwise the account stays signed in
+            fetch('api/logout.php', {
+                method: 'POST'
+            })
+            .then(() => {
+                localStorage.clear();
+                sessionStorage.clear();
+                window.location.href = 'login.html';
+            })
+            .catch(() => {
+                localStorage.clear();
+                sessionStorage.clear();
+                window.location.href = 'login.html';
+            });
         }
         
         // Logout
