@@ -506,6 +506,199 @@
             display: flex;
         }
         
+        /* Email Change OTP Modal (AquaSphere) */
+        .email-otp-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 10050;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.25rem;
+        }
+        .email-otp-modal[hidden] {
+            display: none !important;
+        }
+        .email-otp-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(8px);
+            cursor: pointer;
+        }
+        .email-otp-dialog {
+            position: relative;
+            z-index: 1;
+            width: min(26.5rem, 100%);
+            max-height: 92vh;
+            overflow-y: auto;
+            background: linear-gradient(135deg, #ffffff 0%, #EAF7FC 100%);
+            border: 1px solid #D5E5ED;
+            border-radius: 24px;
+            box-shadow: 0 28px 70px rgba(21, 90, 122, 0.25);
+            padding: 2rem 1.75rem 1.65rem;
+            text-align: center;
+            animation: fadeInModal 0.25s ease;
+        }
+        .email-otp-close {
+            position: absolute;
+            top: 0.65rem;
+            right: 0.65rem;
+            width: 2.25rem;
+            height: 2.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            border-radius: 10px;
+            background: transparent;
+            color: #607D8B;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+        .email-otp-close:hover {
+            background: #EAF7FC;
+            color: #163B53;
+        }
+        .email-otp-icon-wrap {
+            width: 4.25rem;
+            height: 4.25rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.1rem;
+            background: linear-gradient(135deg, #2383B5 0%, #155A7A 100%);
+            box-shadow: 0 10px 28px rgba(35, 131, 181, 0.35);
+        }
+        .email-otp-icon-wrap i {
+            font-size: 2rem;
+            color: #ffffff;
+            line-height: 1;
+        }
+        .email-otp-title {
+            margin: 0 0 0.65rem;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #163B53;
+        }
+        .email-otp-lead {
+            margin: 0 0 1.35rem;
+            font-size: 0.95rem;
+            line-height: 1.55;
+            color: #607D8B;
+            word-break: break-word;
+        }
+        .email-otp-digits {
+            display: flex;
+            justify-content: center;
+            gap: clamp(0.45rem, 2.5vw, 0.65rem);
+            margin: 0 auto 0.5rem;
+        }
+        .email-otp-digit {
+            width: clamp(2.85rem, 9.5vw, 3.35rem);
+            height: clamp(3.2rem, 10.5vw, 3.75rem);
+            border: 2px solid #D5E5ED;
+            border-radius: 14px;
+            font-size: clamp(1.15rem, 4.5vw, 1.35rem);
+            font-weight: 700;
+            text-align: center;
+            color: #163B53;
+            background: #f4fafe;
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .email-otp-digit:focus {
+            border-color: #2383B5;
+            box-shadow: 0 0 0 4px rgba(35, 131, 181, 0.18);
+            background: #ffffff;
+        }
+        .email-otp-error {
+            box-sizing: border-box;
+            width: 100%;
+            margin: 0.9rem 0 0.55rem;
+            padding: 8px 10px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 1.25;
+            background: #fef2f2;
+            border: 1px solid #f8b4bf;
+            color: #b84252;
+        }
+        .email-otp-error[hidden] {
+            display: none !important;
+        }
+        .email-otp-resend-row {
+            margin: 0.4rem 0 0;
+            font-size: 0.9rem;
+            color: #607D8B;
+        }
+        .email-otp-resend-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin: 0;
+            padding: 0;
+            border: none;
+            background: none;
+            font: inherit;
+            font-weight: 700;
+            color: #2383B5;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+            cursor: pointer;
+        }
+        .email-otp-resend-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            text-decoration: none;
+        }
+        .email-otp-timer {
+            margin-left: 0.2rem;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+        }
+        .email-otp-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            margin-top: 1.1rem;
+        }
+        .email-otp-verify-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            width: 100%;
+            padding: 0.9rem 1rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            color: #ffffff;
+            background: linear-gradient(135deg, #2383B5 0%, #155A7A 100%);
+            box-shadow: 0 8px 24px rgba(35, 131, 181, 0.32);
+        }
+        .email-otp-verify-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+        .email-otp-cancel {
+            align-self: center;
+            margin: 0.15rem 0 0;
+            padding: 0.35rem 0.5rem;
+            border: none;
+            background: transparent;
+            font-size: 0.92rem;
+            font-weight: 600;
+            color: #607D8B;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            cursor: pointer;
+        }
+        
         @keyframes fadeInModal {
             from {
                 opacity: 0;
@@ -1711,6 +1904,45 @@
         </div>
     </div>
     
+    <!-- Email Change OTP Modal -->
+    <div class="email-otp-modal" id="emailChangeOtpModal" hidden>
+        <div class="email-otp-backdrop" id="emailChangeOtpBackdrop"></div>
+        <div class="email-otp-dialog" role="dialog" aria-modal="true" aria-labelledby="emailChangeOtpTitle">
+            <button type="button" class="email-otp-close" id="emailChangeOtpCloseBtn" aria-label="Close dialog">
+                <i class="fas fa-times" aria-hidden="true"></i>
+            </button>
+            <div class="email-otp-icon-wrap" aria-hidden="true">
+                <i class="fas fa-envelope-open-text"></i>
+            </div>
+            <h3 class="email-otp-title" id="emailChangeOtpTitle">Verify new email</h3>
+            <p class="email-otp-lead" id="emailChangeOtpLead"></p>
+            <div class="email-otp-digits" id="emailChangeOtpDigits" role="group" aria-label="6-digit email verification code">
+                <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="email-otp-digit" data-email-otp="0" aria-label="Digit 1 of 6" autocomplete="one-time-code">
+                <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="email-otp-digit" data-email-otp="1" aria-label="Digit 2 of 6" autocomplete="off">
+                <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="email-otp-digit" data-email-otp="2" aria-label="Digit 3 of 6" autocomplete="off">
+                <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="email-otp-digit" data-email-otp="3" aria-label="Digit 4 of 6" autocomplete="off">
+                <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="email-otp-digit" data-email-otp="4" aria-label="Digit 5 of 6" autocomplete="off">
+                <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="email-otp-digit" data-email-otp="5" aria-label="Digit 6 of 6" autocomplete="off">
+            </div>
+            <div class="email-otp-error" id="emailChangeOtpError" hidden role="alert">
+                <span id="emailChangeOtpErrorText"></span>
+            </div>
+            <p class="email-otp-resend-row" id="emailChangeOtpResendRow">
+                <span>Didn't receive the code?</span>
+                <button type="button" class="email-otp-resend-btn" id="emailChangeOtpResendBtn">
+                    <span id="emailChangeOtpResendLabel">Resend Code</span>
+                </button>
+                <span class="email-otp-timer" id="emailChangeOtpTimer" aria-live="polite"></span>
+            </p>
+            <div class="email-otp-actions">
+                <button type="button" class="email-otp-verify-btn" id="emailChangeOtpVerifyBtn">
+                    <span id="emailChangeOtpVerifyLabel">Verify</span>
+                </button>
+                <button type="button" class="email-otp-cancel" id="emailChangeOtpCancelBtn">Cancel</button>
+            </div>
+        </div>
+    </div>
+    
     <!-- Settings Modal -->
     <div class="modal-overlay" id="settingsModal" onclick="closeSettingsModal(event)" style="display: none;">
         <div class="address-modal" onclick="event.stopPropagation()" style="max-width: 600px;">
@@ -2748,8 +2980,229 @@
                 });
         }
         
+        // ---------- Email-change OTP (modal, DCore-style flow) ----------
+        let emailOtpResendInterval = null;
+        let emailOtpResendRemaining = 0;
+        let emailOtpVerifyInProgress = false;
+        let emailOtpAutoVerifyTimeout = null;
+        let pendingEmailChange = '';
+        window.__verifiedEmailChange = '';
+        
+        function getEmailOtpDigitInputs() {
+            return Array.from(document.querySelectorAll('[data-email-otp]'));
+        }
+        function getEmailOtpCode() {
+            return getEmailOtpDigitInputs().map(d => (d.value || '').replace(/\D/g, '')).join('');
+        }
+        function clearEmailOtpDigits() {
+            getEmailOtpDigitInputs().forEach(d => { d.value = ''; });
+        }
+        function setEmailOtpError(message) {
+            const wrap = document.getElementById('emailChangeOtpError');
+            const text = document.getElementById('emailChangeOtpErrorText');
+            if (!wrap || !text) return;
+            if (message) { text.textContent = message; wrap.hidden = false; }
+            else { text.textContent = ''; wrap.hidden = true; }
+        }
+        function setEmailOtpVerifyLoading(loading) {
+            const btn = document.getElementById('emailChangeOtpVerifyBtn');
+            const label = document.getElementById('emailChangeOtpVerifyLabel');
+            if (!btn) return;
+            btn.disabled = loading;
+            if (label) label.textContent = loading ? 'Verifying...' : 'Verify';
+        }
+        function openEmailChangeOtpModal(newEmail) {
+            const modal = document.getElementById('emailChangeOtpModal');
+            if (!modal) return;
+            pendingEmailChange = (newEmail || '').trim();
+            emailOtpVerifyInProgress = false;
+            setEmailOtpVerifyLoading(false);
+            setEmailOtpError('');
+            clearEmailOtpDigits();
+            document.getElementById('emailChangeOtpLead').textContent =
+                `We sent a 6-digit code to ${pendingEmailChange}. Enter it below to save your profile.`;
+            modal.hidden = false;
+            document.body.style.overflow = 'hidden';
+            startEmailOtpResendCooldown(60);
+            setTimeout(() => { const f = getEmailOtpDigitInputs()[0]; if (f) f.focus(); }, 80);
+        }
+        function closeEmailChangeOtpModal() {
+            const modal = document.getElementById('emailChangeOtpModal');
+            if (!modal || modal.hidden) return;
+            clearEmailOtpAutoVerify();
+            modal.hidden = true;
+            document.body.style.overflow = '';
+            clearEmailOtpResendCooldown();
+            emailOtpVerifyInProgress = false;
+            setEmailOtpVerifyLoading(false);
+        }
+        function startEmailOtpResendCooldown(seconds) {
+            const btn = document.getElementById('emailChangeOtpResendBtn');
+            const timer = document.getElementById('emailChangeOtpTimer');
+            emailOtpResendRemaining = seconds;
+            if (btn) btn.disabled = true;
+            if (emailOtpResendInterval) clearInterval(emailOtpResendInterval);
+            const tick = () => {
+                if (emailOtpResendRemaining <= 0) { clearEmailOtpResendCooldown(); return; }
+                const mm = Math.floor(emailOtpResendRemaining / 60);
+                const ss = emailOtpResendRemaining % 60;
+                if (timer) timer.textContent = ` (${String(mm).padStart(2, '0')}:${String(ss).padStart(2, '0')})`;
+                emailOtpResendRemaining -= 1;
+            };
+            tick();
+            emailOtpResendInterval = setInterval(tick, 1000);
+        }
+        function clearEmailOtpResendCooldown() {
+            if (emailOtpResendInterval) { clearInterval(emailOtpResendInterval); emailOtpResendInterval = null; }
+            emailOtpResendRemaining = 0;
+            const timer = document.getElementById('emailChangeOtpTimer');
+            if (timer) timer.textContent = '';
+            const btn = document.getElementById('emailChangeOtpResendBtn');
+            if (btn) btn.disabled = false;
+        }
+        function clearEmailOtpAutoVerify() {
+            if (emailOtpAutoVerifyTimeout) { clearTimeout(emailOtpAutoVerifyTimeout); emailOtpAutoVerifyTimeout = null; }
+        }
+        function scheduleEmailOtpAutoVerify() {
+            clearEmailOtpAutoVerify();
+            emailOtpAutoVerifyTimeout = setTimeout(() => {
+                emailOtpAutoVerifyTimeout = null;
+                const modal = document.getElementById('emailChangeOtpModal');
+                if (!modal || modal.hidden) return;
+                if (getEmailOtpCode().length !== 6) return;
+                if (emailOtpVerifyInProgress) return;
+                verifyEmailChangeOtp();
+            }, 300);
+        }
+        async function requestEmailChangeOtp(newEmail) {
+            try {
+                const resp = await fetch('api/send_email_change_otp.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ new_email: newEmail })
+                });
+                const data = await resp.json().catch(() => ({}));
+                if (!resp.ok || !data.success) {
+                    showNotification(data.message || 'Could not send verification email.', 'error');
+                    if (data.field === 'profileEmail') {
+                        const input = document.getElementById('profileEmail');
+                        markProfileError(input);
+                        const group = input && input.closest('.form-group');
+                        if (group) group.classList.add('error');
+                    }
+                    return false;
+                }
+                return true;
+            } catch (e) {
+                showNotification('Could not send verification email. Check your connection.', 'error');
+                return false;
+            }
+        }
+        async function submitEmailOtpResend() {
+            const btn = document.getElementById('emailChangeOtpResendBtn');
+            const label = document.getElementById('emailChangeOtpResendLabel');
+            if (btn) btn.disabled = true;
+            if (label) label.textContent = 'Sending...';
+            try {
+                const resp = await fetch('api/send_email_change_otp.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({})
+                });
+                const data = await resp.json().catch(() => ({}));
+                if (!resp.ok || !data.success) {
+                    setEmailOtpError(data.message || 'Could not resend code.');
+                    return false;
+                }
+                clearEmailOtpDigits();
+                setEmailOtpError('');
+                document.getElementById('emailChangeOtpLead').textContent =
+                    `A new code was sent to ${pendingEmailChange}. Enter it below to save your profile.`;
+                startEmailOtpResendCooldown(60);
+                return true;
+            } catch (e) {
+                setEmailOtpError('Could not resend code. Check your connection.');
+                return false;
+            } finally {
+                if (label) label.textContent = 'Resend Code';
+                if (btn && !emailOtpResendInterval && emailOtpResendRemaining <= 0) btn.disabled = false;
+            }
+        }
+        async function verifyEmailChangeOtp() {
+            if (emailOtpVerifyInProgress) return;
+            const code = getEmailOtpCode();
+            if (code.length !== 6) {
+                setEmailOtpError('Please enter the 6-digit code from your email.');
+                return;
+            }
+            clearEmailOtpAutoVerify();
+            emailOtpVerifyInProgress = true;
+            setEmailOtpVerifyLoading(true);
+            setEmailOtpError('');
+            try {
+                const resp = await fetch('api/verify_email_change_otp.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ code: code })
+                });
+                const data = await resp.json().catch(() => ({}));
+                if (!resp.ok || !data.success) {
+                    setEmailOtpError(data.message || 'Invalid or expired verification code.');
+                    return;
+                }
+                window.__verifiedEmailChange = pendingEmailChange.toLowerCase();
+                closeEmailChangeOtpModal();
+                showNotification('Email verified. Saving profile...', 'success');
+                saveProfile({ preventDefault() {} });
+            } catch (e) {
+                setEmailOtpError('Could not reach the server. Check your connection and try again.');
+            } finally {
+                emailOtpVerifyInProgress = false;
+                setEmailOtpVerifyLoading(false);
+            }
+        }
+        function wireEmailChangeOtp() {
+            const digits = getEmailOtpDigitInputs();
+            if (digits.length && !digits[0].dataset.emailOtpWired) {
+                digits[0].dataset.emailOtpWired = '1';
+                digits.forEach((input, idx) => {
+                    input.addEventListener('input', (e) => {
+                        const v = (e.target.value || '').replace(/\D/g, '').slice(-1);
+                        e.target.value = v;
+                        setEmailOtpError('');
+                        if (v && idx < digits.length - 1) digits[idx + 1].focus();
+                        clearEmailOtpAutoVerify();
+                        if (getEmailOtpCode().length === 6) scheduleEmailOtpAutoVerify();
+                    });
+                    input.addEventListener('keydown', (e) => {
+                        if (e.key === 'Backspace' && !input.value && idx > 0) digits[idx - 1].focus();
+                    });
+                    input.addEventListener('paste', (e) => {
+                        e.preventDefault();
+                        const raw = (e.clipboardData.getData('text') || '').replace(/\D/g, '').slice(0, 6).split('');
+                        digits.forEach((d, i) => { d.value = raw[i] || ''; });
+                        const lastIdx = Math.min(raw.length, digits.length) - 1;
+                        if (lastIdx >= 0) digits[lastIdx].focus();
+                        setEmailOtpError('');
+                        clearEmailOtpAutoVerify();
+                        if (getEmailOtpCode().length === 6) scheduleEmailOtpAutoVerify();
+                    });
+                });
+            }
+            const wire = (id, fn) => {
+                const el = document.getElementById(id);
+                if (el && !el.dataset.emailOtpWired) { el.dataset.emailOtpWired = '1'; el.addEventListener('click', fn); }
+            };
+            wire('emailChangeOtpBackdrop', closeEmailChangeOtpModal);
+            wire('emailChangeOtpCloseBtn', closeEmailChangeOtpModal);
+            wire('emailChangeOtpCancelBtn', closeEmailChangeOtpModal);
+            wire('emailChangeOtpVerifyBtn', verifyEmailChangeOtp);
+            wire('emailChangeOtpResendBtn', submitEmailOtpResend);
+        }
+        wireEmailChangeOtp();
+        
         // Save Profile
-        function saveProfile(event) {
+        async function saveProfile(event) {
             event.preventDefault();
             
             const updateBtn = document.getElementById('updateProfileBtn');
@@ -2781,6 +3234,18 @@
                 if (firstError) {
                     firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }
+                return;
+            }
+            
+            // Email-change OTP gate: a changed address must be verified via
+            // the modal before anything is saved
+            const newEmailValue = (document.getElementById('profileEmail').value || '').trim();
+            const originalEmailValue = (typeof originalProfileData !== 'undefined' && originalProfileData) ? (originalProfileData.email || '') : '';
+            const emailChangedNow = originalProfileData && Object.keys(originalProfileData).length > 0 &&
+                newEmailValue.toLowerCase() !== String(originalEmailValue).toLowerCase();
+            if (emailChangedNow && window.__verifiedEmailChange !== newEmailValue.toLowerCase()) {
+                const sent = await requestEmailChangeOtp(newEmailValue);
+                if (sent) openEmailChangeOtpModal(newEmailValue);
                 return;
             }
             

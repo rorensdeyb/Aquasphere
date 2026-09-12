@@ -290,6 +290,22 @@ function init_db() {
         error_log("Failed to create password_reset table: " . ($GLOBALS['use_postgres'] ? pg_last_error($conn) : "SQLite error"));
     }
     
+    // Create email_change_otp table (one pending email-change challenge per user)
+    $query = "
+    CREATE TABLE IF NOT EXISTS email_change_otp (
+        user_id " . get_integer_type() . " PRIMARY KEY,
+        otp_code " . get_text_type() . " NOT NULL,
+        new_email " . get_text_type() . " NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        expires_at TIMESTAMP NOT NULL
+    )
+    ";
+    
+    $result = execute_sql($conn, $query);
+    if ($result === false) {
+        error_log("Failed to create email_change_otp table: " . ($GLOBALS['use_postgres'] ? pg_last_error($conn) : "SQLite error"));
+    }
+    
     // Create orders table for water delivery system
     // Note: FOREIGN KEY constraints are handled differently for PostgreSQL vs SQLite
     if ($GLOBALS['use_postgres']) {
