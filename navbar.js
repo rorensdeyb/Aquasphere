@@ -126,6 +126,21 @@ function paintCachedUser() {
     }
 }
 
+// Pages that require a live session. A 401 here (e.g. PHP sessions wiped
+// by a redeploy) sends the user to login instead of leaving them stranded
+// on a stale, half-logged-out page. Network errors never redirect - the
+// server may simply be mid-deploy and unreachable.
+const AQUA_PROTECTED_PAGES = ['dashboard.html', 'cart.html', 'orders.html', 'payment.html', 'profile.html', 'recent_orders.html'];
+
+function redirectToLoginIfProtected() {
+    try {
+        const page = (window.location.pathname.split('/').pop() || '').toLowerCase();
+        if (AQUA_PROTECTED_PAGES.includes(page)) {
+            window.location.href = 'login.html';
+        }
+    } catch (_) {}
+}
+
 // Load user data for navbar
 function loadUserData() {
     // Optimistic paint first - server response below will verify/correct it
@@ -151,6 +166,10 @@ function loadUserData() {
                 if (navNotificationsWrapper) {
                     navNotificationsWrapper.style.display = 'none';
                 }
+                
+                // Dead session on a protected page (e.g. after a redeploy
+                // wiped server sessions) - go to login instead of lingering
+                redirectToLoginIfProtected();
                 
                 return null; // Don't proceed with JSON parsing
             }
