@@ -33,9 +33,9 @@ def ensure_dir():
 # ERD
 # ---------------------------------------------------------------------------
 def draw_erd():
-    fig, ax = plt.subplots(1, 1, figsize=(18, 12))
+    fig, ax = plt.subplots(1, 1, figsize=(18, 13))
     ax.set_xlim(0, 18)
-    ax.set_ylim(0, 12)
+    ax.set_ylim(0, 13)
     ax.axis("off")
     fig.patch.set_facecolor(WHITE)
 
@@ -131,14 +131,14 @@ def draw_erd():
         "status", "payment_method", "created_at",
     ], "id  (PK)")
 
-    # ====== ARROWS — clean routing, no crossing through boxes ======
+    # ====== ARROWS — clean routing, no box overlap ======
     def mid_y(y, h):
         return y + h / 2
 
     AW = 1.6
     AS = 16
 
-    def ra_arrow(pts, label=None, label_side="right", label_offset=0.22):
+    def ra_arrow(pts, label=None, label_x=None, label_y=None):
         """Right-angle arrow through waypoints."""
         verts = list(pts)
         codes = [MPath.MOVETO] + [MPath.LINETO] * (len(verts) - 1)
@@ -146,24 +146,22 @@ def draw_erd():
         patch = mpatches.FancyArrowPatch(path=path, arrowstyle="-|>", color=MUTED,
                                          lw=AW, mutation_scale=AS)
         ax.add_patch(patch)
-        if label and len(verts) >= 2:
-            mx = (verts[0][0] + verts[-1][0]) / 2
-            my = (verts[0][1] + verts[-1][1]) / 2
-            ox = label_offset if label_side == "right" else -label_offset
-            ax.text(mx + ox, my, label,
-                    ha="left" if label_side == "right" else "right",
-                    fontsize=7.5, color=MUTED, fontstyle="italic")
+        if label:
+            lx = label_x if label_x is not None else (verts[0][0] + verts[-1][0]) / 2
+            ly = label_y if label_y is not None else (verts[0][1] + verts[-1][1]) / 2
+            ax.text(lx, ly, label, ha="center", fontsize=7.5,
+                    color=MUTED, fontstyle="italic")
 
-    # Gap between top and bottom rows
-    gap_y = (y_top + y_bot + max(h_sys, h_prst, h_eml, h_oitem, h_oshist)) / 2
-
-    # 1) users → otp_verification: horizontal
-    ax.annotate("", xy=(c2, mid_y(y_top + 0.8, h_otp)),
-                xytext=(c1 + W1, mid_y(y_top, h_users)),
-                arrowprops=dict(arrowstyle="-|>", color=MUTED, lw=AW,
-                                connectionstyle="arc3,rad=0", shrinkA=3, shrinkB=3))
-    ax.text((c1 + W1 + c2) / 2, mid_y(y_top + 0.8, h_otp) + 0.22, "1:N",
-            ha="center", fontsize=7.5, color=MUTED, fontstyle="italic")
+    # 1) users → otp_verification: route ABOVE everything, arrow enters otp from LEFT
+    route_top = 11.8
+    ra_arrow([
+        (c1 + W1, mid_y(y_top, h_users)),
+        (c1 + W1 + 0.4, mid_y(y_top, h_users)),
+        (c1 + W1 + 0.4, route_top),
+        (c2 - 0.4, route_top),
+        (c2 - 0.4, mid_y(y_top + 0.8, h_otp)),
+        (c2, mid_y(y_top + 0.8, h_otp)),
+    ], label="1:N", label_x=(c1 + W1 + c2) / 2, label_y=route_top + 0.25)
 
     # 2) otp_verification → password_reset: straight vertical
     ax.annotate("", xy=(bx[1] + bw_bot / 2, y_bot + h_prst),
@@ -181,15 +179,15 @@ def draw_erd():
     ax.text(c3 + W3 / 2 + 0.25, (y_top + 0.8 + y_bot + h_oitem) / 2, "1:N",
             ha="left", fontsize=7.5, color=MUTED, fontstyle="italic")
 
-    # 4) users → orders: route through the gap between top and bottom rows
+    # 4) users → orders: route ABOVE everything, arrow enters orders from LEFT
     ra_arrow([
-        (c1 + W1, mid_y(y_top, h_users)),
-        (c1 + W1 + 0.4, mid_y(y_top, h_users)),
-        (c1 + W1 + 0.4, gap_y),
-        (c4 - 0.4, gap_y),
+        (c1 + W1, mid_y(y_top, h_users) - 0.6),
+        (c1 + W1 + 0.4, mid_y(y_top, h_users) - 0.6),
+        (c1 + W1 + 0.4, route_top - 0.6),
+        (c4 - 0.4, route_top - 0.6),
         (c4 - 0.4, mid_y(y_top, h_ord)),
         (c4, mid_y(y_top, h_ord)),
-    ], label="1:N", label_side="right")
+    ], label="1:N", label_x=(c1 + W1 + c4) / 2, label_y=route_top - 0.35)
 
     # 5) orders → order_items: straight vertical
     ax.annotate("", xy=(bx[3] + bw_bot / 2, y_bot + h_oitem),
@@ -215,13 +213,14 @@ def draw_erd():
     ax.text(c1 + W1 / 2 - 0.3, (y_top + y_bot + h_sys) / 2, "1:N",
             ha="right", fontsize=7.5, color=MUTED, fontstyle="italic")
 
-    # 8) users → email_change_otp: route through gap, separate horizontal line from #4
+    # 8) users → email_change_otp: route BELOW all boxes, arrow enters from TOP
+    route_bot = y_bot - 0.4
     ra_arrow([
-        (c1 + W1 / 2 + 0.5, y_top),
-        (c1 + W1 / 2 + 0.5, gap_y - 0.5),
-        (bx[2] + bw_bot / 2, gap_y - 0.5),
+        (c1 + W1 / 2 + 0.6, y_top),
+        (c1 + W1 / 2 + 0.6, route_bot),
+        (bx[2] + bw_bot / 2, route_bot),
         (bx[2] + bw_bot / 2, y_bot + h_eml),
-    ], label="1:N", label_side="right")
+    ], label="1:N", label_x=(c1 + W1 / 2 + 0.6 + bx[2] + bw_bot / 2) / 2, label_y=route_bot - 0.25)
 
     ax.set_title("AquaSphere — Entity Relationship Diagram", fontsize=16, fontweight="bold",
                  color=DEEP, pad=16, fontfamily="sans-serif")
