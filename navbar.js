@@ -453,10 +453,18 @@ function markNotificationsSeen() {
     paintCountBadge('notificationCount', 0);
 }
 
-// Clicking a notification marks seen and takes the user to their orders
-function openNotificationOrder(orderId) {
+// Clicking a notification marks seen and takes the user to the right page:
+// delivered / completed / cancelled orders live on recent orders,
+// everything else (active orders) lives on the orders page
+function openNotificationOrder(orderId, status) {
     markNotificationsSeen();
-    window.location.href = 'orders.html';
+    const s = String(status || '').toLowerCase();
+    const id = parseInt(orderId, 10) || 0;
+    if ((s === 'delivered' || s === 'completed' || s === 'cancelled') && id > 0) {
+        window.location.href = 'recent_orders.html?order=' + id;
+    } else {
+        window.location.href = 'orders.html';
+    }
 }
 
 function clearNotificationBadge() {
@@ -692,6 +700,7 @@ function doFetchNotifications() {
                     notifications.push({
                         ...msg,
                         orderId: row.order_id,
+                        status: (row.status || '').toLowerCase(),
                         when: row.created_at
                     });
                 }
@@ -806,7 +815,7 @@ function renderNotificationPage() {
     const current = __notifData.slice(start, start + __notifPageSize);
 
     list.innerHTML = current.map(n => `
-        <div class="notification-item" onclick="openNotificationOrder(${parseInt(n.orderId, 10) || 0})" title="View order">
+        <div class="notification-item" onclick="openNotificationOrder(${parseInt(n.orderId, 10) || 0}, '${String(n.status || '').replace(/[^a-z_]/g, '')}')" title="View order">
             <div class="notification-icon" style="background:${n.color};">
                 <i class="${n.icon}"></i>
             </div>

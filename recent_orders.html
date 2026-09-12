@@ -172,6 +172,11 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
         
+        .status-pill.cancelled {
+            background: rgba(220, 38, 38, 0.35);
+            border-color: rgba(255, 255, 255, 0.45);
+        }
+        
         .order-body {
             padding: 2rem 2.5rem;
         }
@@ -842,7 +847,7 @@
         <div class="container">
             <div class="page-header">
                 <h1 style="color: #155A7A;">Recent Orders</h1>
-                <p>Your completed and delivered orders in one place.</p>
+                <p>Your completed, delivered and cancelled orders in one place.</p>
             </div>
             <div class="orders-container">
                 <button class="nav-arrows prev" id="prevBtn" onclick="navigateOrder(-1)" style="display: none;">
@@ -906,10 +911,10 @@
 
             if (loader) loader.remove();
 
-            // Filter delivered / completed
+            // Filter delivered / completed / cancelled
             const filtered = orders.filter(o => {
                 const s = (o.status || '').toLowerCase();
-                return s === 'delivered' || s === 'completed';
+                return s === 'delivered' || s === 'completed' || s === 'cancelled';
             });
 
             if (filtered.length === 0) {
@@ -917,7 +922,7 @@
                     <div class="order-card">
                         <div class="empty-state">
                             <i class="fas fa-inbox"></i>
-                            <p>No completed or delivered orders yet.</p>
+                            <p>No completed, delivered or cancelled orders yet.</p>
                         </div>
                     </div>
                 `;
@@ -927,9 +932,16 @@
                 return;
             }
 
-            // Store orders and display first one
+            // Store orders and display first one (or the deep-linked one)
             allOrders = filtered;
             currentOrderIndex = 0;
+            try {
+                const targetId = new URLSearchParams(window.location.search).get('order');
+                if (targetId) {
+                    const foundIdx = allOrders.findIndex(o => String(o.id) === String(targetId));
+                    if (foundIdx >= 0) currentOrderIndex = foundIdx;
+                }
+            } catch (_) { /* ignore malformed query strings */ }
             displayOrder(currentOrderIndex);
             updateNavigation();
         }
@@ -1014,7 +1026,7 @@
                                     ${date}
                                 </p>
                             </div>
-                            <span class="status-pill">${statusLabel}</span>
+                            <span class="status-pill${status === 'cancelled' ? ' cancelled' : ''}">${statusLabel}</span>
                         </div>
                     </div>
                     <div class="order-body">
@@ -1047,6 +1059,12 @@
                             <div class="summary-row" style="margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid #cbd5e1;">
                                 <span class="summary-label"><i class="fas fa-check-circle me-1"></i>Delivered On</span>
                                 <span class="summary-value">${formatDate(order.delivered_at)}</span>
+                            </div>
+                            ` : ''}
+                            ${status === 'cancelled' ? `
+                            <div class="summary-row" style="margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid #cbd5e1;">
+                                <span class="summary-label"><i class="fas fa-ban me-1"></i>Cancelled On</span>
+                                <span class="summary-value">${formatDate(order.updated_at || order.order_date)}</span>
                             </div>
                             ` : ''}
                         </div>
