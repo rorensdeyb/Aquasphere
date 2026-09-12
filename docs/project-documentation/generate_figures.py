@@ -131,111 +131,97 @@ def draw_erd():
         "status", "payment_method", "created_at",
     ], "id  (PK)")
 
-    # ====== ARROWS ======
+    # ====== ARROWS — clean routing, no crossing through boxes ======
     def mid_y(y, h):
         return y + h / 2
 
-    # 1) users → otp_verification (horizontal, mid-height of users to left of otp)
+    AW = 1.6
+    AS = 16
+
+    def ra_arrow(pts, label=None, label_side="right", label_offset=0.22):
+        """Right-angle arrow through waypoints."""
+        verts = list(pts)
+        codes = [MPath.MOVETO] + [MPath.LINETO] * (len(verts) - 1)
+        path = MPath(verts, codes)
+        patch = mpatches.FancyArrowPatch(path=path, arrowstyle="-|>", color=MUTED,
+                                         lw=AW, mutation_scale=AS)
+        ax.add_patch(patch)
+        if label and len(verts) >= 2:
+            mx = (verts[0][0] + verts[-1][0]) / 2
+            my = (verts[0][1] + verts[-1][1]) / 2
+            ox = label_offset if label_side == "right" else -label_offset
+            ax.text(mx + ox, my, label,
+                    ha="left" if label_side == "right" else "right",
+                    fontsize=7.5, color=MUTED, fontstyle="italic")
+
+    # Gap between top and bottom rows
+    gap_y = (y_top + y_bot + max(h_sys, h_prst, h_eml, h_oitem, h_oshist)) / 2
+
+    # 1) users → otp_verification: horizontal
     ax.annotate("", xy=(c2, mid_y(y_top + 0.8, h_otp)),
                 xytext=(c1 + W1, mid_y(y_top, h_users)),
-                arrowprops=dict(arrowstyle="-|>", color=MUTED, lw=1.6,
+                arrowprops=dict(arrowstyle="-|>", color=MUTED, lw=AW,
                                 connectionstyle="arc3,rad=0", shrinkA=3, shrinkB=3))
-    ax.text((c1 + W1 + c2) / 2, mid_y(y_top + 0.8, h_otp) + 0.2, "1:N",
+    ax.text((c1 + W1 + c2) / 2, mid_y(y_top + 0.8, h_otp) + 0.22, "1:N",
             ha="center", fontsize=7.5, color=MUTED, fontstyle="italic")
 
-    # 2) otp_verification → password_reset (straight vertical)
+    # 2) otp_verification → password_reset: straight vertical
     ax.annotate("", xy=(bx[1] + bw_bot / 2, y_bot + h_prst),
                 xytext=(c2 + W2 / 2, y_top + 0.8),
-                arrowprops=dict(arrowstyle="-|>", color=MUTED, lw=1.6,
+                arrowprops=dict(arrowstyle="-|>", color=MUTED, lw=AW,
                                 connectionstyle="arc3,rad=0", shrinkA=3, shrinkB=3))
     ax.text(c2 + W2 / 2 + 0.25, (y_top + 0.8 + y_bot + h_prst) / 2, "1:N",
             ha="left", fontsize=7.5, color=MUTED, fontstyle="italic")
 
-    # 3) products → order_items (straight vertical)
+    # 3) products → order_items: straight vertical
     ax.annotate("", xy=(bx[3] + bw_bot / 2, y_bot + h_oitem),
                 xytext=(c3 + W3 / 2, y_top + 0.8),
-                arrowprops=dict(arrowstyle="-|>", color=MUTED, lw=1.6,
+                arrowprops=dict(arrowstyle="-|>", color=MUTED, lw=AW,
                                 connectionstyle="arc3,rad=0", shrinkA=3, shrinkB=3))
     ax.text(c3 + W3 / 2 + 0.25, (y_top + 0.8 + y_bot + h_oitem) / 2, "1:N",
             ha="left", fontsize=7.5, color=MUTED, fontstyle="italic")
 
-    # 4) users → orders (right-angle path: up from users, across above, down to orders)
-    u_right_x = c1 + W1
-    u_mid_y = mid_y(y_top, h_users)
-    o_left_x = c4
-    o_mid_y = mid_y(y_top, h_ord)
-    y_arc = y_top + max(h_users, h_otp, h_prod) + 0.6
+    # 4) users → orders: route through the gap between top and bottom rows
+    ra_arrow([
+        (c1 + W1, mid_y(y_top, h_users)),
+        (c1 + W1 + 0.4, mid_y(y_top, h_users)),
+        (c1 + W1 + 0.4, gap_y),
+        (c4 - 0.4, gap_y),
+        (c4 - 0.4, mid_y(y_top, h_ord)),
+        (c4, mid_y(y_top, h_ord)),
+    ], label="1:N", label_side="right")
 
-    verts_u = [
-        (u_right_x, u_mid_y),
-        (u_right_x + 0.3, u_mid_y),
-        (u_right_x + 0.3, y_arc),
-        (o_left_x - 0.3, y_arc),
-        (o_left_x - 0.3, o_mid_y),
-        (o_left_x, o_mid_y),
-    ]
-    codes_u = [MPath.MOVETO, MPath.LINETO, MPath.LINETO, MPath.LINETO, MPath.LINETO, MPath.LINETO]
-    path_u = MPath(verts_u, codes_u)
-    patch_u = mpatches.FancyArrowPatch(path=path_u, arrowstyle="-|>", color=MUTED,
-                                       lw=1.6, mutation_scale=16)
-    ax.add_patch(patch_u)
-    ax.text((u_right_x + o_left_x) / 2, y_arc + 0.18, "1:N", ha="center",
-            fontsize=7.5, color=MUTED, fontstyle="italic")
-
-    # 5) orders → order_items (straight vertical)
+    # 5) orders → order_items: straight vertical
     ax.annotate("", xy=(bx[3] + bw_bot / 2, y_bot + h_oitem),
                 xytext=(c4 + W4 / 2, y_top),
-                arrowprops=dict(arrowstyle="-|>", color=MUTED, lw=1.6,
+                arrowprops=dict(arrowstyle="-|>", color=MUTED, lw=AW,
                                 connectionstyle="arc3,rad=0", shrinkA=3, shrinkB=3))
     ax.text(c4 + W4 / 2 + 0.25, (y_top + y_bot + h_oitem) / 2, "1:N",
             ha="left", fontsize=7.5, color=MUTED, fontstyle="italic")
 
-    # 6) orders → order_status_history (right-angle: down from orders, right-angle to table)
+    # 6) orders → order_status_history: straight vertical (slight offset)
     ax.annotate("", xy=(bx[4] + bw_bot / 2, y_bot + h_oshist),
-                xytext=(c4 + W4 / 2 + 0.4, y_top),
-                arrowprops=dict(arrowstyle="-|>", color=MUTED, lw=1.6,
-                                connectionstyle="arc3,rad=0.04", shrinkA=3, shrinkB=3))
-    ax.text(c4 + W4 / 2 + 0.6, (y_top + y_bot + h_oshist) / 2, "1:N",
+                xytext=(c4 + W4 / 2 + 0.35, y_top),
+                arrowprops=dict(arrowstyle="-|>", color=MUTED, lw=AW,
+                                connectionstyle="arc3,rad=0.03", shrinkA=3, shrinkB=3))
+    ax.text(c4 + W4 / 2 + 0.55, (y_top + y_bot + h_oshist) / 2, "1:N",
             ha="left", fontsize=7.5, color=MUTED, fontstyle="italic")
 
-    # 7) users → system_settings (right-angle: down from users bottom, right to system_settings)
-    u_bot_x = c1 + W1 / 2
-    sys_top_x = bx[0] + bw_bot / 2
-    sys_top_y = y_bot + h_sys
-    corner_y = (y_top + y_bot + h_sys) / 2
+    # 7) users → system_settings: straight vertical
+    ax.annotate("", xy=(bx[0] + bw_bot / 2, y_bot + h_sys),
+                xytext=(c1 + W1 / 2, y_top),
+                arrowprops=dict(arrowstyle="-|>", color=MUTED, lw=AW,
+                                connectionstyle="arc3,rad=0", shrinkA=3, shrinkB=3))
+    ax.text(c1 + W1 / 2 - 0.3, (y_top + y_bot + h_sys) / 2, "1:N",
+            ha="right", fontsize=7.5, color=MUTED, fontstyle="italic")
 
-    verts_ss = [
-        (u_bot_x, y_top),
-        (u_bot_x, corner_y),
-        (sys_top_x, corner_y),
-        (sys_top_x, sys_top_y),
-    ]
-    codes_ss = [MPath.MOVETO, MPath.LINETO, MPath.LINETO, MPath.LINETO]
-    path_ss = MPath(verts_ss, codes_ss)
-    patch_ss = mpatches.FancyArrowPatch(path=path_ss, arrowstyle="-|>", color=MUTED,
-                                        lw=1.6, mutation_scale=16)
-    ax.add_patch(patch_ss)
-    ax.text(sys_top_x - 0.3, corner_y + 0.18, "1:N", ha="right",
-            fontsize=7.5, color=MUTED, fontstyle="italic")
-
-    # 8) users → email_change_otp (right-angle: down from users, right-angle to email_change_otp)
-    eml_top_x = bx[2] + bw_bot / 2
-    eml_top_y = y_bot + h_eml
-    corner2_y = (y_top + y_bot + h_eml) / 2 - 0.2
-
-    verts_ec = [
-        (u_bot_x + 0.3, y_top),
-        (u_bot_x + 0.3, corner2_y),
-        (eml_top_x, corner2_y),
-        (eml_top_x, eml_top_y),
-    ]
-    codes_ec = [MPath.MOVETO, MPath.LINETO, MPath.LINETO, MPath.LINETO]
-    path_ec = MPath(verts_ec, codes_ec)
-    patch_ec = mpatches.FancyArrowPatch(path=path_ec, arrowstyle="-|>", color=MUTED,
-                                        lw=1.6, mutation_scale=16)
-    ax.add_patch(patch_ec)
-    ax.text(eml_top_x + 0.25, corner2_y + 0.18, "1:N", ha="left",
-            fontsize=7.5, color=MUTED, fontstyle="italic")
+    # 8) users → email_change_otp: route through gap, separate horizontal line from #4
+    ra_arrow([
+        (c1 + W1 / 2 + 0.5, y_top),
+        (c1 + W1 / 2 + 0.5, gap_y - 0.5),
+        (bx[2] + bw_bot / 2, gap_y - 0.5),
+        (bx[2] + bw_bot / 2, y_bot + h_eml),
+    ], label="1:N", label_side="right")
 
     ax.set_title("AquaSphere — Entity Relationship Diagram", fontsize=16, fontweight="bold",
                  color=DEEP, pad=16, fontfamily="sans-serif")
