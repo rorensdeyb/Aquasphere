@@ -9,7 +9,8 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
-from matplotlib.patches import FancyBboxPatch, FancyArrowPatch
+from matplotlib.patches import FancyBboxPatch
+from matplotlib.path import Path as MPath
 
 ROOT = Path(__file__).resolve().parent
 FIG = ROOT / "figures"
@@ -17,315 +18,427 @@ FIG = ROOT / "figures"
 AQUA = "#2383B5"
 DEEP = "#155A7A"
 LIGHT = "#5BC0EB"
-BG = "#EAF7FC"
 INK = "#163B53"
 MUTED = "#607D8B"
 WHITE = "#FFFFFF"
 GREEN = "#2E8B70"
 RED = "#b84252"
-BORDER = "#D5E5ED"
 
 
 def ensure_dir():
     FIG.mkdir(parents=True, exist_ok=True)
 
 
+# ---------------------------------------------------------------------------
+# ERD
+# ---------------------------------------------------------------------------
 def draw_erd():
-    fig, ax = plt.subplots(1, 1, figsize=(14, 9))
-    ax.set_xlim(0, 14)
-    ax.set_ylim(0, 9)
+    fig, ax = plt.subplots(1, 1, figsize=(16, 10))
+    ax.set_xlim(0, 16)
+    ax.set_ylim(0, 10)
     ax.axis("off")
     fig.patch.set_facecolor(WHITE)
 
-    def table_box(x, y, w, h, name, cols, pk=None):
-        rect = FancyBboxPatch((x, y), w, h, boxstyle="round,pad=0.05",
+    LINE_H = 0.27
+    HEADER_H = 0.42
+    PAD_TOP = 0.12
+    PAD_X = 0.18
+
+    def calc_h(n_cols):
+        return HEADER_H + PAD_TOP + n_cols * LINE_H + 0.12
+
+    def table_box(x, y, w, name, cols, pk=None):
+        h = calc_h(len(cols))
+        rect = FancyBboxPatch((x, y), w, h, boxstyle="round,pad=0.06",
                               facecolor=WHITE, edgecolor=AQUA, linewidth=1.5)
         ax.add_patch(rect)
-        header = FancyBboxPatch((x, y + h - 0.35), w, 0.35, boxstyle="round,pad=0.02",
-                                facecolor=DEEP, edgecolor=DEEP, linewidth=1)
-        ax.add_patch(header)
-        ax.text(x + w / 2, y + h - 0.17, name, ha="center", va="center",
-                fontsize=8, fontweight="bold", color=WHITE, fontfamily="sans-serif")
-        ty = y + h - 0.5
+        hdr = FancyBboxPatch((x, y + h - HEADER_H), w, HEADER_H,
+                             boxstyle="round,pad=0.03",
+                             facecolor=DEEP, edgecolor=DEEP, linewidth=1)
+        ax.add_patch(hdr)
+        ax.text(x + w / 2, y + h - HEADER_H / 2, name,
+                ha="center", va="center", fontsize=9,
+                fontweight="bold", color=WHITE, fontfamily="sans-serif")
+        ty = y + h - HEADER_H - PAD_TOP - LINE_H / 2
         for col in cols:
-            marker = "PK " if col == pk else "    "
-            ax.text(x + 0.1, ty, f"{marker}{col}", ha="left", va="center",
-                    fontsize=6.5, color=INK, fontfamily="monospace")
-            ty -= 0.22
+            prefix = "\u2611  " if col == pk else "     "
+            ax.text(x + PAD_X, ty, prefix + col, ha="left", va="center",
+                    fontsize=7, color=INK, fontfamily="monospace")
+            ty -= LINE_H
+        return h
 
-    # Tables
-    table_box(0.3, 6.5, 2.8, 2.2, "users", [
-        "id (PK)", "username", "password_hash", "email",
-        "first_name, last_name", "gender, date_of_birth",
-        "is_admin", "saved_cart (JSON)", "delivery_address (JSON)",
-        "notif_seen_at, notif_cleared_at"
-    ], "id (PK)")
+    # Column x-positions
+    c1, c2, c3, c4 = 0.4, 4.3, 8.2, 12.1
+    W1, W2, W3, W4 = 3.5, 3.5, 3.5, 3.5
 
-    table_box(4.0, 7.0, 2.5, 1.5, "otp_verification", [
-        "id (PK)", "email", "otp_code", "username",
-        "password_hash", "expires_at", "is_verified"
-    ], "id (PK)")
+    y_top = 5.0    # bottom of top row
+    y_bot = 0.4    # bottom of bottom row
 
-    table_box(4.0, 5.2, 2.5, 1.3, "password_reset", [
-        "id (PK)", "email", "otp_code", "user_id (FK)",
-        "expires_at", "is_verified"
-    ], "id (PK)")
+    # --- Top row ---
+    h_users = table_box(c1, y_top, W1, "users", [
+        "id  (PK)", "username", "password_hash", "email",
+        "first_name", "last_name", "gender", "date_of_birth",
+        "is_admin", "saved_cart  (JSON)", "delivery_address  (JSON)",
+        "notif_seen_at", "notif_cleared_at",
+    ], "id  (PK)")
 
-    table_box(7.5, 7.0, 2.5, 1.3, "products", [
-        "id (PK)", "label", "description", "price",
-        "image_url", "category", "unit"
-    ], "id (PK)")
+    h_otp = table_box(c2, y_top + 0.7, W2, "otp_verification", [
+        "id  (PK)", "email", "otp_code", "username",
+        "password_hash", "expires_at", "is_verified",
+    ], "id  (PK)")
 
-    table_box(11.0, 6.5, 2.7, 2.2, "orders", [
-        "id (PK)", "user_id (FK)", "order_date",
-        "delivery_date, delivery_time", "delivery_address",
-        "total_amount, status", "payment_method",
-        "paymongo_source_id"
-    ], "id (PK)")
+    h_prod = table_box(c3, y_top + 0.7, W3, "products", [
+        "id  (PK)", "label", "description", "price",
+        "image_url", "category", "unit",
+    ], "id  (PK)")
 
-    table_box(7.5, 4.5, 2.5, 1.3, "order_items", [
-        "id (PK)", "order_id (FK)", "product_name",
-        "product_price", "quantity", "subtotal"
-    ], "id (PK)")
+    h_ord = table_box(c4, y_top, W4, "orders", [
+        "id  (PK)", "user_id  (FK)", "order_date",
+        "delivery_date", "delivery_time", "delivery_address",
+        "total_amount", "status", "payment_method",
+        "paymongo_source_id",
+    ], "id  (PK)")
 
-    table_box(11.0, 4.2, 2.7, 1.3, "order_status_history", [
-        "id (PK)", "order_id (FK)", "user_id (FK)",
-        "status", "payment_method", "created_at"
-    ], "id (PK)")
+    # --- Bottom row (spread across full width) ---
+    # 5 tables in bottom row: system_settings | password_reset | email_change_otp | order_items | order_status_history
+    bw_bot = 2.8
+    gap_bot = 0.35
+    bx = [0.4 + i * (bw_bot + gap_bot) for i in range(5)]
 
-    table_box(0.3, 3.5, 2.8, 1.0, "system_settings", [
-        "id (PK)", "setting_key", "setting_value",
-        "updated_by (FK)"
-    ], "id (PK)")
+    h_sys   = table_box(bx[0], y_bot, bw_bot, "system_settings", [
+        "id  (PK)", "setting_key", "setting_value",
+        "updated_by  (FK)",
+    ], "id  (PK)")
 
-    table_box(4.0, 3.5, 2.5, 1.0, "email_change_otp", [
-        "id (PK)", "user_id (FK)", "otp_code",
-        "new_email", "expires_at"
-    ], "id (PK)")
+    h_prst  = table_box(bx[1], y_bot, bw_bot, "password_reset", [
+        "id  (PK)", "email", "otp_code",
+        "user_id  (FK)", "expires_at", "is_verified",
+    ], "id  (PK)")
 
-    # Relationships (arrows)
-    arrow_kw = dict(arrowstyle="-|>", color=MUTED, lw=1.2, connectionstyle="arc3,rad=0")
-    ax.annotate("", xy=(4.0, 7.75), xytext=(3.15, 7.75), arrowprops=arrow_kw)
-    ax.annotate("", xy=(4.0, 5.85), xytext=(3.15, 6.2), arrowprops=arrow_kw)
-    ax.annotate("", xy=(7.5, 7.65), xytext=(6.5, 7.65), arrowprops=arrow_kw)
-    ax.annotate("", xy=(11.0, 7.6), xytext=(10.0, 7.6), arrowprops=arrow_kw)
-    ax.annotate("", xy=(7.5, 5.15), xytext=(11.0, 5.15),
-                arrowprops=dict(arrowstyle="-|>", color=MUTED, lw=1.2, connectionstyle="arc3,rad=-0.2"))
-    ax.annotate("", xy=(11.0, 4.85), xytext=(10.0, 5.5),
-                arrowprops=dict(arrowstyle="-|>", color=MUTED, lw=1.2, connectionstyle="arc3,rad=0.15"))
-    ax.annotate("", xy=(4.0, 4.0), xytext=(3.15, 4.2),
-                arrowprops=dict(arrowstyle="-|>", color=MUTED, lw=1.2, connectionstyle="arc3,rad=-0.15"))
+    h_eml   = table_box(bx[2], y_bot, bw_bot, "email_change_otp", [
+        "id  (PK)", "user_id  (FK)", "otp_code",
+        "new_email", "expires_at",
+    ], "id  (PK)")
 
-    # Relationship labels
-    ax.text(3.5, 7.9, "1:N", ha="center", fontsize=6, color=MUTED, fontstyle="italic")
-    ax.text(3.5, 5.95, "1:N", ha="center", fontsize=6, color=MUTED, fontstyle="italic")
-    ax.text(7.0, 7.85, "1:N", ha="center", fontsize=6, color=MUTED, fontstyle="italic")
-    ax.text(10.5, 7.85, "1:N", ha="center", fontsize=6, color=MUTED, fontstyle="italic")
+    h_oitem = table_box(bx[3], y_bot, bw_bot, "order_items", [
+        "id  (PK)", "order_id  (FK)", "product_name",
+        "product_price", "quantity", "subtotal",
+    ], "id  (PK)")
 
-    ax.set_title("AquaSphere — Entity Relationship Diagram", fontsize=12, fontweight="bold",
-                 color=DEEP, pad=10, fontfamily="sans-serif")
+    h_oshist = table_box(bx[4], y_bot, bw_bot, "order_status_history", [
+        "id  (PK)", "order_id  (FK)", "user_id  (FK)",
+        "status", "payment_method", "created_at",
+    ], "id  (PK)")
 
-    plt.tight_layout()
+    # ====== ARROWS ======
+    def mid_y(y, h):
+        return y + h / 2
+
+    def mid_x(x, w):
+        return x + w / 2
+
+    def straight_h(y, x1, x2, label=None, rad=0):
+        ax.annotate("", xy=(x2, y), xytext=(x1, y),
+                    arrowprops=dict(arrowstyle="-|>", color=MUTED, lw=1.4,
+                                    connectionstyle=f"arc3,rad={rad}",
+                                    shrinkA=2, shrinkB=2))
+        if label:
+            ax.text((x1 + x2) / 2, y + 0.17, label, ha="center",
+                    fontsize=6.5, color=MUTED, fontstyle="italic")
+
+    # 1) users → otp_verification (horizontal)
+    straight_h(mid_y(y_top, h_users), c1 + W1, c2, "1:N")
+
+    # 2) otp_verification → password_reset (vertical, from otp bottom to prst top)
+    # password_reset is at bx[1], so connect otp center-x to bx[1] center-x
+    ax.annotate("", xy=(bx[1] + bw_bot / 2, y_bot + h_prst),
+                xytext=(c2 + W2 / 2, y_top + 0.7),
+                arrowprops=dict(arrowstyle="-|>", color=MUTED, lw=1.4,
+                                connectionstyle="arc3,rad=0", shrinkA=2, shrinkB=2))
+    ax.text(c2 + W2 / 2 + 0.2, (y_top + 0.7 + y_bot + h_prst) / 2, "1:N",
+            ha="left", fontsize=6.5, color=MUTED, fontstyle="italic")
+
+    # 3) products → order_items (vertical)
+    ax.annotate("", xy=(bx[3] + bw_bot / 2, y_bot + h_oitem),
+                xytext=(c3 + W3 / 2, y_top + 0.7),
+                arrowprops=dict(arrowstyle="-|>", color=MUTED, lw=1.4,
+                                connectionstyle="arc3,rad=0", shrinkA=2, shrinkB=2))
+    ax.text(c3 + W3 / 2 + 0.2, (y_top + 0.7 + y_bot + h_oitem) / 2, "1:N",
+            ha="left", fontsize=6.5, color=MUTED, fontstyle="italic")
+
+    # 4) users → orders (horizontal, with slight arc to go OVER the middle tables)
+    # Route above the otp_verification and products boxes
+    y_arc = y_top + max(h_users, h_otp, h_prod) + 0.5  # above all top-row boxes
+    verts_u = [
+        (c1 + W1 * 0.6, mid_y(y_top, h_users)),   # start: right side of users, mid height
+        (c1 + W1 * 0.6, y_arc),                     # up to arc height
+        (c4, y_arc),                                 # across
+        (c4, mid_y(y_top, h_ord)),                   # down to orders mid height
+    ]
+    codes_u = [MPath.MOVETO, MPath.CURVE4, MPath.CURVE4, MPath.CURVE4]
+    path_u = MPath(verts_u, codes_u)
+    patch_u = mpatches.FancyArrowPatch(path=path_u, arrowstyle="-|>", color=MUTED,
+                                       lw=1.4, mutation_scale=14)
+    ax.add_patch(patch_u)
+    ax.text((c1 + W1 + c4) / 2, y_arc + 0.15, "1:N", ha="center",
+            fontsize=6.5, color=MUTED, fontstyle="italic")
+
+    # 5) orders → order_items (vertical, from orders bottom to order_items top)
+    ax.annotate("", xy=(bx[3] + bw_bot / 2, y_bot + h_oitem),
+                xytext=(c4 + W4 / 2, y_top),
+                arrowprops=dict(arrowstyle="-|>", color=MUTED, lw=1.4,
+                                connectionstyle="arc3,rad=0", shrinkA=2, shrinkB=2))
+    ax.text(c4 + W4 / 2 + 0.2, (y_top + y_bot + h_oitem) / 2, "1:N",
+            ha="left", fontsize=6.5, color=MUTED, fontstyle="italic")
+
+    # 6) orders → order_status_history (vertical, offset)
+    ax.annotate("", xy=(bx[4] + bw_bot / 2, y_bot + h_oshist),
+                xytext=(c4 + W4 / 2 + 0.35, y_top),
+                arrowprops=dict(arrowstyle="-|>", color=MUTED, lw=1.4,
+                                connectionstyle="arc3,rad=0.06", shrinkA=2, shrinkB=2))
+    ax.text(c4 + W4 / 2 + 0.55, (y_top + y_bot + h_oshist) / 2, "1:N",
+            ha="left", fontsize=6.5, color=MUTED, fontstyle="italic")
+
+    # 7) users → system_settings (vertical)
+    ax.annotate("", xy=(bx[0] + bw_bot / 2, y_bot + h_sys),
+                xytext=(c1 + W1 / 2, y_top),
+                arrowprops=dict(arrowstyle="-|>", color=MUTED, lw=1.4,
+                                connectionstyle="arc3,rad=0", shrinkA=2, shrinkB=2))
+    ax.text(c1 + W1 / 2 - 0.3, (y_top + y_bot + h_sys) / 2, "1:N",
+            ha="right", fontsize=6.5, color=MUTED, fontstyle="italic")
+
+    # 8) users → email_change_otp (diagonal)
+    ax.annotate("", xy=(bx[2] + bw_bot / 2, y_bot + h_eml),
+                xytext=(c1 + W1 * 0.7, y_top),
+                arrowprops=dict(arrowstyle="-|>", color=MUTED, lw=1.4,
+                                connectionstyle="arc3,rad=0.1", shrinkA=2, shrinkB=2))
+    ax.text(c1 + W1 * 0.85, (y_top + y_bot + h_eml) / 2 + 0.2, "1:N",
+            ha="left", fontsize=6.5, color=MUTED, fontstyle="italic")
+
+    ax.set_title("AquaSphere — Entity Relationship Diagram", fontsize=14, fontweight="bold",
+                 color=DEEP, pad=14, fontfamily="sans-serif")
+
+    plt.tight_layout(pad=0.5)
     fig.savefig(FIG / "diagram-erd.png", dpi=180, bbox_inches="tight", facecolor=WHITE)
     plt.close()
     print("Saved diagram-erd.png")
 
 
+# ---------------------------------------------------------------------------
+# System Flow
+# ---------------------------------------------------------------------------
 def draw_system_flow():
-    fig, ax = plt.subplots(1, 1, figsize=(12, 7))
-    ax.set_xlim(0, 12)
-    ax.set_ylim(0, 7)
+    fig, ax = plt.subplots(1, 1, figsize=(13, 8))
+    ax.set_xlim(0, 13)
+    ax.set_ylim(0, 8)
     ax.axis("off")
     fig.patch.set_facecolor(WHITE)
 
-    def box(x, y, w, h, text, color=AQUA):
-        rect = FancyBboxPatch((x, y), w, h, boxstyle="round,pad=0.08",
-                              facecolor=color, edgecolor=DEEP, linewidth=1.2)
-        ax.add_patch(rect)
-        ax.text(x + w / 2, y + h / 2, text, ha="center", va="center",
+    bw, bh = 2.0, 0.85
+    gap = 0.55
+
+    def box(x, y, text, color=AQUA):
+        r = FancyBboxPatch((x, y), bw, bh, boxstyle="round,pad=0.08",
+                           facecolor=color, edgecolor=DEEP, linewidth=1.2)
+        ax.add_patch(r)
+        ax.text(x + bw / 2, y + bh / 2, text, ha="center", va="center",
                 fontsize=7.5, color=WHITE, fontweight="bold", fontfamily="sans-serif")
 
-    def arrow(x1, y1, x2, y2, label=None):
+    def arr(x1, y1, x2, y2, label=None, color=INK, rad=0, ls="-"):
         ax.annotate("", xy=(x2, y2), xytext=(x1, y1),
-                    arrowprops=dict(arrowstyle="-|>", color=INK, lw=1.3))
+                    arrowprops=dict(arrowstyle="-|>", color=color, lw=1.3,
+                                    connectionstyle=f"arc3,rad={rad}", linestyle=ls))
         if label:
             mx, my = (x1 + x2) / 2, (y1 + y2) / 2
-            ax.text(mx, my + 0.12, label, ha="center", fontsize=5.5, color=MUTED, fontstyle="italic")
+            ax.text(mx, my + 0.15, label, ha="center", fontsize=5.5,
+                    color=MUTED, fontstyle="italic")
 
-    # User
-    box(0.3, 5.5, 1.8, 0.9, "User\n(Customer)", DEEP)
+    ax.text(0.3, 7.4, "Customer Flow", fontsize=9, fontweight="bold",
+            color=DEEP, fontfamily="sans-serif")
+    ax.text(0.3, 4.5, "Admin Flow", fontsize=9, fontweight="bold",
+            color=DEEP, fontfamily="sans-serif")
 
-    # Auth flow
-    box(3.0, 5.8, 1.8, 0.7, "Register /\nLogin", AQUA)
-    arrow(2.15, 5.95, 3.0, 6.15)
-    arrow(2.15, 5.95, 3.0, 5.95)
+    row1_y = 6.2
+    row2_y = 5.0
+    row3_y = 2.2
+    x0 = 0.4
 
-    box(5.5, 5.8, 1.8, 0.7, "OTP\nVerification", LIGHT)
-    arrow(4.85, 6.15, 5.5, 6.15, "email")
+    # Row 1
+    box(x0, row1_y, "User\n(Customer)", DEEP)
+    box(x0 + bw + gap, row1_y, "Register /\nLogin", AQUA)
+    box(x0 + 2*(bw + gap), row1_y, "OTP\nVerification", LIGHT)
+    box(x0 + 3*(bw + gap), row1_y, "Browse\nProducts", AQUA)
+    box(x0 + 4*(bw + gap), row1_y, "Add to\nCart", AQUA)
 
-    # Main flow
-    box(3.0, 4.2, 1.8, 0.7, "Browse\nProducts", AQUA)
-    arrow(4.85, 5.95, 3.9, 4.55)
+    arr(x0 + bw, row1_y + bh/2, x0 + bw + gap, row1_y + bh/2)
+    arr(x0 + 2*bw + gap, row1_y + bh/2, x0 + 2*(bw + gap), row1_y + bh/2, "credentials")
+    arr(x0 + 3*bw + 2*gap, row1_y + bh/2, x0 + 3*(bw + gap), row1_y + bh/2, "verified")
+    arr(x0 + 4*bw + 3*gap, row1_y + bh/2, x0 + 4*(bw + gap), row1_y + bh/2)
 
-    box(5.5, 4.2, 1.8, 0.7, "Add to\nCart", AQUA)
-    arrow(4.85, 4.55, 5.5, 4.55)
+    # Row 2
+    box(x0, row2_y, "Checkout", AQUA)
+    box(x0 + bw + gap, row2_y, "Payment\n(COD)", GREEN)
+    box(x0 + 2*(bw + gap), row2_y, "Order\nCreated", AQUA)
+    box(x0 + 3*(bw + gap), row2_y, "ML Delivery\nPredict", "#D4952A")
+    box(x0 + 4*(bw + gap), row2_y, "Notifications", LIGHT)
 
-    box(8.0, 4.2, 1.8, 0.7, "Checkout", AQUA)
-    arrow(7.35, 4.55, 8.0, 4.55)
+    arr(x0 + bw, row2_y + bh/2, x0 + bw + gap, row2_y + bh/2, "confirm")
+    arr(x0 + 2*bw + gap, row2_y + bh/2, x0 + 2*(bw + gap), row2_y + bh/2)
+    arr(x0 + 3*bw + 2*gap, row2_y + bh/2, x0 + 3*(bw + gap), row2_y + bh/2, "location", color=MUTED)
+    arr(x0 + 4*bw + 3*gap, row2_y + bh/2, x0 + 4*(bw + gap), row2_y + bh/2, "status update", color=MUTED)
 
-    # Payment
-    box(8.0, 2.8, 1.8, 0.7, "Payment\n(COD)", GREEN)
-    arrow(8.9, 4.2, 8.9, 3.5)
+    arr(x0 + 3*(bw + gap) + bw/2, row1_y, x0 + 3*(bw + gap) + bw/2, row2_y + bh, rad=0)
+    arr(x0 + 4*(bw + gap) + bw/2, row1_y, x0 + 4*(bw + gap) + bw/2, row2_y + bh, rad=0)
 
-    # ML
-    box(10.2, 4.2, 1.5, 0.7, "ML\nPredict", "#E8A838")
-    arrow(8.0, 4.55, 10.2, 4.55, "location")
+    # Row 3
+    box(x0, row3_y, "Admin", DEEP)
+    box(x0 + bw + gap, row3_y, "Manage\nProducts", AQUA)
+    box(x0 + 2*(bw + gap), row3_y, "Manage\nOrders", AQUA)
+    box(x0 + 3*(bw + gap), row3_y, "Manage\nUsers", AQUA)
 
-    # Order
-    box(5.5, 2.8, 1.8, 0.7, "Order\nCreated", AQUA)
-    arrow(8.9, 2.8, 7.35, 3.15)
+    arr(x0 + bw, row3_y + bh/2, x0 + bw + gap, row3_y + bh/2)
+    arr(x0 + 2*bw + gap, row3_y + bh/2, x0 + 2*(bw + gap), row3_y + bh/2)
+    arr(x0 + 3*bw + 2*gap, row3_y + bh/2, x0 + 3*(bw + gap), row3_y + bh/2)
 
-    # Notifications
-    box(3.0, 2.8, 1.8, 0.7, "Notifications", LIGHT)
-    arrow(5.5, 3.15, 4.85, 3.15, "status update")
-
-    # Admin
-    box(0.3, 1.0, 1.8, 0.9, "Admin", DEEP)
-    box(3.0, 1.0, 1.8, 0.7, "Manage\nProducts", AQUA)
-    arrow(2.15, 1.45, 3.0, 1.35)
-
-    box(5.5, 1.0, 1.8, 0.7, "Manage\nOrders", AQUA)
-    arrow(4.85, 1.35, 5.5, 1.35)
-
-    box(8.0, 1.0, 1.8, 0.7, "Manage\nUsers", AQUA)
-    arrow(7.35, 1.35, 8.0, 1.35)
-
-    # DB
-    rect = FancyBboxPatch((9.5, 0.5), 2.2, 1.5, boxstyle="round,pad=0.08",
-                          facecolor="#f0f0f0", edgecolor=MUTED, linewidth=1, linestyle="--")
-    ax.add_patch(rect)
-    ax.text(10.6, 1.25, "PostgreSQL\nDatabase", ha="center", va="center",
+    db = FancyBboxPatch((11.2, 1.6), 1.6, 1.6, boxstyle="round,pad=0.08",
+                        facecolor="#f0f0f0", edgecolor=MUTED, linewidth=1, linestyle="--")
+    ax.add_patch(db)
+    ax.text(12.0, 2.4, "PostgreSQL\nDatabase", ha="center", va="center",
             fontsize=7, color=INK, fontfamily="sans-serif")
 
-    ax.set_title("AquaSphere — System Flow Diagram", fontsize=12, fontweight="bold",
-                 color=DEEP, pad=10, fontfamily="sans-serif")
+    arr(x0 + 4*(bw + gap), row3_y + bh/2, 11.2, 2.4, color=MUTED, rad=-0.15, ls="--")
 
-    plt.tight_layout()
+    ax.set_title("AquaSphere — System Flow Diagram", fontsize=14, fontweight="bold",
+                 color=DEEP, pad=14, fontfamily="sans-serif")
+
+    plt.tight_layout(pad=0.5)
     fig.savefig(FIG / "diagram-system-flow.png", dpi=180, bbox_inches="tight", facecolor=WHITE)
     plt.close()
     print("Saved diagram-system-flow.png")
 
 
+# ---------------------------------------------------------------------------
+# Order Status Flow
+# ---------------------------------------------------------------------------
 def draw_order_flow():
-    fig, ax = plt.subplots(1, 1, figsize=(12, 4))
-    ax.set_xlim(0, 12)
-    ax.set_ylim(0, 4)
+    fig, ax = plt.subplots(1, 1, figsize=(13, 4.5))
+    ax.set_xlim(0, 13)
+    ax.set_ylim(0, 4.5)
     ax.axis("off")
     fig.patch.set_facecolor(WHITE)
 
-    def box(x, y, w, h, text, color=AQUA):
-        rect = FancyBboxPatch((x, y), w, h, boxstyle="round,pad=0.06",
-                              facecolor=color, edgecolor=DEEP, linewidth=1.2)
-        ax.add_patch(rect)
-        ax.text(x + w / 2, y + h / 2, text, ha="center", va="center",
-                fontsize=7, color=WHITE, fontweight="bold", fontfamily="sans-serif")
+    bw, bh = 1.8, 0.9
+    gap = 0.5
 
-    def arrow(x1, y1, x2, y2, label=None):
-        ax.annotate("", xy=(x2, y2), xytext=(x1, y1),
-                    arrowprops=dict(arrowstyle="-|>", color=INK, lw=1.3))
-        if label:
-            mx, my = (x1 + x2) / 2, (y1 + y2) / 2
-            ax.text(mx, my + 0.15, label, ha="center", fontsize=5.5, color=MUTED, fontstyle="italic")
+    def box(x, y, text, color=AQUA):
+        r = FancyBboxPatch((x, y), bw, bh, boxstyle="round,pad=0.06",
+                           facecolor=color, edgecolor=DEEP, linewidth=1.2)
+        ax.add_patch(r)
+        ax.text(x + bw / 2, y + bh / 2, text, ha="center", va="center",
+                fontsize=7.5, color=WHITE, fontweight="bold", fontfamily="sans-serif")
 
-    statuses = [
-        (0.3, 1.5, "Order\nPlaced", DEEP),
-        (2.3, 1.5, "Pending", AQUA),
-        (4.3, 1.5, "Confirmed", AQUA),
-        (6.3, 1.5, "Out for\nDelivery", LIGHT),
-        (8.3, 1.5, "Delivered", GREEN),
-        (10.3, 1.5, "Completed", GREEN),
-    ]
+    xs = [0.4 + i * (bw + gap) for i in range(6)]
+    labels = ["Order\nPlaced", "Pending", "Confirmed", "Out for\nDelivery", "Delivered", "Completed"]
+    colors = [DEEP, AQUA, AQUA, LIGHT, GREEN, GREEN]
 
-    for i, (x, y, text, color) in enumerate(statuses):
-        box(x, y, 1.6, 0.9, text, color)
-        if i < len(statuses) - 1:
-            arrow(x + 1.6, 1.95, x + 2.3, 1.95)
+    for i, (x, lab, col) in enumerate(zip(xs, labels, colors)):
+        box(x, 1.8, lab, col)
+        if i < len(xs) - 1:
+            ax.annotate("", xy=(xs[i + 1], 2.25), xytext=(x + bw, 2.25),
+                        arrowprops=dict(arrowstyle="-|>", color=INK, lw=1.3))
 
-    # Cancelled branch
-    box(4.3, 0.2, 1.6, 0.7, "Cancelled", RED)
-    ax.annotate("", xy=(5.1, 0.9), xytext=(5.1, 1.5),
+    cx = xs[2] + bw / 2
+    box(xs[2], 0.3, "Cancelled", RED)
+    ax.annotate("", xy=(cx, 0.3 + bh), xytext=(cx, 1.8),
                 arrowprops=dict(arrowstyle="-|>", color=RED, lw=1.3))
-    ax.text(5.4, 1.15, "cancel", fontsize=5.5, color=RED, fontstyle="italic")
+    ax.text(cx + 0.25, 1.05, "cancel", fontsize=6, color=RED, fontstyle="italic")
 
-    ax.set_title("AquaSphere — Order Status Flow", fontsize=11, fontweight="bold",
-                 color=DEEP, pad=10, fontfamily="sans-serif")
+    ax.set_title("AquaSphere — Order Status Flow", fontsize=13, fontweight="bold",
+                 color=DEEP, pad=12, fontfamily="sans-serif")
 
-    plt.tight_layout()
+    plt.tight_layout(pad=0.5)
     fig.savefig(FIG / "diagram-order-flow.png", dpi=180, bbox_inches="tight", facecolor=WHITE)
     plt.close()
     print("Saved diagram-order-flow.png")
 
 
+# ---------------------------------------------------------------------------
+# ML Pipeline
+# ---------------------------------------------------------------------------
 def draw_ml_pipeline():
-    fig, ax = plt.subplots(1, 1, figsize=(11, 4.5))
-    ax.set_xlim(0, 11)
-    ax.set_ylim(0, 4.5)
+    fig, ax = plt.subplots(1, 1, figsize=(13, 6.5))
+    ax.set_xlim(0, 13)
+    ax.set_ylim(0, 6.5)
     ax.axis("off")
     fig.patch.set_facecolor(WHITE)
 
-    def box(x, y, w, h, text, color=AQUA):
-        rect = FancyBboxPatch((x, y), w, h, boxstyle="round,pad=0.06",
-                              facecolor=color, edgecolor=DEEP, linewidth=1.2)
-        ax.add_patch(rect)
-        ax.text(x + w / 2, y + h / 2, text, ha="center", va="center",
-                fontsize=7, color=WHITE, fontweight="bold", fontfamily="sans-serif")
+    bw, bh = 2.0, 0.85
+    gap = 0.55
 
-    def arrow(x1, y1, x2, y2, label=None):
+    def box(x, y, text, color=AQUA):
+        r = FancyBboxPatch((x, y), bw, bh, boxstyle="round,pad=0.06",
+                           facecolor=color, edgecolor=DEEP, linewidth=1.2)
+        ax.add_patch(r)
+        ax.text(x + bw / 2, y + bh / 2, text, ha="center", va="center",
+                fontsize=7.5, color=WHITE, fontweight="bold", fontfamily="sans-serif")
+
+    def arr(x1, y1, x2, y2, label=None, color=INK, rad=0, ls="-"):
         ax.annotate("", xy=(x2, y2), xytext=(x1, y1),
-                    arrowprops=dict(arrowstyle="-|>", color=INK, lw=1.3))
+                    arrowprops=dict(arrowstyle="-|>", color=color, lw=1.3,
+                                    connectionstyle=f"arc3,rad={rad}", linestyle=ls))
         if label:
             mx, my = (x1 + x2) / 2, (y1 + y2) / 2
-            ax.text(mx, my + 0.15, label, ha="center", fontsize=5.5, color=MUTED, fontstyle="italic")
+            ax.text(mx, my + 0.15, label, ha="center", fontsize=6,
+                    color=MUTED, fontstyle="italic")
 
-    # Training pipeline (top row)
-    ax.text(0.5, 4.0, "Training Pipeline (Offline)", fontsize=8, fontweight="bold",
+    # Training row
+    ax.text(0.3, 5.8, "Training Pipeline (Offline)", fontsize=9, fontweight="bold",
             color=DEEP, fontfamily="sans-serif")
-    box(0.3, 3.0, 1.8, 0.7, "Synthetic\nData", MUTED)
-    box(2.6, 3.0, 1.8, 0.7, "Feature\nEngineering", AQUA)
-    box(4.9, 3.0, 1.8, 0.7, "Model\nTraining", AQUA)
-    box(7.2, 3.0, 1.8, 0.7, "Model\nExport", GREEN)
-    arrow(2.15, 3.35, 2.6, 3.35)
-    arrow(4.45, 3.35, 4.9, 3.35)
-    arrow(6.75, 3.35, 7.2, 3.35)
 
-    # Inference pipeline (bottom row)
-    ax.text(0.5, 2.2, "Inference Pipeline (Production)", fontsize=8, fontweight="bold",
+    ty = 4.8  # y for training boxes
+    tx = [0.4 + i * (bw + gap) for i in range(4)]
+    t_labs = ["Synthetic\nData", "Feature\nEngineering", "Model\nTraining", "Model\nExport"]
+    t_cols = [MUTED, AQUA, AQUA, GREEN]
+    for i, (lab, col) in enumerate(zip(t_labs, t_cols)):
+        box(tx[i], ty, lab, col)
+        if i < 3:
+            arr(tx[i] + bw, ty + bh/2, tx[i+1], ty + bh/2)
+
+    # Inference row
+    ax.text(0.3, 3.2, "Inference Pipeline (Production)", fontsize=9, fontweight="bold",
             color=DEEP, fontfamily="sans-serif")
-    box(0.3, 1.2, 1.8, 0.7, "User\nCheckout", DEEP)
-    box(2.6, 1.2, 1.8, 0.7, "PHP\nBackend", AQUA)
-    box(4.9, 1.2, 1.8, 0.7, "Python\npredict.py", AQUA)
-    box(7.2, 1.2, 1.8, 0.7, "Delivery\nPrediction", GREEN)
-    box(9.3, 1.2, 1.5, 0.7, "Ship\nFee", GREEN)
-    arrow(2.15, 1.55, 2.6, 1.55)
-    arrow(4.45, 1.55, 4.9, 1.55)
-    arrow(6.75, 1.55, 7.2, 1.55)
-    arrow(9.05, 1.55, 9.3, 1.55)
 
-    # Arrow from export to predict.py
-    ax.annotate("", xy=(5.8, 1.9), xytext=(8.1, 3.0),
-                arrowprops=dict(arrowstyle="-|>", color=MUTED, lw=1, linestyle="dashed",
-                                connectionstyle="arc3,rad=0.3"))
-    ax.text(7.5, 2.5, "joblib", fontsize=5.5, color=MUTED, fontstyle="italic")
+    iy = 1.8  # y for inference boxes
+    ix = [0.4 + i * (bw + gap) for i in range(5)]
+    i_labs = ["User\nCheckout", "PHP\nBackend", "Python\npredict.py", "Delivery\nTime", "Shipping\nFee"]
+    i_cols = [DEEP, AQUA, AQUA, GREEN, GREEN]
+    for i, (lab, col) in enumerate(zip(i_labs, i_cols)):
+        box(ix[i], iy, lab, col)
+        if i < 4:
+            arr(ix[i] + bw, iy + bh/2, ix[i+1], iy + bh/2)
 
-    # Fallback arrow
-    ax.annotate("", xy=(7.2, 1.2), xytext=(4.9, 1.2),
-                arrowprops=dict(arrowstyle="-|>", color=RED, lw=1, linestyle="dotted"))
-    ax.text(6.0, 1.0, "fallback", fontsize=5, color=RED, fontstyle="italic")
+    # joblib arrow: Model Export → Python predict.py (dashed, from export bottom to predict.py top)
+    arr(tx[3] + bw/2, ty, ix[2] + bw/2, iy + bh,
+        label="joblib", color=MUTED, rad=-0.2, ls="--")
 
-    ax.set_title("AquaSphere — ML Training and Inference Pipeline", fontsize=11, fontweight="bold",
-                 color=DEEP, pad=10, fontfamily="sans-serif")
+    # Fallback arrow: PHP Backend → Delivery Time (bypasses predict.py)
+    # Draw it as a simple curved arrow going BELOW the predict.py box
+    fb_sx = ix[1] + bw        # right edge of PHP Backend
+    fb_sy = iy + bh * 0.5     # mid-height of PHP Backend
+    fb_ex = ix[3]              # left edge of Delivery Time
+    fb_ey = iy + bh * 0.5     # mid-height of Delivery Time
 
-    plt.tight_layout()
+    # Use a simple arc3 with negative radius to curve below
+    ax.annotate("", xy=(fb_ex, fb_ey), xytext=(fb_sx, fb_sy),
+                arrowprops=dict(arrowstyle="-|>", color=RED, lw=1.2, linestyle="--",
+                                connectionstyle="arc3,rad=-0.5"))
+    ax.text((fb_sx + fb_ex) / 2, iy - 0.25, "fallback (when Python unavailable)",
+            ha="center", fontsize=6, color=RED, fontstyle="italic")
+
+    ax.set_title("AquaSphere — ML Training and Inference Pipeline", fontsize=13, fontweight="bold",
+                 color=DEEP, pad=14, fontfamily="sans-serif")
+
+    plt.tight_layout(pad=0.5)
     fig.savefig(FIG / "diagram-ml-pipeline.png", dpi=180, bbox_inches="tight", facecolor=WHITE)
     plt.close()
     print("Saved diagram-ml-pipeline.png")
