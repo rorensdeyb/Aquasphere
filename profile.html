@@ -2225,6 +2225,13 @@
                 return true;
             }
             
+            // If this email was just verified via OTP, skip availability check
+            if (window.__verifiedEmailChange && v.toLowerCase() === window.__verifiedEmailChange) {
+                markProfileClear(emailInput);
+                markProfileSuccess(emailInput, 'email');
+                return true;
+            }
+            
             // Debounced availability check (reduced delay for faster feedback)
             if (emailDebounce) clearTimeout(emailDebounce);
             emailDebounce = setTimeout(() => {
@@ -3309,6 +3316,7 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
+                    if (originalProfileData) originalProfileData.email = userData.email;
                     const passwordChanged = newPassword && newPassword.length > 0;
                     
                     const updatedUserData = {
