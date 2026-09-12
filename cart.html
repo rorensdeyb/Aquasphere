@@ -4955,49 +4955,12 @@
             });
         }
         
-        // Load user data
+        // User data loading is owned by navbar.js (handles dead sessions) -
+        // delegate to avoid shadowing it with a copy that swallows 401s
         function loadUserData() {
-            // Try to fetch from server first, then fallback to localStorage
-            fetch('api/get_current_user.php')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Failed to fetch user data');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.success && data.user) {
-                        const userData = data.user;
-                        // Save to localStorage
-                        localStorage.setItem('loggedInUser', JSON.stringify(userData));
-                        localStorage.setItem('userData', JSON.stringify(userData));
-                        
-                        const usernameDisplay = document.getElementById('usernameDisplay');
-                        if (usernameDisplay) {
-                            usernameDisplay.textContent = userData.username || 'User';
-                        }
-                    } else {
-                        // Fallback to localStorage
-                        const userData = JSON.parse(localStorage.getItem('loggedInUser')) || 
-                                       JSON.parse(localStorage.getItem('userData')) || 
-                                       JSON.parse(sessionStorage.getItem('userData')) || {};
-                        const usernameDisplay = document.getElementById('usernameDisplay');
-                        if (usernameDisplay) {
-                            usernameDisplay.textContent = userData.username || 'User';
-                        }
-                    }
-                })
-                .catch(error => {
-                    console.error('Error loading user data:', error);
-                    // Fallback to localStorage
-                    const userData = JSON.parse(localStorage.getItem('loggedInUser')) || 
-                                   JSON.parse(localStorage.getItem('userData')) || 
-                                   JSON.parse(sessionStorage.getItem('userData')) || {};
-                    const usernameDisplay = document.getElementById('usernameDisplay');
-                    if (usernameDisplay) {
-                        usernameDisplay.textContent = userData.username || 'User';
-                    }
-                });
+            if (typeof window.__navbarLoadUserData === 'function') {
+                window.__navbarLoadUserData();
+            }
         }
         
         // Open Profile Page

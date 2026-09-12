@@ -98,8 +98,9 @@ function initializeNavbar() {
         if (ordersLink) ordersLink.classList.add('active');
     }
     
-    // Load user data
-    loadUserData();
+    // Load user data (via alias: pages may declare their own global
+    // loadUserData() which would shadow the bare name)
+    window.__navbarLoadUserData();
     
     // Badges are now loaded immediately in loadNavbar() - no delays needed here
 }
@@ -238,6 +239,10 @@ function loadUserData() {
             }
         });
 }
+
+// Shadowing-proof alias (see initializeNavbar note): pages must call
+// window.__navbarLoadUserData() instead of relying on the bare name.
+window.__navbarLoadUserData = loadUserData;
 
 // Paint a count badge only when something actually changed, so duplicate
 // paint calls from different sources never cause a visible flicker/reload
