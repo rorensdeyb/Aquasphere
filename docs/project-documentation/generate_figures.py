@@ -33,46 +33,46 @@ def ensure_dir():
 # ERD
 # ---------------------------------------------------------------------------
 def draw_erd():
-    fig, ax = plt.subplots(1, 1, figsize=(16, 10))
-    ax.set_xlim(0, 16)
-    ax.set_ylim(0, 10)
+    fig, ax = plt.subplots(1, 1, figsize=(18, 12))
+    ax.set_xlim(0, 18)
+    ax.set_ylim(0, 12)
     ax.axis("off")
     fig.patch.set_facecolor(WHITE)
 
-    LINE_H = 0.27
-    HEADER_H = 0.42
-    PAD_TOP = 0.12
-    PAD_X = 0.18
+    LINE_H = 0.30
+    HEADER_H = 0.46
+    PAD_TOP = 0.14
+    PAD_X = 0.20
 
     def calc_h(n_cols):
-        return HEADER_H + PAD_TOP + n_cols * LINE_H + 0.12
+        return HEADER_H + PAD_TOP + n_cols * LINE_H + 0.14
 
     def table_box(x, y, w, name, cols, pk=None):
         h = calc_h(len(cols))
         rect = FancyBboxPatch((x, y), w, h, boxstyle="round,pad=0.06",
-                              facecolor=WHITE, edgecolor=AQUA, linewidth=1.5)
+                              facecolor=WHITE, edgecolor=AQUA, linewidth=1.8)
         ax.add_patch(rect)
         hdr = FancyBboxPatch((x, y + h - HEADER_H), w, HEADER_H,
                              boxstyle="round,pad=0.03",
-                             facecolor=DEEP, edgecolor=DEEP, linewidth=1)
+                             facecolor=DEEP, edgecolor=DEEP, linewidth=1.2)
         ax.add_patch(hdr)
         ax.text(x + w / 2, y + h - HEADER_H / 2, name,
-                ha="center", va="center", fontsize=9,
+                ha="center", va="center", fontsize=10,
                 fontweight="bold", color=WHITE, fontfamily="sans-serif")
         ty = y + h - HEADER_H - PAD_TOP - LINE_H / 2
         for col in cols:
             prefix = "\u2611  " if col == pk else "     "
             ax.text(x + PAD_X, ty, prefix + col, ha="left", va="center",
-                    fontsize=7, color=INK, fontfamily="monospace")
+                    fontsize=8, color=INK, fontfamily="monospace")
             ty -= LINE_H
         return h
 
-    # Column x-positions
-    c1, c2, c3, c4 = 0.4, 4.3, 8.2, 12.1
-    W1, W2, W3, W4 = 3.5, 3.5, 3.5, 3.5
+    # Layout constants
+    c1, c2, c3, c4 = 0.5, 5.0, 9.5, 14.0
+    W1, W2, W3, W4 = 4.0, 4.0, 4.0, 3.5
 
-    y_top = 5.0    # bottom of top row
-    y_bot = 0.4    # bottom of bottom row
+    y_top = 6.5
+    y_bot = 0.5
 
     # --- Top row ---
     h_users = table_box(c1, y_top, W1, "users", [
@@ -82,12 +82,12 @@ def draw_erd():
         "notif_seen_at", "notif_cleared_at",
     ], "id  (PK)")
 
-    h_otp = table_box(c2, y_top + 0.7, W2, "otp_verification", [
+    h_otp = table_box(c2, y_top + 0.8, W2, "otp_verification", [
         "id  (PK)", "email", "otp_code", "username",
         "password_hash", "expires_at", "is_verified",
     ], "id  (PK)")
 
-    h_prod = table_box(c3, y_top + 0.7, W3, "products", [
+    h_prod = table_box(c3, y_top + 0.8, W3, "products", [
         "id  (PK)", "label", "description", "price",
         "image_url", "category", "unit",
     ], "id  (PK)")
@@ -99,11 +99,12 @@ def draw_erd():
         "paymongo_source_id",
     ], "id  (PK)")
 
-    # --- Bottom row (spread across full width) ---
-    # 5 tables in bottom row: system_settings | password_reset | email_change_otp | order_items | order_status_history
-    bw_bot = 2.8
-    gap_bot = 0.35
-    bx = [0.4 + i * (bw_bot + gap_bot) for i in range(5)]
+    # --- Bottom row ---
+    bw_bot = 3.0
+    gap_bot = 0.5
+    total_bot = 5 * bw_bot + 4 * gap_bot
+    bx_start = (18 - total_bot) / 2
+    bx = [bx_start + i * (bw_bot + gap_bot) for i in range(5)]
 
     h_sys   = table_box(bx[0], y_bot, bw_bot, "system_settings", [
         "id  (PK)", "setting_key", "setting_value",
@@ -134,92 +135,113 @@ def draw_erd():
     def mid_y(y, h):
         return y + h / 2
 
-    def mid_x(x, w):
-        return x + w / 2
+    # 1) users → otp_verification (horizontal, mid-height of users to left of otp)
+    ax.annotate("", xy=(c2, mid_y(y_top + 0.8, h_otp)),
+                xytext=(c1 + W1, mid_y(y_top, h_users)),
+                arrowprops=dict(arrowstyle="-|>", color=MUTED, lw=1.6,
+                                connectionstyle="arc3,rad=0", shrinkA=3, shrinkB=3))
+    ax.text((c1 + W1 + c2) / 2, mid_y(y_top + 0.8, h_otp) + 0.2, "1:N",
+            ha="center", fontsize=7.5, color=MUTED, fontstyle="italic")
 
-    def straight_h(y, x1, x2, label=None, rad=0):
-        ax.annotate("", xy=(x2, y), xytext=(x1, y),
-                    arrowprops=dict(arrowstyle="-|>", color=MUTED, lw=1.4,
-                                    connectionstyle=f"arc3,rad={rad}",
-                                    shrinkA=2, shrinkB=2))
-        if label:
-            ax.text((x1 + x2) / 2, y + 0.17, label, ha="center",
-                    fontsize=6.5, color=MUTED, fontstyle="italic")
-
-    # 1) users → otp_verification (horizontal)
-    straight_h(mid_y(y_top, h_users), c1 + W1, c2, "1:N")
-
-    # 2) otp_verification → password_reset (vertical, from otp bottom to prst top)
-    # password_reset is at bx[1], so connect otp center-x to bx[1] center-x
+    # 2) otp_verification → password_reset (straight vertical)
     ax.annotate("", xy=(bx[1] + bw_bot / 2, y_bot + h_prst),
-                xytext=(c2 + W2 / 2, y_top + 0.7),
-                arrowprops=dict(arrowstyle="-|>", color=MUTED, lw=1.4,
-                                connectionstyle="arc3,rad=0", shrinkA=2, shrinkB=2))
-    ax.text(c2 + W2 / 2 + 0.2, (y_top + 0.7 + y_bot + h_prst) / 2, "1:N",
-            ha="left", fontsize=6.5, color=MUTED, fontstyle="italic")
+                xytext=(c2 + W2 / 2, y_top + 0.8),
+                arrowprops=dict(arrowstyle="-|>", color=MUTED, lw=1.6,
+                                connectionstyle="arc3,rad=0", shrinkA=3, shrinkB=3))
+    ax.text(c2 + W2 / 2 + 0.25, (y_top + 0.8 + y_bot + h_prst) / 2, "1:N",
+            ha="left", fontsize=7.5, color=MUTED, fontstyle="italic")
 
-    # 3) products → order_items (vertical)
+    # 3) products → order_items (straight vertical)
     ax.annotate("", xy=(bx[3] + bw_bot / 2, y_bot + h_oitem),
-                xytext=(c3 + W3 / 2, y_top + 0.7),
-                arrowprops=dict(arrowstyle="-|>", color=MUTED, lw=1.4,
-                                connectionstyle="arc3,rad=0", shrinkA=2, shrinkB=2))
-    ax.text(c3 + W3 / 2 + 0.2, (y_top + 0.7 + y_bot + h_oitem) / 2, "1:N",
-            ha="left", fontsize=6.5, color=MUTED, fontstyle="italic")
+                xytext=(c3 + W3 / 2, y_top + 0.8),
+                arrowprops=dict(arrowstyle="-|>", color=MUTED, lw=1.6,
+                                connectionstyle="arc3,rad=0", shrinkA=3, shrinkB=3))
+    ax.text(c3 + W3 / 2 + 0.25, (y_top + 0.8 + y_bot + h_oitem) / 2, "1:N",
+            ha="left", fontsize=7.5, color=MUTED, fontstyle="italic")
 
-    # 4) users → orders (horizontal, with slight arc to go OVER the middle tables)
-    # Route above the otp_verification and products boxes
-    y_arc = y_top + max(h_users, h_otp, h_prod) + 0.5  # above all top-row boxes
+    # 4) users → orders (right-angle path: up from users, across above, down to orders)
+    u_right_x = c1 + W1
+    u_mid_y = mid_y(y_top, h_users)
+    o_left_x = c4
+    o_mid_y = mid_y(y_top, h_ord)
+    y_arc = y_top + max(h_users, h_otp, h_prod) + 0.6
+
     verts_u = [
-        (c1 + W1 * 0.6, mid_y(y_top, h_users)),   # start: right side of users, mid height
-        (c1 + W1 * 0.6, y_arc),                     # up to arc height
-        (c4, y_arc),                                 # across
-        (c4, mid_y(y_top, h_ord)),                   # down to orders mid height
+        (u_right_x, u_mid_y),
+        (u_right_x + 0.3, u_mid_y),
+        (u_right_x + 0.3, y_arc),
+        (o_left_x - 0.3, y_arc),
+        (o_left_x - 0.3, o_mid_y),
+        (o_left_x, o_mid_y),
     ]
-    codes_u = [MPath.MOVETO, MPath.CURVE4, MPath.CURVE4, MPath.CURVE4]
+    codes_u = [MPath.MOVETO, MPath.LINETO, MPath.LINETO, MPath.LINETO, MPath.LINETO, MPath.LINETO]
     path_u = MPath(verts_u, codes_u)
     patch_u = mpatches.FancyArrowPatch(path=path_u, arrowstyle="-|>", color=MUTED,
-                                       lw=1.4, mutation_scale=14)
+                                       lw=1.6, mutation_scale=16)
     ax.add_patch(patch_u)
-    ax.text((c1 + W1 + c4) / 2, y_arc + 0.15, "1:N", ha="center",
-            fontsize=6.5, color=MUTED, fontstyle="italic")
+    ax.text((u_right_x + o_left_x) / 2, y_arc + 0.18, "1:N", ha="center",
+            fontsize=7.5, color=MUTED, fontstyle="italic")
 
-    # 5) orders → order_items (vertical, from orders bottom to order_items top)
+    # 5) orders → order_items (straight vertical)
     ax.annotate("", xy=(bx[3] + bw_bot / 2, y_bot + h_oitem),
                 xytext=(c4 + W4 / 2, y_top),
-                arrowprops=dict(arrowstyle="-|>", color=MUTED, lw=1.4,
-                                connectionstyle="arc3,rad=0", shrinkA=2, shrinkB=2))
-    ax.text(c4 + W4 / 2 + 0.2, (y_top + y_bot + h_oitem) / 2, "1:N",
-            ha="left", fontsize=6.5, color=MUTED, fontstyle="italic")
+                arrowprops=dict(arrowstyle="-|>", color=MUTED, lw=1.6,
+                                connectionstyle="arc3,rad=0", shrinkA=3, shrinkB=3))
+    ax.text(c4 + W4 / 2 + 0.25, (y_top + y_bot + h_oitem) / 2, "1:N",
+            ha="left", fontsize=7.5, color=MUTED, fontstyle="italic")
 
-    # 6) orders → order_status_history (vertical, offset)
+    # 6) orders → order_status_history (right-angle: down from orders, right-angle to table)
     ax.annotate("", xy=(bx[4] + bw_bot / 2, y_bot + h_oshist),
-                xytext=(c4 + W4 / 2 + 0.35, y_top),
-                arrowprops=dict(arrowstyle="-|>", color=MUTED, lw=1.4,
-                                connectionstyle="arc3,rad=0.06", shrinkA=2, shrinkB=2))
-    ax.text(c4 + W4 / 2 + 0.55, (y_top + y_bot + h_oshist) / 2, "1:N",
-            ha="left", fontsize=6.5, color=MUTED, fontstyle="italic")
+                xytext=(c4 + W4 / 2 + 0.4, y_top),
+                arrowprops=dict(arrowstyle="-|>", color=MUTED, lw=1.6,
+                                connectionstyle="arc3,rad=0.04", shrinkA=3, shrinkB=3))
+    ax.text(c4 + W4 / 2 + 0.6, (y_top + y_bot + h_oshist) / 2, "1:N",
+            ha="left", fontsize=7.5, color=MUTED, fontstyle="italic")
 
-    # 7) users → system_settings (vertical)
-    ax.annotate("", xy=(bx[0] + bw_bot / 2, y_bot + h_sys),
-                xytext=(c1 + W1 / 2, y_top),
-                arrowprops=dict(arrowstyle="-|>", color=MUTED, lw=1.4,
-                                connectionstyle="arc3,rad=0", shrinkA=2, shrinkB=2))
-    ax.text(c1 + W1 / 2 - 0.3, (y_top + y_bot + h_sys) / 2, "1:N",
-            ha="right", fontsize=6.5, color=MUTED, fontstyle="italic")
+    # 7) users → system_settings (right-angle: down from users bottom, right to system_settings)
+    u_bot_x = c1 + W1 / 2
+    sys_top_x = bx[0] + bw_bot / 2
+    sys_top_y = y_bot + h_sys
+    corner_y = (y_top + y_bot + h_sys) / 2
 
-    # 8) users → email_change_otp (diagonal)
-    ax.annotate("", xy=(bx[2] + bw_bot / 2, y_bot + h_eml),
-                xytext=(c1 + W1 * 0.7, y_top),
-                arrowprops=dict(arrowstyle="-|>", color=MUTED, lw=1.4,
-                                connectionstyle="arc3,rad=0.1", shrinkA=2, shrinkB=2))
-    ax.text(c1 + W1 * 0.85, (y_top + y_bot + h_eml) / 2 + 0.2, "1:N",
-            ha="left", fontsize=6.5, color=MUTED, fontstyle="italic")
+    verts_ss = [
+        (u_bot_x, y_top),
+        (u_bot_x, corner_y),
+        (sys_top_x, corner_y),
+        (sys_top_x, sys_top_y),
+    ]
+    codes_ss = [MPath.MOVETO, MPath.LINETO, MPath.LINETO, MPath.LINETO]
+    path_ss = MPath(verts_ss, codes_ss)
+    patch_ss = mpatches.FancyArrowPatch(path=path_ss, arrowstyle="-|>", color=MUTED,
+                                        lw=1.6, mutation_scale=16)
+    ax.add_patch(patch_ss)
+    ax.text(sys_top_x - 0.3, corner_y + 0.18, "1:N", ha="right",
+            fontsize=7.5, color=MUTED, fontstyle="italic")
 
-    ax.set_title("AquaSphere — Entity Relationship Diagram", fontsize=14, fontweight="bold",
-                 color=DEEP, pad=14, fontfamily="sans-serif")
+    # 8) users → email_change_otp (right-angle: down from users, right-angle to email_change_otp)
+    eml_top_x = bx[2] + bw_bot / 2
+    eml_top_y = y_bot + h_eml
+    corner2_y = (y_top + y_bot + h_eml) / 2 - 0.2
+
+    verts_ec = [
+        (u_bot_x + 0.3, y_top),
+        (u_bot_x + 0.3, corner2_y),
+        (eml_top_x, corner2_y),
+        (eml_top_x, eml_top_y),
+    ]
+    codes_ec = [MPath.MOVETO, MPath.LINETO, MPath.LINETO, MPath.LINETO]
+    path_ec = MPath(verts_ec, codes_ec)
+    patch_ec = mpatches.FancyArrowPatch(path=path_ec, arrowstyle="-|>", color=MUTED,
+                                        lw=1.6, mutation_scale=16)
+    ax.add_patch(patch_ec)
+    ax.text(eml_top_x + 0.25, corner2_y + 0.18, "1:N", ha="left",
+            fontsize=7.5, color=MUTED, fontstyle="italic")
+
+    ax.set_title("AquaSphere — Entity Relationship Diagram", fontsize=16, fontweight="bold",
+                 color=DEEP, pad=16, fontfamily="sans-serif")
 
     plt.tight_layout(pad=0.5)
-    fig.savefig(FIG / "diagram-erd.png", dpi=180, bbox_inches="tight", facecolor=WHITE)
+    fig.savefig(FIG / "diagram-erd.png", dpi=300, bbox_inches="tight", facecolor=WHITE)
     plt.close()
     print("Saved diagram-erd.png")
 
@@ -439,7 +461,7 @@ def draw_ml_pipeline():
                  color=DEEP, pad=14, fontfamily="sans-serif")
 
     plt.tight_layout(pad=0.5)
-    fig.savefig(FIG / "diagram-ml-pipeline.png", dpi=180, bbox_inches="tight", facecolor=WHITE)
+    fig.savefig(FIG / "diagram-ml-pipeline.png", dpi=300, bbox_inches="tight", facecolor=WHITE)
     plt.close()
     print("Saved diagram-ml-pipeline.png")
 

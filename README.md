@@ -6,6 +6,8 @@
 
 > **Project status:** This is a second-year capstone project (ITST 304). Core features are implemented and deployed. PayMongo digital payment is scaffolded but not active. Known limitations are documented in the system documentation.
 
+> **Regional Coverage:** The system currently covers the area around Region IV-A CALABARZON and does not cater to all places in the Philippines yet. This showcase demonstrates a potentially helpful system for water delivery businesses operating within this region.
+
 ---
 
 ## Key Features

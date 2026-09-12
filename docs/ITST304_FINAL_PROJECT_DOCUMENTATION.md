@@ -23,6 +23,8 @@ The system includes an administrator panel for managing products, viewing orders
 
 AquaSphere was developed as a second-year capstone project, and while core functionality is implemented and deployed, certain features remain in an early or incomplete state. The system is presented here in its current working form, with known limitations documented for transparency.
 
+**Regional Coverage:** The system currently covers the area around Region IV-A CALABARZON and does not cater to all places in the Philippines yet. This showcase demonstrates a potentially helpful system for water delivery businesses operating within this region.
+
 ---
 
 ## Statement of the Problem
