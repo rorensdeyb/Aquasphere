@@ -14,6 +14,7 @@ from matplotlib.path import Path as MPath
 
 ROOT = Path(__file__).resolve().parent
 FIG = ROOT / "figures"
+DIAG = ROOT.parent.parent / "diagram-image"
 
 AQUA = "#2383B5"
 DEEP = "#155A7A"
@@ -27,6 +28,7 @@ RED = "#b84252"
 
 def ensure_dir():
     FIG.mkdir(parents=True, exist_ok=True)
+    DIAG.mkdir(parents=True, exist_ok=True)
 
 
 # ---------------------------------------------------------------------------
@@ -184,8 +186,9 @@ def draw_erd():
 
     plt.tight_layout(pad=0.5)
     fig.savefig(FIG / "diagram-erd.png", dpi=300, bbox_inches="tight", facecolor=WHITE)
+    fig.savefig(DIAG / "diagram-erd.svg", bbox_inches="tight", facecolor=WHITE)
     plt.close()
-    print("Saved diagram-erd.png")
+    print("Saved diagram-erd.png + .svg")
 
 
 # ---------------------------------------------------------------------------
@@ -404,8 +407,9 @@ def draw_ml_pipeline():
 
     plt.tight_layout(pad=0.5)
     fig.savefig(FIG / "diagram-ml-pipeline.png", dpi=300, bbox_inches="tight", facecolor=WHITE)
+    fig.savefig(DIAG / "diagram-ml-pipeline.svg", bbox_inches="tight", facecolor=WHITE)
     plt.close()
-    print("Saved diagram-ml-pipeline.png")
+    print("Saved diagram-ml-pipeline.png + .svg")
 
 
 if __name__ == "__main__":
