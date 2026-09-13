@@ -33,9 +33,9 @@ def ensure_dir():
 # ERD
 # ---------------------------------------------------------------------------
 def draw_erd():
-    fig, ax = plt.subplots(1, 1, figsize=(18, 13))
+    fig, ax = plt.subplots(1, 1, figsize=(18, 15))
     ax.set_xlim(0, 18)
-    ax.set_ylim(0, 13)
+    ax.set_ylim(-0.3, 15)
     ax.axis("off")
     fig.patch.set_facecolor(WHITE)
 
@@ -67,160 +67,117 @@ def draw_erd():
             ty -= LINE_H
         return h
 
-    # Layout constants
-    c1, c2, c3, c4 = 0.5, 5.0, 9.5, 14.0
-    W1, W2, W3, W4 = 4.0, 4.0, 4.0, 3.5
+    # Layered layout: users on top, related tables in rows below
+    ux, uw, uy = 7.2, 3.6, 9.0              # users box (top layer)
+    W1 = 2.8                                 # middle-layer box width
+    c_otp, c_prod = 1.0, 4.3                 # otp_verification / products
+    c_ord, c_sys, c_eml = 7.6, 10.9, 14.2    # orders / system_settings / email_change_otp
+    y_mid, y_ord = 5.2, 4.2                  # middle-layer bottoms (orders staggered)
+    W2 = 2.8                                 # bottom-layer box width
+    b_prst, b_oitem, b_osh = 1.0, 6.7, 9.8   # password_reset / order_items / order_status_history
+    y_bot = 0.6                              # bottom-layer bottom
 
-    y_top = 6.5
-    y_bot = 0.5
-
-    # --- Top row ---
-    h_users = table_box(c1, y_top, W1, "users", [
+    # --- Top layer ---
+    h_users = table_box(ux, uy, uw, "users", [
         "id  (PK)", "username", "password_hash", "email",
         "first_name", "last_name", "gender", "date_of_birth",
         "is_admin", "saved_cart  (JSON)", "delivery_address  (JSON)",
         "notif_seen_at", "notif_cleared_at",
     ], "id  (PK)")
 
-    h_otp = table_box(c2, y_top + 0.8, W2, "otp_verification", [
+    # --- Middle layer ---
+    h_otp = table_box(c_otp, y_mid, W1, "otp_verification", [
         "id  (PK)", "email", "otp_code", "username",
         "password_hash", "expires_at", "is_verified",
     ], "id  (PK)")
 
-    h_prod = table_box(c3, y_top + 0.8, W3, "products", [
+    h_prod = table_box(c_prod, y_mid, W1, "products", [
         "id  (PK)", "label", "description", "price",
         "image_url", "category", "unit",
     ], "id  (PK)")
 
-    h_ord = table_box(c4, y_top, W4, "orders", [
+    h_ord = table_box(c_ord, y_ord, W1, "orders", [
         "id  (PK)", "user_id  (FK)", "order_date",
         "delivery_date", "delivery_time", "delivery_address",
         "total_amount", "status", "payment_method",
         "paymongo_source_id",
     ], "id  (PK)")
 
-    # --- Bottom row ---
-    bw_bot = 3.0
-    gap_bot = 0.5
-    total_bot = 5 * bw_bot + 4 * gap_bot
-    bx_start = (18 - total_bot) / 2
-    bx = [bx_start + i * (bw_bot + gap_bot) for i in range(5)]
-
-    h_sys   = table_box(bx[0], y_bot, bw_bot, "system_settings", [
+    h_sys = table_box(c_sys, y_mid, W1, "system_settings", [
         "id  (PK)", "setting_key", "setting_value",
         "updated_by  (FK)",
     ], "id  (PK)")
 
-    h_prst  = table_box(bx[1], y_bot, bw_bot, "password_reset", [
-        "id  (PK)", "email", "otp_code",
-        "user_id  (FK)", "expires_at", "is_verified",
-    ], "id  (PK)")
-
-    h_eml   = table_box(bx[2], y_bot, bw_bot, "email_change_otp", [
+    h_eml = table_box(c_eml, y_mid, W1, "email_change_otp", [
         "id  (PK)", "user_id  (FK)", "otp_code",
         "new_email", "expires_at",
     ], "id  (PK)")
 
-    h_oitem = table_box(bx[3], y_bot, bw_bot, "order_items", [
+    # --- Bottom layer ---
+    h_prst = table_box(b_prst, y_bot, W2, "password_reset", [
+        "id  (PK)", "email", "otp_code",
+        "user_id  (FK)", "expires_at", "is_verified",
+    ], "id  (PK)")
+
+    h_oitem = table_box(b_oitem, y_bot, W2, "order_items", [
         "id  (PK)", "order_id  (FK)", "product_name",
         "product_price", "quantity", "subtotal",
     ], "id  (PK)")
 
-    h_oshist = table_box(bx[4], y_bot, bw_bot, "order_status_history", [
+    h_osh = table_box(b_osh, y_bot, W2, "order_status_history", [
         "id  (PK)", "order_id  (FK)", "user_id  (FK)",
         "status", "payment_method", "created_at",
     ], "id  (PK)")
 
-    # ====== ARROWS — clean routing, no box overlap ======
-    def mid_y(y, h):
-        return y + h / 2
-
+    # ====== ARROWS: short fan-out from users, straight drops elsewhere ======
     AW = 1.6
     AS = 16
 
-    def ra_arrow(pts, label=None, label_x=None, label_y=None):
-        """Right-angle arrow through waypoints."""
+    def elbow(pts, label=None, lx=None, ly=None):
+        """Orthogonal connector; arrowhead lands on the target box."""
         verts = list(pts)
         codes = [MPath.MOVETO] + [MPath.LINETO] * (len(verts) - 1)
-        path = MPath(verts, codes)
-        patch = mpatches.FancyArrowPatch(path=path, arrowstyle="-|>", color=MUTED,
-                                         lw=AW, mutation_scale=AS)
-        ax.add_patch(patch)
+        ax.add_patch(mpatches.FancyArrowPatch(path=MPath(verts, codes),
+                                              arrowstyle="-|>", color=MUTED,
+                                              lw=AW, mutation_scale=AS))
         if label:
-            lx = label_x if label_x is not None else (verts[0][0] + verts[-1][0]) / 2
-            ly = label_y if label_y is not None else (verts[0][1] + verts[-1][1]) / 2
             ax.text(lx, ly, label, ha="center", fontsize=7.5,
                     color=MUTED, fontstyle="italic")
 
-    # 1) users → otp_verification: route ABOVE everything, arrow enters otp from LEFT
-    route_top = 11.8
-    ra_arrow([
-        (c1 + W1, mid_y(y_top, h_users)),
-        (c1 + W1 + 0.4, mid_y(y_top, h_users)),
-        (c1 + W1 + 0.4, route_top),
-        (c2 - 0.4, route_top),
-        (c2 - 0.4, mid_y(y_top + 0.8, h_otp)),
-        (c2, mid_y(y_top + 0.8, h_otp)),
-    ], label="1:N", label_x=(c1 + W1 + c2) / 2, label_y=route_top + 0.25)
+    def drop(x, y_from, y_to, label=None, lx=None, ly=None):
+        """Straight vertical arrow."""
+        ax.annotate("", xy=(x, y_to), xytext=(x, y_from),
+                    arrowprops=dict(arrowstyle="-|>", color=MUTED, lw=AW,
+                                    shrinkA=3, shrinkB=3))
+        if label:
+            ax.text(lx, ly, label, ha="center", fontsize=7.5,
+                    color=MUTED, fontstyle="italic")
 
-    # 2) otp_verification → password_reset: straight vertical
-    ax.annotate("", xy=(bx[1] + bw_bot / 2, y_bot + h_prst),
-                xytext=(c2 + W2 / 2, y_top + 0.8),
-                arrowprops=dict(arrowstyle="-|>", color=MUTED, lw=AW,
-                                connectionstyle="arc3,rad=0", shrinkA=3, shrinkB=3))
-    ax.text(c2 + W2 / 2 + 0.25, (y_top + 0.8 + y_bot + h_prst) / 2, "1:N",
-            ha="left", fontsize=7.5, color=MUTED, fontstyle="italic")
+    u_cx = ux + uw / 2          # users horizontal center
+    u_by = uy                   # users bottom edge
 
-    # 3) products → order_items: straight vertical
-    ax.annotate("", xy=(bx[3] + bw_bot / 2, y_bot + h_oitem),
-                xytext=(c3 + W3 / 2, y_top + 0.8),
-                arrowprops=dict(arrowstyle="-|>", color=MUTED, lw=AW,
-                                connectionstyle="arc3,rad=0", shrinkA=3, shrinkB=3))
-    ax.text(c3 + W3 / 2 + 0.25, (y_top + 0.8 + y_bot + h_oitem) / 2, "1:N",
-            ha="left", fontsize=7.5, color=MUTED, fontstyle="italic")
-
-    # 4) users → orders: route ABOVE everything, arrow enters orders from LEFT
-    ra_arrow([
-        (c1 + W1, mid_y(y_top, h_users) - 0.6),
-        (c1 + W1 + 0.4, mid_y(y_top, h_users) - 0.6),
-        (c1 + W1 + 0.4, route_top - 0.6),
-        (c4 - 0.4, route_top - 0.6),
-        (c4 - 0.4, mid_y(y_top, h_ord)),
-        (c4, mid_y(y_top, h_ord)),
-    ], label="1:N", label_x=(c1 + W1 + c4) / 2, label_y=route_top - 0.35)
-
-    # 5) orders → order_items: straight vertical
-    ax.annotate("", xy=(bx[3] + bw_bot / 2, y_bot + h_oitem),
-                xytext=(c4 + W4 / 2, y_top),
-                arrowprops=dict(arrowstyle="-|>", color=MUTED, lw=AW,
-                                connectionstyle="arc3,rad=0", shrinkA=3, shrinkB=3))
-    ax.text(c4 + W4 / 2 + 0.25, (y_top + y_bot + h_oitem) / 2, "1:N",
-            ha="left", fontsize=7.5, color=MUTED, fontstyle="italic")
-
-    # 6) orders → order_status_history: straight vertical (slight offset)
-    ax.annotate("", xy=(bx[4] + bw_bot / 2, y_bot + h_oshist),
-                xytext=(c4 + W4 / 2 + 0.35, y_top),
-                arrowprops=dict(arrowstyle="-|>", color=MUTED, lw=AW,
-                                connectionstyle="arc3,rad=0.03", shrinkA=3, shrinkB=3))
-    ax.text(c4 + W4 / 2 + 0.55, (y_top + y_bot + h_oshist) / 2, "1:N",
-            ha="left", fontsize=7.5, color=MUTED, fontstyle="italic")
-
-    # 7) users → system_settings: straight vertical
-    ax.annotate("", xy=(bx[0] + bw_bot / 2, y_bot + h_sys),
-                xytext=(c1 + W1 / 2, y_top),
-                arrowprops=dict(arrowstyle="-|>", color=MUTED, lw=AW,
-                                connectionstyle="arc3,rad=0", shrinkA=3, shrinkB=3))
-    ax.text(c1 + W1 / 2 - 0.3, (y_top + y_bot + h_sys) / 2, "1:N",
-            ha="right", fontsize=7.5, color=MUTED, fontstyle="italic")
-
-    # 8) users → email_change_otp: route BELOW all boxes, arrow enters from TOP
-    route_bot = y_bot - 0.4
-    ra_arrow([
-        (c1 + W1 / 2 + 0.6, y_top),
-        (c1 + W1 / 2 + 0.6, route_bot),
-        (bx[2] + bw_bot / 2, route_bot),
-        (bx[2] + bw_bot / 2, y_bot + h_eml),
-    ], label="1:N", label_x=(c1 + W1 / 2 + 0.6 + bx[2] + bw_bot / 2) / 2, label_y=route_bot - 0.25)
+    # users → otp_verification (left elbow, clear of all boxes)
+    elbow([(7.6, u_by), (7.6, 8.75), (2.4, 8.75), (2.4, y_mid + h_otp)],
+          label="1:N", lx=5.0, ly=8.93)
+    # users → orders (straight drop)
+    drop(u_cx, u_by, y_ord + h_ord, label="1:N", lx=u_cx + 0.28, ly=8.45)
+    # users → system_settings + email_change_otp (shared bus below users)
+    for tx, ty_top, lx, ly in [(c_sys + W1 / 2, y_mid + h_sys, c_sys + W1 / 2 + 0.28, 7.8),
+                               (c_eml + W1 / 2, y_mid + h_eml, c_eml + W1 / 2 + 0.28, 7.9)]:
+        elbow([(10.4, u_by), (10.4, 8.5), (tx, 8.5), (tx, ty_top)],
+              label="1:N", lx=lx, ly=ly)
+    # otp_verification → password_reset (straight drop)
+    drop(c_otp + W1 / 2, y_mid, y_bot + h_prst, label="1:N", lx=2.68, ly=4.2)
+    # products → order_items (elbow into shared top edge)
+    elbow([(c_prod + W1 / 2, y_mid), (c_prod + W1 / 2, 3.8),
+           (b_oitem + 0.9, 3.8), (b_oitem + 0.9, y_bot + h_oitem)],
+          label="1:N", lx=6.5, ly=3.55)
+    # orders → order_items (straight drop)
+    drop(8.6, y_ord, y_bot + h_oitem, label="1:N", lx=8.88, ly=3.7)
+    # orders → order_status_history (elbow, lands on its top edge)
+    elbow([(10.2, y_ord), (10.2, 3.6), (b_osh + W2 / 2, 3.6),
+           (b_osh + W2 / 2, y_bot + h_osh)],
+          label="1:N", lx=10.7, ly=3.82)
 
     ax.set_title("AquaSphere — Entity Relationship Diagram", fontsize=16, fontweight="bold",
                  color=DEEP, pad=16, fontfamily="sans-serif")
