@@ -688,11 +688,15 @@
         .product-panel-header {
             background: linear-gradient(135deg, #2383B5, #155A7A);
             color: white;
-            padding: 20px 24px;
-            display: flex;
-            align-items: center;
-            gap: 14px;
+            padding: 20px 24px 64px;
             flex-shrink: 0;
+            position: relative;
+        }
+        .product-panel-toprow {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
         }
         .product-panel-back {
             background: rgba(255,255,255,0.15);
@@ -711,73 +715,125 @@
         .product-panel-back:hover {
             background: rgba(255,255,255,0.3);
         }
-        .product-panel-header-info h3 {
-            margin: 0;
-            font-size: 1.15rem;
-            font-weight: 700;
+        .product-panel-idpill {
+            background: rgba(255,255,255,0.18);
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
         }
-        .product-panel-header-info small {
-            opacity: 0.8;
-            font-size: 0.82rem;
+        .product-panel-titleblock h3 {
+            margin: 0 0 10px;
+            font-size: 1.4rem;
+            font-weight: 800;
+            padding-right: 120px;
+            line-height: 1.25;
+            word-break: break-word;
         }
-        .product-panel-body {
-            flex: 1;
-            overflow-y: auto;
-            padding: 24px;
+        .product-panel-catpill {
+            display: inline-block;
+            background: rgba(255,255,255,0.18);
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 500;
         }
-        .product-panel-avatar {
-            width: 120px;
-            height: 120px;
+        .product-panel-thumb {
+            position: absolute;
+            right: 22px;
+            bottom: -45px;
+            width: 110px;
+            height: 110px;
             border-radius: 16px;
+            border: 4px solid #ffffff;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.22);
             overflow: hidden;
-            margin: 0 auto 20px;
-            box-shadow: 0 4px 14px rgba(14, 165, 233, 0.25);
             background: #f0f9ff;
             display: flex;
             align-items: center;
             justify-content: center;
         }
-        .product-panel-avatar img {
+        .product-panel-thumb img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            cursor: zoom-in;
         }
-        .product-panel-avatar i {
+        .product-panel-thumb i {
             font-size: 2.5rem;
             color: #155A7A;
         }
+        .product-panel-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 62px 20px 20px;
+            background: #edf2f6;
+        }
+        .product-price-hero {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 18px 22px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 14px;
+        }
+        .product-price-label {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            color: #155A7A;
+        }
+        .product-price-value {
+            font-size: 1.9rem;
+            font-weight: 800;
+            color: #155A7A;
+            white-space: nowrap;
+        }
+        .product-price-value small {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #2383B5;
+        }
         .product-panel-section {
-            background: #f8fbfe;
-            border: 1px solid #e8f1f8;
-            border-radius: 10px;
-            padding: 14px 16px;
-            margin-bottom: 12px;
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 18px 20px;
+            margin-bottom: 14px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
         }
         .product-panel-section:last-child {
             margin-bottom: 0;
         }
         .product-panel-section-title {
-            font-size: 0.68rem;
+            font-size: 0.72rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #2383B5;
-            margin-bottom: 10px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid #D5E5ED;
+            letter-spacing: 1.5px;
+            color: #155A7A;
+            margin-bottom: 6px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e2e8f0;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
         }
-        .product-panel-section-title i {
-            font-size: 0.7rem;
-            color: #155A7A;
+        .product-panel-section-title::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 2px;
+            background: #2383B5;
+            flex-shrink: 0;
         }
         .product-panel-field {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
-            padding: 8px 0;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
         }
         .product-panel-field:not(:last-child) {
             border-bottom: 1px solid #f1f5f9;
@@ -811,6 +867,50 @@
             border-radius: 20px;
             font-size: 0.78rem;
             font-weight: 600;
+        }
+        .product-panel-footer {
+            display: flex;
+            gap: 10px;
+            padding: 14px 20px;
+            background: #ffffff;
+            border-top: 1px solid #e5edf3;
+            flex-shrink: 0;
+        }
+        .product-panel-edit {
+            flex: 1;
+            background: linear-gradient(135deg, #2383B5, #155A7A);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 16px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .product-panel-edit:hover {
+            filter: brightness(1.08);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(35, 131, 181, 0.35);
+            color: white;
+        }
+        .product-panel-delete {
+            padding: 12px 26px;
+            background: #ffffff;
+            color: #dc3545;
+            border: 1.5px solid #f3c2c7;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .product-panel-delete:hover {
+            background: #fef2f2;
+            border-color: #dc3545;
         }
 
         /* Pagination Styles */
@@ -1613,13 +1713,21 @@
     <div class="product-panel-overlay" id="productPanelOverlay" onclick="closeProductPanel()"></div>
     <div class="product-panel" id="productPanel">
         <div class="product-panel-header">
-            <button class="product-panel-back" onclick="closeProductPanel()"><i class="fas fa-arrow-left"></i></button>
-            <div class="product-panel-header-info">
-                <h3 id="panelProductName">Product Name</h3>
-                <small id="panelProductCategory">Category</small>
+            <div class="product-panel-toprow">
+                <button class="product-panel-back" onclick="closeProductPanel()"><i class="fas fa-arrow-left"></i></button>
+                <span class="product-panel-idpill" id="panelProductIdPill">#0</span>
             </div>
+            <div class="product-panel-titleblock">
+                <h3 id="panelProductName">Product Name</h3>
+                <span class="product-panel-catpill" id="panelProductCategory">Category</span>
+            </div>
+            <div class="product-panel-thumb" id="panelProductThumb"><i class="fas fa-box"></i></div>
         </div>
         <div class="product-panel-body" id="productPanelBody">
+        </div>
+        <div class="product-panel-footer">
+            <button class="product-panel-edit" onclick="editProductFromPanel()"><i class="fas fa-edit me-2"></i>Edit Product</button>
+            <button class="product-panel-delete" onclick="deleteProductFromPanel()">Delete</button>
         </div>
     </div>
 
@@ -1972,6 +2080,8 @@
         }
 
         // View product panel
+        let viewedProductId = null;
+
         function viewProduct(productId) {
             const id = parseInt(productId);
             const product = allProducts.find(p => parseInt(p.id) === id);
@@ -1980,6 +2090,8 @@
                 return;
             }
 
+            viewedProductId = product.id;
+
             let imageUrl = product.image_url || '';
             if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('/')) {
                 imageUrl = '../' + imageUrl;
@@ -1987,17 +2099,28 @@
                 imageUrl = '..' + imageUrl;
             }
 
+            const rawUnit = product.unit ? String(product.unit) : '';
+            const unitDisplay = rawUnit ? (rawUnit.startsWith('/') ? rawUnit : '/' + rawUnit) : '';
+            const priceDisplay = '₱' + parseFloat(product.price).toFixed(2);
+
             document.getElementById('panelProductName').textContent = product.label || 'N/A';
             document.getElementById('panelProductCategory').textContent = product.category || 'N/A';
+            document.getElementById('panelProductIdPill').textContent = '#' + product.id;
+
+            const thumb = document.getElementById('panelProductThumb');
+            thumb.innerHTML = imageUrl
+                ? `<img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(product.label || 'Product')}" title="Click to view fullscreen" onclick="openFullscreenImage(this.src)" onerror="this.parentElement.innerHTML='<i class=\\'fas fa-box\\'></i>'">`
+                : '<i class="fas fa-box"></i>';
 
             const body = document.getElementById('productPanelBody');
             body.innerHTML = `
-                <div class="product-panel-avatar">
-                    ${imageUrl ? `<img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(product.label)}" onerror="this.parentElement.innerHTML='<i class=\\'fas fa-box\\'></i>'">` : '<i class="fas fa-box"></i>'}
+                <div class="product-price-hero">
+                    <span class="product-price-label">PRICE</span>
+                    <span class="product-price-value">${priceDisplay}${unitDisplay ? `<small> ${escapeHtml(unitDisplay)}</small>` : ''}</span>
                 </div>
 
                 <div class="product-panel-section">
-                    <div class="product-panel-section-title"><i class="fas fa-tag"></i> Product Info</div>
+                    <div class="product-panel-section-title">Product Info</div>
                     <div class="product-panel-field">
                         <span class="product-panel-field-label">ID</span>
                         <span class="product-panel-field-value">#${product.id}</span>
@@ -2008,7 +2131,7 @@
                     </div>
                     <div class="product-panel-field">
                         <span class="product-panel-field-label">Price</span>
-                        <span class="product-panel-field-value">₱${parseFloat(product.price).toFixed(2)}<span style="color:#2383B5; font-weight:700;">${escapeHtml(product.unit || '')}</span></span>
+                        <span class="product-panel-field-value">${priceDisplay}${unitDisplay ? `<span style="color:#2383B5;"> ${escapeHtml(unitDisplay)}</span>` : ''}</span>
                     </div>
                     <div class="product-panel-field">
                         <span class="product-panel-field-label">Category</span>
@@ -2017,7 +2140,7 @@
                 </div>
 
                 <div class="product-panel-section">
-                    <div class="product-panel-section-title"><i class="fas fa-align-left"></i> Description</div>
+                    <div class="product-panel-section-title">Description</div>
                     <p class="product-panel-desc">${escapeHtml(product.description || 'No description')}</p>
                 </div>
             `;
@@ -2031,6 +2154,22 @@
                 panel.classList.add('is-open');
             });
             document.body.style.overflow = 'hidden';
+        }
+
+        function editProductFromPanel() {
+            const id = viewedProductId;
+            closeProductPanel();
+            if (id !== null && id !== undefined) {
+                setTimeout(() => editProduct(id), 120);
+            }
+        }
+
+        function deleteProductFromPanel() {
+            const id = viewedProductId;
+            closeProductPanel();
+            if (id !== null && id !== undefined) {
+                setTimeout(() => deleteProduct(id), 120);
+            }
         }
 
         function closeProductPanel() {
