@@ -42,7 +42,7 @@
         
         /* Payment Container */
         .payment-container {
-            max-width: 900px;
+            max-width: 1040px;
             margin: 0 auto;
         }
         
@@ -318,6 +318,213 @@
             letter-spacing: 0.5px;
         }
         
+        /* Two-column checkout layout */
+        .checkout-grid {
+            display: grid;
+            grid-template-columns: 1.25fr 1fr;
+            gap: 1.5rem;
+            align-items: start;
+        }
+
+        .checkout-title-row {
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .checkout-title-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #2383B5, #155A7A);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+            flex-shrink: 0;
+        }
+
+        .checkout-title-text h2 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #155A7A;
+            margin: 0 0 0.15rem;
+        }
+
+        .checkout-title-text p {
+            font-size: 0.88rem;
+            color: #607D8B;
+            margin: 0;
+        }
+
+        .pay-method-label {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #607D8B;
+            margin-bottom: 0.6rem;
+        }
+
+        .checkout-grid .payment-methods-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .checkout-grid .payment-method-card {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.25rem;
+            border-width: 2px;
+            border-radius: 16px;
+        }
+
+        .checkout-grid .payment-method-card:hover {
+            transform: none;
+        }
+
+        .checkout-grid .payment-method-card.disabled {
+            border-style: dashed;
+            background: #f8fafc;
+        }
+
+        .checkout-grid .payment-method-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .checkout-grid .payment-method-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .checkout-grid .payment-method-name {
+            font-size: 1rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .checkout-grid .payment-method-description {
+            font-size: 0.82rem;
+            margin-bottom: 0;
+        }
+
+        .checkout-grid .payment-method-radio {
+            flex-shrink: 0;
+        }
+
+        .checkout-grid .payment-method-card.selected .payment-method-radio::after {
+            content: '✓';
+            width: auto;
+            height: auto;
+            background: transparent;
+            color: white;
+            font-size: 14px;
+            font-weight: 800;
+            line-height: 1;
+            border-radius: 0;
+        }
+
+        .checkout-grid .coming-soon-badge {
+            flex-shrink: 0;
+        }
+
+        .cod-note {
+            display: flex;
+            gap: 0.6rem;
+            align-items: flex-start;
+            background: #f0f7fc;
+            border: 1px solid #d8e8f3;
+            border-radius: 12px;
+            padding: 0.85rem 1rem;
+            font-size: 0.82rem;
+            color: #475569;
+            line-height: 1.55;
+        }
+
+        .cod-note i {
+            color: #2383B5;
+            margin-top: 0.15rem;
+        }
+
+        .cod-note strong {
+            color: #155A7A;
+        }
+
+        .checkout-side .order-summary {
+            background: #f0f7fc;
+            box-shadow: none;
+            border: 1px solid #d8e8f3;
+            margin-bottom: 0;
+        }
+
+        .checkout-side .order-summary .summary-row.total {
+            border-bottom: none;
+        }
+
+        .delivery-box {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 0.7rem 0.9rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .delivery-box-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: #EAF7FC;
+            color: #2383B5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .delivery-box-label {
+            font-size: 0.75rem;
+            color: #607D8B;
+        }
+
+        .delivery-box-value {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .checkout-side .btn-place-order {
+            width: 100%;
+            justify-content: center;
+            margin-top: 0.5rem;
+        }
+
+        .checkout-side .btn-back {
+            width: 100%;
+            justify-content: center;
+            margin-top: 0.6rem;
+            font-size: 0.9rem;
+            padding: 0.7rem 1rem;
+        }
+
+        @media (max-width: 900px) {
+            .checkout-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
         /* Order Summary */
         .order-summary {
             background: white;
@@ -1231,103 +1438,106 @@
     <div class="main-content">
         <div class="container">
             <div class="payment-container">
-                <!-- Header -->
-                <div class="payment-header">
-                    <h1>Select Payment Method</h1>
-                    <p>Choose your preferred payment option to complete your order</p>
-                </div>
-                
                 <!-- Payment Card -->
                 <div class="payment-card">
-                    <div class="payment-card-header">
-                        <h2>Payment Options</h2>
-                    </div>
                     <div class="payment-card-body">
-                        <div class="payment-methods-grid">
-                            <!-- Cash on Delivery -->
-                            <div class="payment-method-card selected" onclick="selectPaymentMethod('cod')" id="paymentMethodCod">
-                                <div class="payment-method-header">
-                                    <div class="payment-method-icon">
-                                        <i class="fas fa-money-bill-wave"></i>
+                        <div class="checkout-grid">
+                            <div class="checkout-main">
+                                <div class="checkout-title-row">
+                                    <div class="checkout-title-icon">
+                                        <i class="fas fa-credit-card"></i>
                                     </div>
-                                    <div class="payment-method-radio"></div>
-                                </div>
-                                <div class="payment-method-info">
-                                    <div class="payment-method-name">Cash on Delivery</div>
-                                    <div class="payment-method-description">
-                                        Pay with cash when your order arrives. No need for online payment.
+                                    <div class="checkout-title-text">
+                                        <h2>Payment Options</h2>
+                                        <p>Choose how you'd like to pay for your order</p>
                                     </div>
                                 </div>
-                            </div>
-                            
-                            <!-- GCASH (Coming Soon) -->
-                            <div class="payment-method-card disabled" onclick="selectPaymentMethod('gcash')" id="paymentMethodGcash">
-                                <div class="payment-method-header">
-                                    <div class="payment-method-icon">
-                                        <i class="fas fa-mobile-alt"></i>
+                                <div class="pay-method-label">Payment Method</div>
+                                <div class="payment-methods-grid">
+                                    <!-- Cash on Delivery -->
+                                    <div class="payment-method-card selected" onclick="selectPaymentMethod('cod')" id="paymentMethodCod">
+                                        <div class="payment-method-icon">
+                                            <i class="fas fa-money-bill-wave"></i>
+                                        </div>
+                                        <div class="payment-method-info">
+                                            <div class="payment-method-name">Cash on Delivery</div>
+                                            <div class="payment-method-description">
+                                                Pay with cash when your order arrives. No need for online payment.
+                                            </div>
+                                        </div>
+                                        <div class="payment-method-radio"></div>
                                     </div>
-                                    <div class="payment-method-radio"></div>
-                                </div>
-                                <div class="payment-method-info">
-                                    <div class="payment-method-name">GCASH</div>
-                                    <div class="payment-method-description">
-                                        Pay using your GCASH wallet. Coming soon!
+
+                                    <!-- GCASH (Coming Soon) -->
+                                    <div class="payment-method-card disabled" onclick="selectPaymentMethod('gcash')" id="paymentMethodGcash">
+                                        <div class="payment-method-icon">
+                                            <i class="fas fa-mobile-alt"></i>
+                                        </div>
+                                        <div class="payment-method-info">
+                                            <div class="payment-method-name">GCASH</div>
+                                            <div class="payment-method-description">
+                                                Pay using your GCASH wallet.
+                                            </div>
+                                        </div>
+                                        <span class="coming-soon-badge">Coming Soon</span>
+                                        <div class="payment-method-radio"></div>
                                     </div>
-                                    <span class="coming-soon-badge">Coming Soon</span>
-                                </div>
-                            </div>
-                            
-                            <!-- Maya (Coming Soon) -->
-                            <div class="payment-method-card disabled" id="paymentMethodMaya" onclick="selectPaymentMethod('maya')">
-                                <div class="payment-method-header">
-                                    <div class="payment-method-icon">
-                                        <i class="fas fa-wallet"></i>
+
+                                    <!-- Maya (Coming Soon) -->
+                                    <div class="payment-method-card disabled" id="paymentMethodMaya" onclick="selectPaymentMethod('maya')">
+                                        <div class="payment-method-icon">
+                                            <i class="fas fa-wallet"></i>
+                                        </div>
+                                        <div class="payment-method-info">
+                                            <div class="payment-method-name">Maya</div>
+                                            <div class="payment-method-description">
+                                                Pay using your Maya wallet.
+                                            </div>
+                                        </div>
+                                        <span class="coming-soon-badge">Coming Soon</span>
+                                        <div class="payment-method-radio"></div>
                                     </div>
-                                    <div class="payment-method-radio"></div>
                                 </div>
-                                <div class="payment-method-info">
-                                    <div class="payment-method-name">Maya</div>
-                                    <div class="payment-method-description">
-                                        Pay using your Maya wallet. Coming soon!
+
+                                <div class="cod-note" id="codNote">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span>Please have <strong id="codNoteTotal">₱0.00</strong> ready in cash. Payment is collected by the rider when your order arrives.</span>
+                                </div>
+                            </div>
+                            <aside class="checkout-side">
+                                <div class="order-summary">
+                                    <h3>Order Summary</h3>
+                                    <div class="delivery-box" id="orderDeliveryTimeRow" style="display: none;">
+                                        <div class="delivery-box-icon">
+                                            <i class="fas fa-truck"></i>
+                                        </div>
+                                        <div>
+                                            <div class="delivery-box-label">Estimated delivery</div>
+                                            <div class="delivery-box-value" id="orderDeliveryTime">--</div>
+                                        </div>
                                     </div>
-                                    <span class="coming-soon-badge">Coming Soon</span>
+                                    <div class="summary-row">
+                                        <span class="summary-label">Subtotal</span>
+                                        <span class="summary-value" id="orderSubtotal">₱0.00</span>
+                                    </div>
+                                    <div class="summary-row">
+                                        <span class="summary-label">Delivery Fee</span>
+                                        <span class="summary-value" id="orderDeliveryFee">₱--</span>
+                                    </div>
+                                    <div class="summary-row total">
+                                        <span class="summary-label">Total</span>
+                                        <span class="summary-value" id="orderTotal">₱0.00</span>
+                                    </div>
+                                    <button class="btn-place-order" id="placeOrderBtn" onclick="placeOrder()">
+                                        <i class="fas fa-check-circle"></i>
+                                        Place Order
+                                    </button>
+                                    <a href="cart.html" class="btn-back">
+                                        <i class="fas fa-arrow-left"></i>
+                                        Back to Cart
+                                    </a>
                                 </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Order Summary -->
-                        <div class="order-summary">
-                            <h3>Order Summary</h3>
-                            <div class="summary-row">
-                                <span class="summary-label">Subtotal</span>
-                                <span class="summary-value" id="orderSubtotal">₱0.00</span>
-                            </div>
-                            <div class="summary-row" id="orderDeliveryTimeRow" style="display: none;">
-                                <span class="summary-label">
-                                    <i class="fas fa-truck me-1"></i>Estimated Delivery
-                                </span>
-                                <span class="summary-value" id="orderDeliveryTime">--</span>
-                            </div>
-                            <div class="summary-row">
-                                <span class="summary-label">Delivery Fee</span>
-                                <span class="summary-value" id="orderDeliveryFee">₱--</span>
-                            </div>
-                            <div class="summary-row total">
-                                <span class="summary-label">Total</span>
-                                <span class="summary-value" id="orderTotal">₱0.00</span>
-                            </div>
-                        </div>
-                        
-                        <!-- Action Buttons -->
-                        <div class="payment-actions">
-                            <a href="cart.html" class="btn-back">
-                                <i class="fas fa-arrow-left"></i>
-                                Back to Cart
-                            </a>
-                            <button class="btn-place-order" id="placeOrderBtn" onclick="placeOrder()">
-                                <i class="fas fa-check-circle"></i>
-                                Place Order
-                            </button>
+                            </aside>
                         </div>
                     </div>
                 </div>
@@ -1438,10 +1648,12 @@
                         const deliveryFeeEl = document.getElementById('orderDeliveryFee');
                         const totalEl = document.getElementById('orderTotal');
                         const placeOrderBtn = document.getElementById('placeOrderBtn');
-                        
+                        const codTotalEl = document.getElementById('codNoteTotal');
+
                         if (subtotalEl) subtotalEl.textContent = '₱0.00';
                         if (deliveryFeeEl) deliveryFeeEl.textContent = '₱--';
                         if (totalEl) totalEl.textContent = '₱0.00';
+                        if (codTotalEl) codTotalEl.textContent = '₱0.00';
                         if (placeOrderBtn) placeOrderBtn.disabled = true;
                     }, { once: true });
                 } else {
@@ -1450,10 +1662,12 @@
                     const deliveryFeeEl = document.getElementById('orderDeliveryFee');
                     const totalEl = document.getElementById('orderTotal');
                     const placeOrderBtn = document.getElementById('placeOrderBtn');
-                    
+                    const codTotalEl = document.getElementById('codNoteTotal');
+
                     if (subtotalEl) subtotalEl.textContent = '₱0.00';
                     if (deliveryFeeEl) deliveryFeeEl.textContent = '₱--';
                     if (totalEl) totalEl.textContent = '₱0.00';
+                    if (codTotalEl) codTotalEl.textContent = '₱0.00';
                     if (placeOrderBtn) placeOrderBtn.disabled = true;
                 }
             }
@@ -1611,6 +1825,10 @@
             document.getElementById('orderSubtotal').textContent = subtotalDisplay;
             document.getElementById('orderDeliveryFee').textContent = deliveryFeeDisplay;
             document.getElementById('orderTotal').textContent = totalDisplay;
+
+            // Keep the Cash on Delivery note in sync with the total
+            const codNoteTotal = document.getElementById('codNoteTotal');
+            if (codNoteTotal) codNoteTotal.textContent = totalDisplay;
             
             // Update delivery date range display
             const deliveryTimeRow = document.getElementById('orderDeliveryTimeRow');
