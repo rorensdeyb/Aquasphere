@@ -73,7 +73,7 @@
 
         /* Order Card */
         .order-card {
-            background: linear-gradient(135deg, #ffffff 0%, #EAF7FC 50%, #f0f9ff 100%);
+            background: #ffffff;
             border-radius: 24px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.1);
             overflow: hidden;
@@ -110,10 +110,18 @@
         }
 
         .order-header {
-            background: linear-gradient(135deg, #2383B5 0%, #155A7A 50%, #5BC0EB 100%);
-            padding: 1rem 1.5rem;
+            background: #ffffff;
+            padding: 1.25rem 1.5rem;
             position: relative;
-            overflow: hidden;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            border-bottom: 1px solid #eef2f6;
+        }
+
+        .order-header::before {
+            display: none;
         }
 
         .order-header::before {
@@ -144,61 +152,137 @@
             z-index: 1;
         }
 
-        .order-info h3 {
-            font-size: 1.25rem;
-            font-weight: 800;
+        .order-header-left {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            min-width: 0;
+        }
+
+        .order-id-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #2383B5, #155A7A);
             color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+            flex-shrink: 0;
+        }
+
+        .order-header-right {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            flex-shrink: 0;
+        }
+
+        .eta-pill {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: #f0f7fc;
+            border: 1px solid #d8e8f3;
+            border-radius: 12px;
+            padding: 0.5rem 0.85rem;
+            color: #155A7A;
+        }
+
+        .eta-pill > i {
+            font-size: 1.1rem;
+            color: #2383B5;
+        }
+
+        .eta-pill span {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.3;
+        }
+
+        .eta-pill small {
+            font-size: 0.7rem;
+            color: #607D8B;
+            font-weight: 500;
+        }
+
+        .eta-pill strong {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #0f172a;
+            white-space: nowrap;
+        }
+
+        .order-info h3 {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: #155A7A;
             margin: 0;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         }
 
         .order-info p {
-            color: rgba(255, 255, 255, 0.9);
+            color: #7d93a5;
             margin: 0.15rem 0 0 0;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
         }
 
         .order-status-badge {
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: #fef3c7;
             padding: 0.4rem 1rem;
             border-radius: 20px;
             font-weight: 700;
-            font-size: 0.8rem;
-            color: white;
+            font-size: 0.75rem;
+            color: #b45309;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            border: none;
+            white-space: nowrap;
         }
 
-        .order-status-badge.pending {
-            background: rgba(251, 191, 36, 0.3);
-            border-color: rgba(251, 191, 36, 0.5);
+        .order-status-badge::before {
+            content: '';
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: currentColor;
+            flex-shrink: 0;
+        }
+
+        .order-status-badge.pending,
+        .order-status-badge.cancellation_requested {
+            background: #fef3c7;
+            color: #b45309;
         }
 
         .order-status-badge.preparing {
-            background: rgba(59, 130, 246, 0.3);
-            border-color: rgba(59, 130, 246, 0.5);
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .order-status-badge.shipped {
+            background: #e0f2fe;
+            color: #0369a1;
         }
 
         .order-status-badge.out_for_delivery {
-            background: rgba(139, 92, 246, 0.3);
-            border-color: rgba(139, 92, 246, 0.5);
+            background: #ede9fe;
+            color: #6d28d9;
         }
 
-        .order-status-badge.delivered {
-            background: rgba(34, 197, 94, 0.3);
-            border-color: rgba(34, 197, 94, 0.5);
+        .order-status-badge.delivered,
+        .order-status-badge.paid {
+            background: #dcfce7;
+            color: #15803d;
         }
 
         .order-status-badge.cancelled {
-            background: rgba(239, 68, 68, 0.3);
-            border-color: rgba(239, 68, 68, 0.5);
-        }
-
-        .order-status-badge.paid {
-            background: rgba(34, 197, 94, 0.3);
-            border-color: rgba(34, 197, 94, 0.5);
+            background: #fee2e2;
+            color: #b91c1c;
         }
 
         /* Cancellation approved modal */
@@ -485,8 +569,8 @@
         }
 
         .order-status-badge.cancellation_requested {
-            background: rgba(251, 191, 36, 0.3);
-            border-color: rgba(251, 191, 36, 0.5);
+            background: #fef3c7;
+            color: #b45309;
         }
 
         .order-body {
@@ -495,18 +579,20 @@
 
         /* Delivery Tracking */
         .delivery-tracking {
-            background: white;
+            background: #f1f6fa;
             border-radius: 16px;
-            padding: 1rem 1.25rem;
+            padding: 1rem 1.25rem 1.1rem;
             margin-bottom: 1rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            box-shadow: none;
         }
 
         .tracking-title {
-            font-size: 1rem;
+            font-size: 0.72rem;
             font-weight: 700;
-            color: #155A7A;
-            margin-bottom: 0.75rem;
+            color: #7d93a5;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 0.85rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
@@ -589,36 +675,70 @@
             color: #22c55e;
         }
 
+        /* Order Items + Summary two-column layout */
+        .order-bottom-grid {
+            display: grid;
+            grid-template-columns: 1.15fr 1fr;
+            gap: 1rem;
+            align-items: start;
+        }
+
         /* Order Items */
         .order-items {
             background: white;
+            border: 1px solid #e6edf3;
             border-radius: 16px;
-            padding: 1.5rem 1.5rem;
-            margin-bottom: 1rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            padding: 1.25rem 1.25rem 0.5rem;
+            margin-bottom: 0;
+            box-shadow: none;
             overflow: hidden;
         }
 
         .items-title {
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 700;
             color: #155A7A;
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
             display: flex;
             align-items: center;
+            justify-content: space-between;
             gap: 0.5rem;
+        }
+
+        .items-count {
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            color: #607D8B;
+            background: #eef2f6;
+            padding: 0.25rem 0.7rem;
+            border-radius: 20px;
+            white-space: nowrap;
         }
 
         .order-item {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 1rem 0;
-            border-bottom: 1px solid #EAF7FC;
+            gap: 0.75rem;
+            padding: 0.9rem 0;
+            border-bottom: 1px solid #eef2f6;
         }
 
         .order-item:last-child {
             border-bottom: none;
+        }
+
+        .order-item-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: #EAF7FC;
+            color: #2383B5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.15rem;
+            flex-shrink: 0;
         }
 
         .item-info {
@@ -644,19 +764,26 @@
 
         .item-total {
             font-weight: 700;
-            color: #155A7A;
-            font-size: 1.1rem;
+            color: #2383B5;
+            font-size: 1rem;
             flex-shrink: 0;
             white-space: nowrap;
         }
 
         /* Order Summary */
+        .order-summary-col {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            min-width: 0;
+        }
+
         .order-summary {
-            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            background: #eef5fa;
             border-radius: 16px;
-            padding: 1rem 1.25rem;
-            margin-bottom: 1rem;
-            border: 2px solid #2383B5;
+            padding: 1.1rem 1.25rem;
+            margin-bottom: 0;
+            border: none;
         }
 
         .summary-title {
@@ -696,9 +823,31 @@
         }
 
         .summary-row.total .summary-value {
-            font-size: 1.3rem;
+            font-size: 1.35rem;
             color: #2383B5;
             font-weight: 800;
+        }
+
+        .pay-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.75rem;
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid #d8e4ec;
+            font-size: 0.9rem;
+        }
+
+        .pay-pill {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            color: #155A7A;
+            background: #e2eef6;
+            padding: 0.3rem 0.85rem;
+            border-radius: 20px;
+            white-space: nowrap;
         }
 
         /* Order Actions */
@@ -706,6 +855,11 @@
             display: flex;
             gap: 1rem;
             justify-content: flex-end;
+        }
+
+        .order-actions .btn-cancel {
+            width: 100%;
+            justify-content: center;
         }
 
         .btn-cancel {
@@ -1042,6 +1196,18 @@
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 1rem;
+            }
+
+            .order-header {
+                flex-wrap: wrap;
+            }
+
+            .order-header-right {
+                flex-wrap: wrap;
+            }
+
+            .order-bottom-grid {
+                grid-template-columns: 1fr;
             }
 
             .tracking-steps {
@@ -1985,12 +2151,15 @@
 
             card.innerHTML = `
                 <div class="order-header">
-                    <div class="order-header-content">
+                    <div class="order-header-left">
+                        <div class="order-id-icon"><i class="fas fa-cube"></i></div>
                         <div class="order-info">
                             <h3>Order #${order.id}</h3>
                             <p><i class="fas fa-calendar me-1"></i> ${formatDate(order.order_date)}</p>
-                            ${order.delivery_date_range ? `<p style="margin-top: 0.5rem; color: rgba(255, 255, 255, 0.95); font-size: 0.9rem; font-weight: 600; background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(8px); padding: 0.4rem 0.75rem; border-radius: 12px; display: inline-block; border: 1px solid rgba(255, 255, 255, 0.2);"><i class="fas fa-truck me-1"></i> Estimated delivery: ${escapeHtml(order.delivery_date_range)}</p>` : ''}
                         </div>
+                    </div>
+                    <div class="order-header-right">
+                        ${order.delivery_date_range ? `<div class="eta-pill"><i class="fas fa-truck"></i><span><small>Estimated delivery</small><strong>${escapeHtml(order.delivery_date_range)}</strong></span></div>` : ''}
                         <div class="order-status-badge ${status}">${statusLabel}</div>
                     </div>
                 </div>
@@ -1998,7 +2167,6 @@
                     <!-- Delivery Tracking -->
                     <div class="delivery-tracking">
                         <div class="tracking-title">
-                            <i class="fas fa-truck"></i>
                             Delivery Tracking
                         </div>
                         <div class="tracking-steps">
@@ -2012,58 +2180,63 @@
                             `).join('')}
                         </div>
                     </div>
-                    
-                    <!-- Order Items -->
-                    <div class="order-items">
-                        <div class="items-title">
-                            <i class="fas fa-box"></i>
-                            Order Items
-                        </div>
-                        ${items.map(item => `
-                            <div class="order-item">
-                                <div class="item-info">
-                                    <div class="item-name">${escapeHtml(item.product_name)}</div>
-                                    <div class="item-details">Quantity: ${item.quantity} × ₱${parseFloat(item.product_price).toFixed(2)}</div>
+
+                    <div class="order-bottom-grid">
+                        <!-- Order Items -->
+                        <div class="order-items">
+                            <div class="items-title">
+                                Order Items
+                                <span class="items-count">${items.length} Item${items.length === 1 ? '' : 's'}</span>
+                            </div>
+                            ${items.map(item => `
+                                <div class="order-item">
+                                    <div class="order-item-icon"><i class="fas fa-tint"></i></div>
+                                    <div class="item-info">
+                                        <div class="item-name">${escapeHtml(item.product_name)}</div>
+                                        <div class="item-details">Quantity: ${item.quantity} × ₱${parseFloat(item.product_price).toFixed(2)}</div>
+                                    </div>
+                                    <div class="item-total">₱${parseFloat(item.subtotal).toFixed(2)}</div>
                                 </div>
-                                <div class="item-total">₱${parseFloat(item.subtotal).toFixed(2)}</div>
+                            `).join('')}
+                        </div>
+
+                        <div class="order-summary-col">
+                            <!-- Order Summary -->
+                            <div class="order-summary">
+                                <div class="summary-title">Order Summary</div>
+                                <div class="summary-row">
+                                    <span class="summary-label">Subtotal</span>
+                                    <span class="summary-value">₱${subtotal.toFixed(2)}</span>
+                                </div>
+                                <div class="summary-row">
+                                    <span class="summary-label">Delivery Fee</span>
+                                    <span class="summary-value">₱${deliveryFee.toFixed(2)}</span>
+                                </div>
+                                <div class="summary-row total">
+                                    <span class="summary-label">Total</span>
+                                    <span class="summary-value">₱${totalAmount.toFixed(2)}</span>
+                                </div>
+                                <div class="pay-row">
+                                    <span class="summary-label"><i class="fas fa-credit-card me-1"></i>Payment Method</span>
+                                    <span class="pay-pill">${escapeHtml(order.payment_method || 'COD')}</span>
+                                </div>
                             </div>
-                        `).join('')}
-                    </div>
-                    
-                    <!-- Order Summary -->
-                    <div class="order-summary">
-                        <div class="summary-title">Order Summary</div>
-                        <div class="summary-row">
-                            <span class="summary-label">Subtotal</span>
-                            <span class="summary-value">₱${subtotal.toFixed(2)}</span>
-                        </div>
-                        <div class="summary-row">
-                            <span class="summary-label">Delivery Fee</span>
-                            <span class="summary-value">₱${deliveryFee.toFixed(2)}</span>
-                        </div>
-                        <div class="summary-row total">
-                            <span class="summary-label">Total</span>
-                            <span class="summary-value">₱${totalAmount.toFixed(2)}</span>
-                        </div>
-                        <div class="summary-row" style="margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid #cbd5e1;">
-                            <span class="summary-label"><i class="fas fa-credit-card me-1"></i>Payment Method</span>
-                            <span class="summary-value">${escapeHtml(order.payment_method || 'COD')}</span>
-                        </div>
-                    </div>
-                    
-                    <!-- Order Actions -->
-                    <div class="order-actions">
-                        ${status === 'cancellation_requested' ? `
-                            <div style="display: flex; align-items: center; gap: 0.5rem; color: #f59e0b; font-weight: 600; font-size: 0.9rem;">
-                                <i class="fas fa-clock" style="animation: pulse 2s ease infinite;"></i>
-                                Waiting for admin approval
+
+                            <!-- Order Actions -->
+                            <div class="order-actions">
+                                ${status === 'cancellation_requested' ? `
+                                    <div style="display: flex; align-items: center; gap: 0.5rem; color: #f59e0b; font-weight: 600; font-size: 0.9rem;">
+                                        <i class="fas fa-clock" style="animation: pulse 2s ease infinite;"></i>
+                                        Waiting for admin approval
+                                    </div>
+                                ` : canCancelOrder(status) ? `
+                                    <button class="btn-cancel" onclick="showCancelOrderModal(${order.id}, '${status}')">
+                                        <i class="fas fa-times-circle"></i>
+                                        Cancel Order
+                                    </button>
+                                ` : ''}
                             </div>
-                        ` : canCancelOrder(status) ? `
-                            <button class="btn-cancel" onclick="showCancelOrderModal(${order.id}, '${status}')">
-                                <i class="fas fa-times-circle"></i>
-                                Cancel Order
-                            </button>
-                        ` : ''}
+                        </div>
                     </div>
                 </div>
             `;
@@ -2077,7 +2250,7 @@
                 { label: 'Pending', icon: 'fas fa-clock', class: '' },
                 { label: 'Preparing', icon: 'fas fa-box', class: '' },
                 { label: 'Shipped', icon: 'fas fa-shipping-fast', class: '' },
-                { label: 'Out for Delivery', icon: 'fas fa-truck', class: '' },
+                { label: 'Out for Delivery', icon: 'fas fa-map-marker-alt', class: '' },
                 { label: 'Delivered', icon: 'fas fa-check-circle', class: '' }
             ];
 
