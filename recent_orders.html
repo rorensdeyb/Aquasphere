@@ -235,9 +235,50 @@
         
         .item-total {
             font-weight: 700;
-            color: #2383B5;
+            color: #155A7A;
             font-size: 1.1rem;
             flex-shrink: 0;
+            white-space: nowrap;
+        }
+
+        .items-pager {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            padding: 0.8rem 0 0.4rem;
+        }
+
+        .items-pager-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 1.5px solid #D5E5ED;
+            background: #ffffff;
+            color: #155A7A;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            transition: all 0.2s ease;
+        }
+
+        .items-pager-btn:hover:not(:disabled) {
+            background: #2383B5;
+            border-color: #2383B5;
+            color: #ffffff;
+        }
+
+        .items-pager-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .items-page-info {
+            font-size: 0.78rem;
+            color: #607D8B;
+            font-weight: 600;
             white-space: nowrap;
         }
 
@@ -982,10 +1023,57 @@
         function displayOrder(index) {
             const wrapper = document.getElementById('ordersWrapper');
             if (index < 0 || index >= allOrders.length) return;
-            
+
             const order = allOrders[index];
             wrapper.innerHTML = renderOrderCard(order);
+            renderRecentItemsPage(order.id);
         }
+
+        // Recent order items pagination: 3 items per page so the card never stretches
+        const RECENT_ITEMS_PER_PAGE = 3;
+        const recentItemsCache = {};
+
+        function recentItemHtml(item) {
+            return `
+                <div class="order-item">
+                    <div class="item-info">
+                        <div class="item-name">${escapeHtml(item.product_name || 'Item')}</div>
+                        <div class="item-details">Quantity: ${item.quantity || 0} × ₱${parseFloat(item.product_price || 0).toFixed(2)}</div>
+                    </div>
+                    <div class="item-total">₱${parseFloat(item.subtotal || 0).toFixed(2)}</div>
+                </div>
+            `;
+        }
+
+        function renderRecentItemsPage(orderId) {
+            const entry = recentItemsCache[orderId];
+            const listEl = document.getElementById('recentItems-' + orderId);
+            if (!entry || !listEl) return;
+            const totalPages = Math.max(1, Math.ceil(entry.items.length / RECENT_ITEMS_PER_PAGE));
+            if (entry.page >= totalPages) entry.page = totalPages - 1;
+            if (entry.page < 0) entry.page = 0;
+            const start = entry.page * RECENT_ITEMS_PER_PAGE;
+            listEl.innerHTML = entry.items.slice(start, start + RECENT_ITEMS_PER_PAGE).map(recentItemHtml).join('');
+            const pager = document.getElementById('recentPager-' + orderId);
+            if (pager) pager.style.display = entry.items.length > RECENT_ITEMS_PER_PAGE ? 'flex' : 'none';
+            const info = document.getElementById('recentPageInfo-' + orderId);
+            if (info) {
+                const from = entry.items.length === 0 ? 0 : start + 1;
+                info.textContent = `Showing ${from}-${Math.min(start + RECENT_ITEMS_PER_PAGE, entry.items.length)} of ${entry.items.length}`;
+            }
+            const prev = document.getElementById('recentPrev-' + orderId);
+            const next = document.getElementById('recentNext-' + orderId);
+            if (prev) prev.disabled = entry.page === 0;
+            if (next) next.disabled = entry.page >= totalPages - 1;
+        }
+
+        function pageRecentItems(orderId, delta) {
+            const entry = recentItemsCache[orderId];
+            if (!entry) return;
+            entry.page += delta;
+            renderRecentItemsPage(orderId);
+        }
+        window.pageRecentItems = pageRecentItems;
 
         function navigateOrder(direction) {
             const newIndex = currentOrderIndex + direction;
@@ -1038,15 +1126,19 @@
                 ? parseFloat(order.delivery_fee) 
                 : Math.max(0, totalAmount - subtotal);
 
-            const itemsHtml = items.map(item => `
-                <div class="order-item">
-                    <div class="item-info">
-                        <div class="item-name">${escapeHtml(item.product_name || 'Item')}</div>
-                        <div class="item-details">Quantity: ${item.quantity || 0} × ₱${parseFloat(item.product_price || 0).toFixed(2)}</div>
-                    </div>
-                    <div class="item-total">₱${parseFloat(item.subtotal || 0).toFixed(2)}</div>
-                </div>
-            `).join('');
+            const itemsHtml = `<div class="order-items-list" id="recentItems-${order.id}"></div>
+                <div class="items-pager" id="recentPager-${order.id}" style="display: none;">
+                    <button type="button" class="items-pager-btn" id="recentPrev-${order.id}" onclick="pageRecentItems(${order.id}, -1)" aria-label="Previous items">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <span class="items-page-info" id="recentPageInfo-${order.id}"></span>
+                    <button type="button" class="items-pager-btn" id="recentNext-${order.id}" onclick="pageRecentItems(${order.id}, 1)" aria-label="Next items">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>`;
+
+            // Cache items for per-card pagination (3 per page)
+            recentItemsCache[order.id] = { items, page: 0 };
 
             return `
                 <div class="order-card">
