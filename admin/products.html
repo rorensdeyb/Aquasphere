@@ -851,13 +851,21 @@
             font-weight: 600;
             text-align: right;
             word-break: break-word;
+            overflow-wrap: anywhere;
+            min-width: 0;
         }
         .product-panel-desc {
             font-size: 0.9rem;
             color: #334155;
             line-height: 1.7;
             white-space: pre-wrap;
+            overflow-wrap: anywhere;
+            word-break: break-word;
             margin: 0;
+            max-height: 220px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding-right: 4px;
         }
         .product-panel-badge {
             display: inline-flex;
