@@ -1678,6 +1678,54 @@
             margin-top: 1.5rem;
         }
 
+        /* Compact multi-column rows (explicit grid so later flex overrides can't break them) */
+        .form-row-4col {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-row-3col {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Security header with inline hint */
+        .security-head {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+            flex-wrap: wrap;
+        }
+
+        .security-head .section-title {
+            margin-bottom: 0 !important;
+        }
+
+        .security-head p {
+            margin: 0;
+        }
+
+        @media (max-width: 992px) {
+            .form-row-4col {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .form-row-3col {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .form-row-4col {
+                grid-template-columns: 1fr;
+            }
+        }
+
         /* Form Group */
         .form-group {
             display: flex;
@@ -1889,7 +1937,7 @@
 
                     <div class="profile-section-card">
                         <h5 class="section-title"><i class="fas fa-user-circle me-2"></i>Personal Details</h5>
-                        <div class="form-row">
+                        <div class="form-row-4col">
                             <div class="form-group">
                                 <label>First Name</label>
                                 <input type="text" id="profileFirstName" class="custom-input disabled-field" value="First Name" disabled>
@@ -1898,8 +1946,6 @@
                                 <label>Last Name</label>
                                 <input type="text" id="profileLastName" class="custom-input disabled-field" value="Last Name" disabled>
                             </div>
-                        </div>
-                        <div class="form-row mt-3">
                             <div class="form-group">
                                 <label>Gender</label>
                                 <select id="profileGender" class="custom-input disabled-field" disabled>
@@ -1916,22 +1962,23 @@
                     </div>
 
                     <div class="profile-section-card no-border">
-                        <h5 class="section-title text-danger"><i class="fas fa-shield-alt me-2"></i>Security</h5>
-                        <p class="text-muted small mb-3">Leave blank if you don't want to change your password.</p>
-                        
-                        <div class="form-group mb-3">
-                            <label>Current Password</label>
-                            <div class="input-group-custom has-toggle">
-                                <i class="fas fa-lock input-icon"></i>
-                                <input type="password" id="profilePassword" class="custom-input" placeholder="••••••••">
-                                <button type="button" class="btn-password-toggle-inside" onclick="togglePasswordVisibility('profilePassword', this.querySelector('i'))" aria-label="Show password">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                            </div>
-                            <div class="custom-error" id="profilePassword-incorrect" style="display: none;">Current password is incorrect.</div>
+                        <div class="security-head">
+                            <h5 class="section-title text-danger"><i class="fas fa-shield-alt me-2"></i>Security</h5>
+                            <p class="text-muted small">Leave blank if you don't want to change your password.</p>
                         </div>
-                        
-                        <div class="form-row">
+
+                        <div class="form-row-3col">
+                            <div class="form-group">
+                                <label>Current Password</label>
+                                <div class="input-group-custom has-toggle">
+                                    <i class="fas fa-lock input-icon"></i>
+                                    <input type="password" id="profilePassword" class="custom-input" placeholder="••••••••">
+                                    <button type="button" class="btn-password-toggle-inside" onclick="togglePasswordVisibility('profilePassword', this.querySelector('i'))" aria-label="Show password">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                                <div class="custom-error" id="profilePassword-incorrect" style="display: none;">Current password is incorrect.</div>
+                            </div>
                             <div class="form-group">
                                 <label>New Password</label>
                                 <div class="input-group-custom has-toggle">
