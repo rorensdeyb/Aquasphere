@@ -2026,6 +2026,201 @@
             box-shadow: 0 4px 12px rgba(234, 88, 12, 0.3);
         }
         
+        /* New Address modal redesign (scoped to #addressModal - other modals untouched) */
+        #addressModal .address-modal {
+            max-width: 980px;
+            background: #eaf4fa;
+        }
+        #addressModal .modal-header {
+            border-radius: 24px 24px 0 0;
+            padding: 1.1rem 1.75rem;
+            background: linear-gradient(115deg, #1f7cae 0%, #155A7A 45%, #3aa5d6 110%);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        #addressModal .modal-header h2 {
+            font-size: 1.4rem;
+        }
+        #addressModal .modal-header h2::before {
+            content: '📍';
+            font-size: 1.25rem;
+            animation: none;
+        }
+        #addressModal .addr-close {
+            position: relative;
+            z-index: 2;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(255, 255, 255, 0.92);
+            color: #155A7A;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+        #addressModal .addr-close:hover {
+            background: #ffffff;
+            transform: scale(1.08);
+        }
+        #addressModal .modal-body {
+            padding: 1.5rem 1.75rem 1.25rem;
+            max-height: calc(92vh - 200px);
+        }
+        #addressModal .addr-grid {
+            display: grid;
+            grid-template-columns: 1.12fr 1fr;
+            gap: 1.5rem;
+        }
+        #addressModal .addr-col-right {
+            border-left: 1px solid #d3e4ee;
+            padding-left: 1.5rem;
+        }
+        #addressModal .addr-section-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #155A7A;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 0 0 0.75rem;
+        }
+        #addressModal .addr-section-title::before {
+            content: '';
+            width: 4px;
+            height: 16px;
+            border-radius: 2px;
+            background: #2383B5;
+            flex-shrink: 0;
+        }
+        #addressModal .addr-section-title:not(:first-child) {
+            margin-top: 1.25rem;
+        }
+        #addressModal .form-group {
+            margin-bottom: 0.85rem;
+        }
+        #addressModal .form-group label {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #163B53;
+            margin-bottom: 0.3rem;
+            display: block;
+        }
+        #addressModal .form-group input,
+        #addressModal .form-group select {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1.5px solid #cfdfe9;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            background: #ffffff;
+            color: #163B53;
+        }
+        #addressModal .form-group input:focus,
+        #addressModal .form-group select:focus {
+            outline: none;
+            border-color: #2383B5;
+            box-shadow: 0 0 0 3px rgba(35, 131, 181, 0.12);
+        }
+        #addressModal .form-group input::placeholder {
+            color: #94a3b8;
+        }
+        #addressModal .form-row {
+            gap: 0.75rem;
+        }
+        #addressModal .map-placeholder {
+            height: auto;
+            min-height: 190px;
+            border: 2px dashed #7fb6d5;
+            border-radius: 14px;
+            background-color: #f2f8fc;
+            background-image: linear-gradient(#dcebf4 1px, transparent 1px),
+                linear-gradient(90deg, #dcebf4 1px, transparent 1px);
+            background-size: 22px 22px;
+            flex-direction: column;
+            gap: 0.6rem;
+            padding: 1.5rem 1rem;
+        }
+        #addressModal .map-placeholder::before,
+        #addressModal .map-placeholder::after {
+            display: none;
+        }
+        #addressModal .btn-add-location {
+            background: #ffffff;
+            border: 1.5px solid #2383B5;
+            color: #2383B5;
+            box-shadow: 0 2px 8px rgba(35, 131, 181, 0.15);
+        }
+        #addressModal .btn-add-location:hover {
+            background: #2383B5;
+            color: #ffffff;
+        }
+        #addressModal .addr-map-hint {
+            font-size: 0.78rem;
+            color: #7d93a5;
+        }
+        #addressModal .addr-coords {
+            display: flex;
+            gap: 0.5rem;
+        }
+        #addressModal .addr-coords input {
+            flex: 1;
+            min-width: 0;
+            background: #f8f9fa;
+            cursor: not-allowed;
+        }
+        #addressModal .addr-coords .btn-map-control {
+            white-space: nowrap;
+            background: #ffffff;
+            border: 1.5px solid #D5E5ED;
+        }
+        #addressModal .addr-coords-hint {
+            color: #607D8B;
+            font-size: 0.78rem;
+            margin-top: 0.5rem;
+            display: block;
+            line-height: 1.5;
+        }
+        #addressModal .label-section {
+            margin-bottom: 0;
+        }
+        #addressModal .label-btn {
+            padding: 10px 34px;
+            font-size: 0.88rem;
+            border-radius: 10px;
+            box-shadow: none;
+        }
+        #addressModal .label-btn:hover {
+            transform: none;
+            box-shadow: none;
+        }
+        #addressModal .label-btn.active {
+            transform: none;
+        }
+        #addressModal .modal-footer {
+            background: #ffffff;
+            border-top: 1px solid #e2e8f0;
+            border-radius: 0 0 24px 24px;
+            padding: 1rem 1.75rem;
+            margin: 1.25rem -1.75rem -1.25rem;
+        }
+        @media (max-width: 768px) {
+            #addressModal .addr-grid {
+                grid-template-columns: 1fr;
+            }
+            #addressModal .addr-col-right {
+                border-left: none;
+                padding-left: 0;
+                border-top: 1px solid #d3e4ee;
+                padding-top: 1.25rem;
+            }
+        }
+
         /* Override Bootstrap success alert colors to blue */
         .alert-success {
             background-color: #dbeafe !important;
@@ -2419,122 +2614,135 @@
         <div class="address-modal" onclick="event.stopPropagation()">
             <div class="modal-header">
                 <h2>New Address</h2>
+                <button type="button" class="addr-close" onclick="closeAddressModal(event)" aria-label="Close"><i class="fas fa-times"></i></button>
             </div>
             <div class="modal-body">
                 <form id="addressForm" onsubmit="saveAddress(event)" novalidate>
-                    <div class="form-row">
-                    <div class="form-group">
-                        <label for="fullName">Full Name</label>
-                        <input type="text" id="fullName" name="fullName" placeholder="Full Name" autocomplete="off" required>
-                        <div class="error-message">Please fill out this field</div>
-                    </div>
-                    <div class="form-group">
-                        <label for="phoneNumber">Phone Number</label>
-                        <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="+63 9XXXXXXXXX" autocomplete="off" pattern="[0-9]*" inputmode="numeric" required>
-                        <div class="error-message">Please enter a valid PH number (11 digits, starts with +63 or 09).</div>
-                    </div>
-                    </div>
-                    
-                    <div class="form-group full-width">
-                        <label>Region</label>
-                        <select id="region" name="region" autocomplete="off" required onchange="updateProvinces(); validateField(this);">
-                            <option value="">Select Region</option>
-                        </select>
-                        <div class="error-message">Please select an item in the list</div>
-                    </div>
-                    
-                    <div class="form-group full-width">
-                        <label>Province</label>
-                        <select id="province" name="province" autocomplete="off" required onchange="updateCities(); validateField(this);" disabled>
-                            <option value="">Select Province</option>
-                        </select>
-                        <div class="error-message">Please select an item in the list</div>
-                    </div>
-                    
-                    <div class="form-group full-width">
-                        <label>City/Municipality</label>
-                        <select id="city" name="city" autocomplete="off" required onchange="updateBarangays(); validateField(this);" disabled>
-                            <option value="">Select City/Municipality</option>
-                        </select>
-                        <div class="error-message">Please select an item in the list</div>
-                    </div>
-                    
-                    <div class="form-group full-width">
-                        <label>Barangay</label>
-                        <select id="barangay" name="barangay" autocomplete="off" required onchange="validateField(this);" disabled>
-                            <option value="">Select Barangay</option>
-                        </select>
-                        <div class="error-message">Please select an item in the list</div>
-                    </div>
-                    
-                    <div class="form-group full-width">
-                        <label for="postalCode">Postal Code</label>
-                        <input type="text" id="postalCode" name="postalCode" placeholder="Postal Code" autocomplete="off" required>
-                        <div class="error-message">Please fill out this field</div>
-                    </div>
-                    
-                    <div class="form-group full-width">
-                        <label for="streetAddress">Street Name, Building, House No.</label>
-                        <input type="text" id="streetAddress" name="streetAddress" placeholder="Street Name, Building, House No." autocomplete="off" required>
-                        <div class="error-message">Please fill out this field</div>
-                    </div>
-                    
-                    <div class="form-group full-width">
-                        <label>Location on Map</label>
-                        <div id="mapPlaceholder" class="map-placeholder">
-                            <button type="button" class="btn-add-location" onclick="initMap()">
-                                <i class="fas fa-map-marker-alt me-2"></i>
-                                Add Location on Map
-                            </button>
-                        </div>
-                        <div id="mapContainer" class="map-container" style="display: none;">
-                            <div class="map-controls">
-                                <button type="button" class="btn-map-control" onclick="getCurrentLocation()" title="Use my current location">
-                                    <i class="fas fa-crosshairs"></i>
-                                    My Location
-                                </button>
-                                <button type="button" class="btn-map-control" onclick="toggleMapFullscreen()" title="Toggle fullscreen">
-                                    <i class="fas fa-expand" id="fullscreenIcon"></i>
-                                    Fullscreen
-                                </button>
-                                <button type="button" class="btn-map-control" onclick="hideMap()" title="Hide map">
-                                    <i class="fas fa-times"></i>
-                                    Hide
-                                </button>
+                    <div class="addr-grid">
+                        <div class="addr-col">
+                            <h4 class="addr-section-title">Contact details</h4>
+                            <div class="form-row">
+                            <div class="form-group">
+                                <label for="fullName">Full Name</label>
+                                <input type="text" id="fullName" name="fullName" placeholder="Full Name" autocomplete="off" required>
+                                <div class="error-message">Please fill out this field</div>
                             </div>
-                            <div id="map" style="height: 100%;"></div>
-                            <div id="mapLoading" class="map-loading" style="display: none;">
-                                <i class="fas fa-spinner"></i>
-                                <span>Getting your location...</span>
+                            <div class="form-group">
+                                <label for="phoneNumber">Phone Number</label>
+                                <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="+63 9XXXXXXXXX" autocomplete="off" pattern="[0-9]*" inputmode="numeric" required>
+                                <div class="error-message">Please enter a valid PH number (11 digits, starts with +63 or 09).</div>
+                            </div>
+                            </div>
+
+                            <h4 class="addr-section-title">Address</h4>
+                            <div class="form-group full-width">
+                                <label>Region</label>
+                                <select id="region" name="region" autocomplete="off" required onchange="updateProvinces(); validateField(this);">
+                                    <option value="">Select Region</option>
+                                </select>
+                                <div class="error-message">Please select an item in the list</div>
+                            </div>
+
+                            <div class="form-row">
+                            <div class="form-group full-width">
+                                <label>Province</label>
+                                <select id="province" name="province" autocomplete="off" required onchange="updateCities(); validateField(this);" disabled>
+                                    <option value="">Select Province</option>
+                                </select>
+                                <div class="error-message">Please select an item in the list</div>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label>City/Municipality</label>
+                                <select id="city" name="city" autocomplete="off" required onchange="updateBarangays(); validateField(this);" disabled>
+                                    <option value="">Select City/Municipality</option>
+                                </select>
+                                <div class="error-message">Please select an item in the list</div>
+                            </div>
+                            </div>
+
+                            <div class="form-row">
+                            <div class="form-group full-width">
+                                <label>Barangay</label>
+                                <select id="barangay" name="barangay" autocomplete="off" required onchange="validateField(this);" disabled>
+                                    <option value="">Select Barangay</option>
+                                </select>
+                                <div class="error-message">Please select an item in the list</div>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="postalCode">Postal Code</label>
+                                <input type="text" id="postalCode" name="postalCode" placeholder="Postal Code" autocomplete="off" required>
+                                <div class="error-message">Please fill out this field</div>
+                            </div>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="streetAddress">Street Name, Building, House No.</label>
+                                <input type="text" id="streetAddress" name="streetAddress" placeholder="Street Name, Building, House No." autocomplete="off" required>
+                                <div class="error-message">Please fill out this field</div>
                             </div>
                         </div>
-                        <input type="hidden" id="latitude" name="latitude">
-                        <input type="hidden" id="longitude" name="longitude">
-                        <div class="form-group full-width" id="locationDisplayGroup" style="display: none; margin-top: 1rem;">
-                            <label>Location Coordinates</label>
-                            <div style="display: flex; gap: 0.5rem;">
-                                <input type="text" id="latitudeDisplay" class="form-control" placeholder="Latitude" readonly style="background: #f8f9fa; cursor: not-allowed;">
-                                <input type="text" id="longitudeDisplay" class="form-control" placeholder="Longitude" readonly style="background: #f8f9fa; cursor: not-allowed;">
-                                <button type="button" class="btn-map-control" onclick="clearLocation()" title="Clear location" style="white-space: nowrap; padding: 10px 16px;">
-                                    <i class="fas fa-times"></i>
-                                    Clear
-                                </button>
+                        <div class="addr-col addr-col-right">
+                            <h4 class="addr-section-title">Pin location</h4>
+                            <div class="form-group full-width">
+                                <div id="mapPlaceholder" class="map-placeholder">
+                                    <button type="button" class="btn-add-location" onclick="initMap()">
+                                        <i class="fas fa-map-marker-alt me-2"></i>
+                                        Add Location on Map
+                                    </button>
+                                    <small class="addr-map-hint">Coordinates set · click to adjust</small>
+                                </div>
+                                <div id="mapContainer" class="map-container" style="display: none;">
+                                    <div class="map-controls">
+                                        <button type="button" class="btn-map-control" onclick="getCurrentLocation()" title="Use my current location">
+                                            <i class="fas fa-crosshairs"></i>
+                                            My Location
+                                        </button>
+                                        <button type="button" class="btn-map-control" onclick="toggleMapFullscreen()" title="Toggle fullscreen">
+                                            <i class="fas fa-expand" id="fullscreenIcon"></i>
+                                            Fullscreen
+                                        </button>
+                                        <button type="button" class="btn-map-control" onclick="hideMap()" title="Hide map">
+                                            <i class="fas fa-times"></i>
+                                            Hide
+                                        </button>
+                                    </div>
+                                    <div id="map" style="height: 100%;"></div>
+                                    <div id="mapLoading" class="map-loading" style="display: none;">
+                                        <i class="fas fa-spinner"></i>
+                                        <span>Getting your location...</span>
+                                    </div>
+                                </div>
+                                <input type="hidden" id="latitude" name="latitude">
+                                <input type="hidden" id="longitude" name="longitude">
+                                <div class="form-group full-width" id="locationDisplayGroup" style="display: none; margin-top: 0.75rem;">
+                                    <label>Location Coordinates</label>
+                                    <div class="addr-coords">
+                                        <input type="text" id="latitudeDisplay" placeholder="Latitude" readonly>
+                                        <input type="text" id="longitudeDisplay" placeholder="Longitude" readonly>
+                                        <button type="button" class="btn-map-control" onclick="clearLocation()" title="Clear location">
+                                            <i class="fas fa-times"></i>
+                                            Clear
+                                        </button>
+                                    </div>
+                                    <small class="addr-coords-hint">
+                                        <i class="fas fa-info-circle"></i> Location has been set. You can click on the map or use "My Location" to change it.
+                                    </small>
+                                </div>
+                                <small id="locationHint" class="addr-coords-hint">Click on the map to set your location, or use "My Location" to automatically detect it</small>
                             </div>
-                            <small style="color: #607D8B; margin-top: 0.5rem; display: block;">
-                                <i class="fas fa-info-circle"></i> Location has been set. You can click on the map or use "My Location" to change it.
-                            </small>
-                        </div>
-                        <small id="locationHint" style="color: #607D8B; margin-top: 0.5rem; display: block;">Click on the map to set your location, or use "My Location" to automatically detect it</small>
-                    </div>
-                    
-                    <div class="label-section">
-                        <span>Label As:</span>
-                        <div class="label-buttons">
-                            <button type="button" class="label-btn active" data-label="home" onclick="selectLabel(this, 'home')">Home</button>
-                            <button type="button" class="label-btn" data-label="work" onclick="selectLabel(this, 'work')">Work</button>
+
+                            <h4 class="addr-section-title">Label as</h4>
+                            <div class="label-section">
+                                <div class="label-buttons">
+                                    <button type="button" class="label-btn active" data-label="home" onclick="selectLabel(this, 'home')">Home</button>
+                                    <button type="button" class="label-btn" data-label="work" onclick="selectLabel(this, 'work')">Work</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    
+
                     <div class="modal-footer">
                         <button type="button" class="btn-cancel" onclick="closeAddressModal(event)">Cancel</button>
                         <button type="submit" class="btn-submit">Submit</button>
