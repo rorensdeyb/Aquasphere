@@ -741,6 +741,47 @@
             flex-shrink: 0;
         }
 
+        .items-pager {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            padding: 0.8rem 0 0.4rem;
+        }
+
+        .items-pager-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 1.5px solid #D5E5ED;
+            background: #ffffff;
+            color: #155A7A;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            transition: all 0.2s ease;
+        }
+
+        .items-pager-btn:hover:not(:disabled) {
+            background: #2383B5;
+            border-color: #2383B5;
+            color: #ffffff;
+        }
+
+        .items-pager-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .items-page-info {
+            font-size: 0.78rem;
+            color: #607D8B;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
         .item-info {
             flex: 1;
             min-width: 0;
@@ -2069,6 +2110,7 @@
                 const orderCard = createOrderCard(order);
             if (orderCard) {
                 ordersList.appendChild(orderCard);
+                renderOrderItemsPage(order.id);
             }
         }
 
@@ -2130,6 +2172,9 @@
             const items = Array.isArray(order.items) ? order.items : [];
             const totalAmount = parseFloat(order.total_amount || 0);
 
+            // Cache items for per-card pagination (3 per page)
+            orderItemsCache[order.id] = { items, page: 0 };
+
             let statusLabel = status.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
             // Special handling for cancellation_requested
             if (status === 'cancellation_requested') {
@@ -2188,16 +2233,16 @@
                                 Order Items
                                 <span class="items-count">${items.length} Item${items.length === 1 ? '' : 's'}</span>
                             </div>
-                            ${items.map(item => `
-                                <div class="order-item">
-                                    <div class="order-item-icon"><i class="fas fa-tint"></i></div>
-                                    <div class="item-info">
-                                        <div class="item-name">${escapeHtml(item.product_name)}</div>
-                                        <div class="item-details">Quantity: ${item.quantity} × ₱${parseFloat(item.product_price).toFixed(2)}</div>
-                                    </div>
-                                    <div class="item-total">₱${parseFloat(item.subtotal).toFixed(2)}</div>
-                                </div>
-                            `).join('')}
+                            <div class="order-items-list" id="orderItems-${order.id}"></div>
+                            <div class="items-pager" id="itemsPager-${order.id}" style="display: none;">
+                                <button type="button" class="items-pager-btn" id="itemsPrev-${order.id}" onclick="pageOrderItems(${order.id}, -1)" aria-label="Previous items">
+                                    <i class="fas fa-chevron-left"></i>
+                                </button>
+                                <span class="items-page-info" id="itemsPageInfo-${order.id}"></span>
+                                <button type="button" class="items-pager-btn" id="itemsNext-${order.id}" onclick="pageOrderItems(${order.id}, 1)" aria-label="Next items">
+                                    <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </div>
                         </div>
 
                         <div class="order-summary-col">
@@ -2243,6 +2288,53 @@
 
             return card;
         }
+
+        // Order items pagination: 3 items per page so the card never stretches
+        const ORDER_ITEMS_PER_PAGE = 3;
+        const orderItemsCache = {};
+
+        function orderItemHtml(item) {
+            return `
+                <div class="order-item">
+                    <div class="order-item-icon"><i class="fas fa-tint"></i></div>
+                    <div class="item-info">
+                        <div class="item-name">${escapeHtml(item.product_name)}</div>
+                        <div class="item-details">Quantity: ${item.quantity} × ₱${parseFloat(item.product_price).toFixed(2)}</div>
+                    </div>
+                    <div class="item-total">₱${parseFloat(item.subtotal).toFixed(2)}</div>
+                </div>
+            `;
+        }
+
+        function renderOrderItemsPage(orderId) {
+            const entry = orderItemsCache[orderId];
+            const listEl = document.getElementById('orderItems-' + orderId);
+            if (!entry || !listEl) return;
+            const totalPages = Math.max(1, Math.ceil(entry.items.length / ORDER_ITEMS_PER_PAGE));
+            if (entry.page >= totalPages) entry.page = totalPages - 1;
+            if (entry.page < 0) entry.page = 0;
+            const start = entry.page * ORDER_ITEMS_PER_PAGE;
+            listEl.innerHTML = entry.items.slice(start, start + ORDER_ITEMS_PER_PAGE).map(orderItemHtml).join('');
+            const pager = document.getElementById('itemsPager-' + orderId);
+            if (pager) pager.style.display = entry.items.length > ORDER_ITEMS_PER_PAGE ? 'flex' : 'none';
+            const info = document.getElementById('itemsPageInfo-' + orderId);
+            if (info) {
+                const from = entry.items.length === 0 ? 0 : start + 1;
+                info.textContent = `Showing ${from}-${Math.min(start + ORDER_ITEMS_PER_PAGE, entry.items.length)} of ${entry.items.length}`;
+            }
+            const prev = document.getElementById('itemsPrev-' + orderId);
+            const next = document.getElementById('itemsNext-' + orderId);
+            if (prev) prev.disabled = entry.page === 0;
+            if (next) next.disabled = entry.page >= totalPages - 1;
+        }
+
+        function pageOrderItems(orderId, delta) {
+            const entry = orderItemsCache[orderId];
+            if (!entry) return;
+            entry.page += delta;
+            renderOrderItemsPage(orderId);
+        }
+        window.pageOrderItems = pageOrderItems;
 
         // Get tracking steps based on status
         function getTrackingSteps(status) {
