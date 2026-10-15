@@ -1359,6 +1359,34 @@
             font-size: 2.5rem;
             color: #155A7A;
         }
+        .edit-thumb-wrap {
+            position: relative;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .edit-thumb-wrap img {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 10px;
+            display: block;
+        }
+        .edit-thumb-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+        }
+        .edit-thumb-wrap:hover .edit-thumb-overlay {
+            opacity: 1;
+        }
         .edit-side-upload {
             margin: 1rem 0 0;
             display: inline-flex;
@@ -2451,12 +2479,8 @@
                     editImageUrl = '..' + editImageUrl;
                 }
                 window.__editCurrentImageUrl = editImageUrl;
-                const sidebarThumb = document.getElementById('editSidebarThumb');
-                if (sidebarThumb) {
-                    sidebarThumb.innerHTML = editImageUrl
-                        ? `<img src="${escapeHtml(editImageUrl)}" alt="Current product image" onerror="this.parentElement.innerHTML='<i class=\\'fas fa-box\\'></i>'">`
-                        : '<i class="fas fa-box"></i>';
-                }
+                window.__editStagedFile = false;
+                renderEditSidebarThumb(editImageUrl, false);
                 syncEditSidebarSummary();
 
                 // Reset file input and choose-image button label
@@ -2482,21 +2506,18 @@
                     newImageInput.addEventListener('change', function(e) {
                         const file = e.target.files[0];
                         const labelSpan = document.getElementById('editNewImageLabel');
-                        const thumbEl = document.getElementById('editSidebarThumb');
                         if (file) {
                             if (labelSpan) labelSpan.textContent = file.name;
+                            window.__editStagedFile = true;
                             const reader = new FileReader();
                             reader.onload = function(ev) {
-                                if (thumbEl) thumbEl.innerHTML = `<img src="${ev.target.result}" alt="New image preview">`;
+                                renderEditSidebarThumb(ev.target.result, true);
                             };
                             reader.readAsDataURL(file);
                         } else {
                             if (labelSpan) labelSpan.textContent = 'Choose new image';
-                            if (thumbEl) {
-                                thumbEl.innerHTML = window.__editCurrentImageUrl
-                                    ? `<img src="${escapeHtml(window.__editCurrentImageUrl)}" alt="Current product image">`
-                                    : '<i class="fas fa-box"></i>';
-                            }
+                            window.__editStagedFile = false;
+                            renderEditSidebarThumb(window.__editCurrentImageUrl || '', false);
                         }
                     });
                 }
@@ -2615,6 +2636,44 @@
             }
         });
 
+        // Sidebar thumbnail with hover overlay: magnifier opens fullscreen,
+        // X (shown only for a newly selected image) discards the selection
+        function renderEditSidebarThumb(src, isStaged) {
+            const thumbEl = document.getElementById('editSidebarThumb');
+            if (!thumbEl) return;
+            if (!src) {
+                thumbEl.innerHTML = '<i class="fas fa-box"></i>';
+                return;
+            }
+            let html = '<div class="edit-thumb-wrap">';
+            html += `<img src="${escapeHtml(src)}" alt="Product image"${isStaged ? '' : ' onerror="handleEditThumbError(this)"'}>`;
+            html += '<div class="edit-thumb-overlay">';
+            html += `<button type="button" class="image-fullscreen-btn" onclick="openFullscreenImage(this.closest('.edit-thumb-wrap').querySelector('img').src)" title="View fullscreen"><i class="fas fa-magnifying-glass-plus"></i></button>`;
+            if (isStaged) {
+                html += '<button type="button" class="image-close-btn" onclick="clearEditStagedImage()" title="Remove selected image"><i class="fas fa-times"></i></button>';
+            }
+            html += '</div></div>';
+            thumbEl.innerHTML = html;
+        }
+
+        function handleEditThumbError(img) {
+            const wrap = img.closest('.edit-thumb-wrap');
+            if (wrap) {
+                const fallback = document.createElement('i');
+                fallback.className = 'fas fa-box';
+                wrap.replaceWith(fallback);
+            }
+        }
+
+        function clearEditStagedImage() {
+            const input = document.getElementById('editProductImage');
+            if (input) input.value = '';
+            window.__editStagedFile = false;
+            const labelSpan = document.getElementById('editNewImageLabel');
+            if (labelSpan) labelSpan.textContent = 'Choose new image';
+            renderEditSidebarThumb(window.__editCurrentImageUrl || '', false);
+        }
+
         // Helper function to reset edit form
         function resetEditForm() {
             document.getElementById('editProductForm').reset();
@@ -2622,6 +2681,7 @@
             const labelSpan = document.getElementById('editNewImageLabel');
             if (labelSpan) labelSpan.textContent = 'Choose new image';
             window.__editCurrentImageUrl = '';
+            window.__editStagedFile = false;
         }
 
         // Keep the sidebar summary in sync with the form
