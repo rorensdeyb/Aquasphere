@@ -378,36 +378,89 @@
         
         /* Search and Filter Bar */
         .search-filter-bar {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-            margin-bottom: 2rem;
+            background: transparent;
+            padding: 0;
+            border-radius: 0;
+            box-shadow: none;
+            margin-bottom: 1.5rem;
+            display: flex;
+            gap: 1rem;
         }
-        
+
         .search-box {
             position: relative;
+            flex: 1;
         }
-        
+
         .search-box input {
             border-radius: 12px;
-            border: 2px solid #D5E5ED;
-            padding: 12px 45px 12px 15px;
+            border: 1px solid #e2e8f0;
+            background: #ffffff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            padding: 12px 15px 12px 42px;
             width: 100%;
             transition: all 0.3s ease;
         }
-        
+
         .search-box input:focus {
             border-color: #2383B5;
             box-shadow: 0 0 0 0.2rem rgba(35, 131, 181, 0.15);
+            outline: none;
         }
-        
+
         .search-box i {
             position: absolute;
-            right: 15px;
+            left: 15px;
+            right: auto;
             top: 50%;
             transform: translateY(-50%);
             color: #607D8B;
+        }
+
+        .filter-box {
+            position: relative;
+            width: 230px;
+            flex-shrink: 0;
+        }
+
+        .filter-box > i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #607D8B;
+            font-size: 0.85rem;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .filter-box select {
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            background-color: #ffffff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            padding: 12px 34px 12px 38px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #155A7A;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .filter-box select:focus {
+            border-color: #2383B5;
+            box-shadow: 0 0 0 0.2rem rgba(35, 131, 181, 0.15);
+            outline: none;
+        }
+
+        @media (max-width: 640px) {
+            .search-filter-bar {
+                flex-direction: column;
+            }
+
+            .filter-box {
+                width: 100%;
+            }
         }
         
         /* Product Grid - card layout */
@@ -416,6 +469,23 @@
             grid-template-columns: repeat(4, 1fr);
             gap: 1.5rem;
             margin-bottom: 1.5rem;
+        }
+
+        /* Centered full-width grid messages (loading / empty / error) */
+        .grid-message {
+            grid-column: 1 / -1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 0.75rem;
+            padding: 3rem 1rem;
+            color: #607D8B;
+        }
+
+        .grid-message p {
+            margin: 0;
         }
 
         /* Storefront pagination */
@@ -984,39 +1054,47 @@
             -moz-appearance: textfield;
         }
         
-        /* Quick Stats */
+        /* Quick Stats - single connected bar */
         .quick-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        
-        .stat-card {
+            display: flex;
             background: white;
-            padding: 1.5rem;
-            border-radius: 15px;
+            border-radius: 16px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 1.25rem;
+            overflow: hidden;
+        }
+
+        .stat-card {
+            flex: 1;
+            background: transparent;
+            padding: 1.1rem 1.5rem;
+            border-radius: 0;
+            box-shadow: none;
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 0.9rem;
+        }
+
+        .stat-card + .stat-card {
+            border-left: 1px solid #eef2f6;
         }
         
         .stat-icon {
-            width: 50px;
-            height: 50px;
+            width: 44px;
+            height: 44px;
             background: linear-gradient(135deg, #2383B5, #155A7A);
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 1.5rem;
+            font-size: 1.25rem;
+            flex-shrink: 0;
         }
         
         .stat-info h4 {
             margin: 0;
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             font-weight: 700;
             color: #155A7A;
         }
@@ -1024,7 +1102,18 @@
         .stat-info p {
             margin: 0;
             color: #607D8B;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 640px) {
+            .quick-stats {
+                flex-direction: column;
+            }
+
+            .stat-card + .stat-card {
+                border-left: none;
+                border-top: 1px solid #eef2f6;
+            }
         }
         
         
@@ -1523,28 +1612,25 @@
             
             <!-- Search and Filter -->
             <div class="search-filter-bar">
-                <div class="row align-items-center">
-                    <div class="col-md-8">
-                        <div class="search-box">
-                            <input type="text" id="searchInput" placeholder="Search products...">
-                            <i class="fas fa-search"></i>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mt-3 mt-md-0">
-                        <select class="form-select" id="filterSelect">
-                            <option value="all">All Products</option>
-                            <option value="refill">Refills</option>
-                            <option value="bottle">Bottles</option>
-                            <option value="gallon">Gallons</option>
-                        </select>
-                    </div>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Search products...">
+                    <i class="fas fa-search"></i>
+                </div>
+                <div class="filter-box">
+                    <i class="fas fa-filter"></i>
+                    <select class="form-select" id="filterSelect">
+                        <option value="all">All Products</option>
+                        <option value="refill">Refills</option>
+                        <option value="bottle">Bottles</option>
+                        <option value="gallon">Gallons</option>
+                    </select>
                 </div>
             </div>
-            
+
             <!-- Products Grid -->
             <div class="products-grid" id="productsGrid">
-                <div class="text-center text-muted" style="padding: 3rem;">
-                    <i class="fas fa-spinner fa-spin fa-2x mb-3"></i>
+                <div class="grid-message">
+                    <i class="fas fa-spinner fa-spin fa-2x"></i>
                     <p>Loading products...</p>
                 </div>
             </div>
@@ -1847,11 +1933,11 @@
                     renderProductGrid();
                 } else {
                     console.log('No products or success=false:', data);
-                    document.getElementById('productsGrid').innerHTML = '<div class="text-center text-muted" style="padding: 3rem;"><p>No products available. Please check back later.</p></div>';
+                    document.getElementById('productsGrid').innerHTML = '<div class="grid-message"><p>No products available. Please check back later.</p></div>';
                 }
             } catch (error) {
                 console.error('Error loading products:', error);
-                document.getElementById('productsGrid').innerHTML = '<div class="text-center text-muted" style="padding: 3rem;"><p>Failed to load products. Please refresh the page.</p><p style="font-size: 0.9rem; color: #607D8B;">Error: ' + error.message + '</p></div>';
+                document.getElementById('productsGrid').innerHTML = '<div class="grid-message"><p>Failed to load products. Please refresh the page.</p><p style="font-size: 0.9rem;">Error: ' + error.message + '</p></div>';
             }
         }
         
@@ -1894,7 +1980,7 @@
             const productsGrid = document.getElementById('productsGrid');
             
             if (!productsList || productsList.length === 0) {
-                productsGrid.innerHTML = '<div class="text-center text-muted" style="padding: 3rem;"><p>No products available. Please check back later.</p></div>';
+                productsGrid.innerHTML = '<div class="grid-message"><p>No products available. Please check back later.</p></div>';
                 return;
             }
             
