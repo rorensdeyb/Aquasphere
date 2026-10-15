@@ -475,6 +475,129 @@
             background: white;
             transform: scale(1.1);
         }
+
+        /* Add New Product - two-column redesign */
+        .add-product-grid {
+            display: grid;
+            grid-template-columns: 340px 1fr;
+            gap: 1.75rem;
+            align-items: stretch;
+        }
+        .add-product-image-panel .form-label {
+            margin-bottom: 10px;
+        }
+        .add-image-drop {
+            border: 2px dashed #b9d2e2;
+            border-radius: 12px;
+            background: #f6fbfd;
+            padding: 1.5rem 1.25rem;
+            height: 100%;
+            min-height: 420px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            text-align: center;
+        }
+        .add-image-preview {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+        .add-image-empty {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            color: #94a3b8;
+            font-size: 0.9rem;
+            padding: 2.5rem 0;
+        }
+        .add-image-empty i {
+            font-size: 2.25rem;
+            color: #b9d2e2;
+        }
+        .add-image-preview .image-preview-wrapper {
+            margin-top: 0;
+        }
+        .add-image-preview img.image-preview {
+            max-width: 230px;
+            max-height: 250px;
+        }
+        .add-file-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            flex-wrap: wrap;
+        }
+        .add-file-btn {
+            background: #ffffff;
+            border: 1px solid #D5E5ED;
+            border-right: none;
+            border-radius: 8px 0 0 8px;
+            padding: 7px 16px;
+            font-weight: 600;
+            font-size: 0.88rem;
+            color: #334155;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin: 0;
+        }
+        .add-file-btn:hover {
+            background: #EAF7FC;
+            color: #155A7A;
+        }
+        .add-file-name {
+            background: #ffffff;
+            border: 1px solid #D5E5ED;
+            border-radius: 0 8px 8px 0;
+            padding: 7px 14px;
+            font-size: 0.88rem;
+            color: #334155;
+            max-width: 190px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .add-image-hint {
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+        .add-product-fields {
+            display: flex;
+            flex-direction: column;
+        }
+        .add-product-fields .row {
+            flex: 1;
+        }
+        .add-desc-wrap {
+            display: flex;
+            flex-direction: column;
+        }
+        .add-desc-wrap .form-label {
+            flex-shrink: 0;
+        }
+        #productDescription {
+            flex: 1;
+            min-height: 230px;
+            resize: vertical;
+        }
+        .add-product-footer {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 1.5rem;
+        }
+        @media (max-width: 992px) {
+            .add-product-grid {
+                grid-template-columns: 1fr;
+            }
+            .add-image-drop {
+                min-height: 0;
+            }
+        }
         .description-cell {
             max-width: 250px;
         }
@@ -1279,49 +1402,64 @@
         <div class="content-card">
             <h5 class="mb-4" style="color: #155A7A; font-weight: 600;">Add New Product</h5>
             <form id="addProductForm" novalidate>
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <label for="productLabel" class="form-label">Product Label/Name</label>
-                        <input type="text" class="form-control" id="productLabel" required placeholder="e.g., 5-Gallon Refill">
+                <div class="add-product-grid">
+                    <div class="add-product-image-panel">
+                        <label class="form-label">Product Image</label>
+                        <div class="add-image-drop">
+                            <div id="imagePreview" class="add-image-preview">
+                                <div class="add-image-empty">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <span>No image selected</span>
+                                </div>
+                            </div>
+                            <div class="add-file-row">
+                                <label for="productImage" class="add-file-btn">Choose File</label>
+                                <span class="add-file-name" id="addFileName">No file chosen</span>
+                                <input type="file" id="productImage" accept="image/*" hidden>
+                            </div>
+                            <small class="add-image-hint">Upload an image for the product (JPG, PNG, GIF)</small>
+                        </div>
                     </div>
-                    <div class="col-md-6">
-                        <label for="productPrice" class="form-label">Price (₱)</label>
-                        <input type="number" class="form-control" id="productPrice" required step="0.01" min="0" placeholder="e.g., 25.00">
+                    <div class="add-product-fields">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="productLabel" class="form-label">Product Label/Name</label>
+                                <input type="text" class="form-control" id="productLabel" required placeholder="e.g., 5-Gallon Refill">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="productCategory" class="form-label">Category</label>
+                                <select class="form-select" id="productCategory" required>
+                                    <option value="">Select category...</option>
+                                    <option value="refill gallon">Refill Gallon</option>
+                                    <option value="gallon">Gallon</option>
+                                    <option value="bottle">Bottle</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="productPrice" class="form-label">Price (₱)</label>
+                                <input type="number" class="form-control" id="productPrice" required step="0.01" min="0" placeholder="e.g., 25.00">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="productUnit" class="form-label">Price Unit</label>
+                                <input type="text" class="form-control" id="productUnit" required placeholder="e.g., /refill, /unit, /pack">
+                            </div>
+                            <div class="col-12 add-desc-wrap">
+                                <label for="productDescription" class="form-label">Description</label>
+                                <textarea class="form-control" id="productDescription" required placeholder="Product description..."></textarea>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-md-12">
-                        <label for="productDescription" class="form-label">Description</label>
-                        <textarea class="form-control" id="productDescription" rows="3" required placeholder="Product description..."></textarea>
-                    </div>
-                    <div class="col-md-12">
-                        <label for="productImage" class="form-label">Product Image</label>
-                        <input type="file" class="form-control" id="productImage" accept="image/*">
-                        <small class="text-muted">Upload an image for the product (JPG, PNG, GIF)</small>
-                        <div id="imagePreview" style="margin-top: 10px;"></div>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="productCategory" class="form-label">Category</label>
-                        <select class="form-select" id="productCategory" required>
-                            <option value="">Select category...</option>
-                            <option value="refill gallon">Refill Gallon</option>
-                            <option value="gallon">Gallon</option>
-                            <option value="bottle">Bottle</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="productUnit" class="form-label">Price Unit</label>
-                        <input type="text" class="form-control" id="productUnit" required placeholder="e.g., /refill, /unit, /pack">
-                    </div>
-                    <div class="col-12 d-flex justify-content-end">
-                        <button type="submit" class="btn btn-primary" id="addProductBtn">
-                            <span class="btn-text">
-                                <i class="fas fa-plus me-2"></i>Add Product
-                            </span>
-                            <span class="btn-loading" id="addProductLoading">
-                                <span class="btn-loading-spinner"></span>
-                                <span>Adding...</span>
-                            </span>
-                        </button>
-                    </div>
+                </div>
+                <div class="add-product-footer">
+                    <button type="submit" class="btn btn-primary" id="addProductBtn">
+                        <span class="btn-text">
+                            <i class="fas fa-plus me-2"></i>Add Product
+                        </span>
+                        <span class="btn-loading" id="addProductLoading">
+                            <span class="btn-loading-spinner"></span>
+                            <span>Adding...</span>
+                        </span>
+                    </button>
                 </div>
             </form>
         </div>
@@ -1679,44 +1817,70 @@
         }
 
         // Preview image
+        var addImageEmptyHtml = '<div class="add-image-empty"><i class="fas fa-cloud-upload-alt"></i><span>No image selected</span></div>';
+
         document.getElementById('productImage').addEventListener('change', function(e) {
             const file = e.target.files[0];
             const preview = document.getElementById('imagePreview');
+            const fileName = document.getElementById('addFileName');
 
             if (file) {
+                if (fileName) fileName.textContent = file.name;
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     preview.innerHTML = `
                         <div class="image-preview-wrapper">
                             <img src="${e.target.result}" class="image-preview" alt="Preview" onclick="openFullscreenImage(this.src)">
                             <div class="image-preview-overlay">
-                                <button type="button" class="image-fullscreen-btn" onclick="openFullscreenImage(this.closest('.image-preview-wrapper').querySelector('img').src)" title="Fullscreen"><i class="fas fa-expand"></i></button>
-                                <button type="button" class="image-close-btn" onclick="removeImagePreview()" title="Remove"><i class="fas fa-times"></i></button>
+                                <button type="button" class="image-fullscreen-btn" onclick="openFullscreenImage(this.closest('.image-preview-wrapper').querySelector('img').src)" title="View fullscreen"><i class="fas fa-magnifying-glass-plus"></i></button>
+                                <button type="button" class="image-close-btn" onclick="removeImagePreview()" title="Remove image"><i class="fas fa-times"></i></button>
                             </div>
                         </div>`;
                 };
                 reader.readAsDataURL(file);
             } else {
-                preview.innerHTML = '';
+                preview.innerHTML = addImageEmptyHtml;
+                if (fileName) fileName.textContent = 'No file chosen';
             }
         });
 
         function openFullscreenImage(src) {
+            // Close any existing fullscreen overlay first
+            const existing = document.querySelector('.image-fullscreen-overlay');
+            if (existing) existing.remove();
             const overlay = document.createElement('div');
             overlay.className = 'image-fullscreen-overlay';
             overlay.innerHTML = `
                 <img src="${src}" alt="Full preview">
-                <button class="fullscreen-close" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
+                <button class="fullscreen-close" onclick="event.stopPropagation(); closeFullscreenImage();" title="Close"><i class="fas fa-times"></i></button>
             `;
             overlay.addEventListener('click', function(e) {
-                if (e.target === this) this.remove();
+                if (e.target === this) closeFullscreenImage();
             });
             document.body.appendChild(overlay);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeFullscreenImage() {
+            const overlay = document.querySelector('.image-fullscreen-overlay');
+            if (overlay) overlay.remove();
+            document.body.style.overflow = '';
         }
 
         function removeImagePreview() {
-            document.getElementById('imagePreview').innerHTML = '';
+            document.getElementById('imagePreview').innerHTML = addImageEmptyHtml;
             document.getElementById('productImage').value = '';
+            const fileName = document.getElementById('addFileName');
+            if (fileName) fileName.textContent = 'No file chosen';
+        }
+
+        function resetAddProductImage() {
+            const preview = document.getElementById('imagePreview');
+            if (preview) preview.innerHTML = addImageEmptyHtml;
+            const input = document.getElementById('productImage');
+            if (input) input.value = '';
+            const fileName = document.getElementById('addFileName');
+            if (fileName) fileName.textContent = 'No file chosen';
         }
 
         // Add product
@@ -1782,7 +1946,7 @@
                 if (data.success) {
                     showNotification('Product added successfully!', 'success');
                     document.getElementById('addProductForm').reset();
-                    document.getElementById('imagePreview').innerHTML = '';
+                    resetAddProductImage();
                     // Reload products
                     loadProducts().then(() => {
                         // Navigate to last page to show the newly added product
@@ -1883,6 +2047,11 @@
 
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
+                const fullscreen = document.querySelector('.image-fullscreen-overlay');
+                if (fullscreen) {
+                    closeFullscreenImage();
+                    return;
+                }
                 const panel = document.getElementById('productPanel');
                 if (panel && panel.classList.contains('is-open')) {
                     closeProductPanel();
