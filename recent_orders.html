@@ -235,10 +235,43 @@
         
         .item-total {
             font-weight: 700;
-            color: #155A7A;
+            color: #2383B5;
             font-size: 1.1rem;
             flex-shrink: 0;
             white-space: nowrap;
+        }
+
+        .order-bottom-box {
+            background: #f4f9fc;
+            border: 1.5px solid #2383B5;
+            border-radius: 16px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .order-bottom-col {
+            min-width: 0;
+        }
+
+        .order-bottom-col + .order-bottom-col {
+            border-left: 1px solid #d8e4ec;
+            padding-left: 1.5rem;
+        }
+
+        @media (max-width: 640px) {
+            .order-bottom-box {
+                grid-template-columns: 1fr;
+            }
+
+            .order-bottom-col + .order-bottom-col {
+                border-left: none;
+                padding-left: 0;
+                border-top: 1px solid #d8e4ec;
+                padding-top: 1rem;
+            }
         }
         
         .order-summary {
@@ -1037,36 +1070,41 @@
                             </div>
                             ${itemsHtml || '<p class="text-muted mb-0">No items found.</p>'}
                         </div>
-                        <div class="order-summary">
-                            <div class="summary-title">Order Summary</div>
-                            <div class="summary-row">
-                                <span class="summary-label">Subtotal</span>
-                                <span class="summary-value">₱${subtotal.toFixed(2)}</span>
+                        <div class="order-bottom-box">
+                            <div class="order-bottom-col">
+                                <div class="summary-title">Order Details</div>
+                                <div class="summary-row">
+                                    <span class="summary-label"><i class="fas fa-credit-card me-1"></i>Payment Method</span>
+                                    <span class="summary-value">${escapeHtml(order.payment_method || 'COD')}</span>
+                                </div>
+                                ${order.delivered_at ? `
+                                <div class="summary-row">
+                                    <span class="summary-label"><i class="fas fa-check-circle me-1"></i>Delivered On</span>
+                                    <span class="summary-value">${formatDate(order.delivered_at)}</span>
+                                </div>
+                                ` : ''}
+                                ${status === 'cancelled' ? `
+                                <div class="summary-row">
+                                    <span class="summary-label"><i class="fas fa-ban me-1"></i>Cancelled On</span>
+                                    <span class="summary-value">${formatDate(order.updated_at || order.order_date)}</span>
+                                </div>
+                                ` : ''}
                             </div>
-                            <div class="summary-row">
-                                <span class="summary-label">Delivery Fee</span>
-                                <span class="summary-value">₱${deliveryFee.toFixed(2)}</span>
+                            <div class="order-bottom-col">
+                                <div class="summary-title">Order Summary</div>
+                                <div class="summary-row">
+                                    <span class="summary-label">Subtotal</span>
+                                    <span class="summary-value">₱${subtotal.toFixed(2)}</span>
+                                </div>
+                                <div class="summary-row">
+                                    <span class="summary-label">Delivery Fee</span>
+                                    <span class="summary-value">₱${deliveryFee.toFixed(2)}</span>
+                                </div>
+                                <div class="summary-row total">
+                                    <span class="summary-label">Total</span>
+                                    <span class="summary-value">₱${totalAmount.toFixed(2)}</span>
+                                </div>
                             </div>
-                            <div class="summary-row total">
-                                <span class="summary-label">Total</span>
-                                <span class="summary-value">₱${totalAmount.toFixed(2)}</span>
-                            </div>
-                            <div class="summary-row" style="margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid #cbd5e1;">
-                                <span class="summary-label"><i class="fas fa-credit-card me-1"></i>Payment Method</span>
-                                <span class="summary-value">${escapeHtml(order.payment_method || 'COD')}</span>
-                            </div>
-                            ${order.delivered_at ? `
-                            <div class="summary-row" style="margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid #cbd5e1;">
-                                <span class="summary-label"><i class="fas fa-check-circle me-1"></i>Delivered On</span>
-                                <span class="summary-value">${formatDate(order.delivered_at)}</span>
-                            </div>
-                            ` : ''}
-                            ${status === 'cancelled' ? `
-                            <div class="summary-row" style="margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid #cbd5e1;">
-                                <span class="summary-label"><i class="fas fa-ban me-1"></i>Cancelled On</span>
-                                <span class="summary-value">${formatDate(order.updated_at || order.order_date)}</span>
-                            </div>
-                            ` : ''}
                         </div>
                     </div>
                 </div>
