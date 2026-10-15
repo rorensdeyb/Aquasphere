@@ -1715,6 +1715,11 @@
             color: #2383B5;
         }
 
+        /* Make room for the eye icon so text never slides underneath it */
+        .input-group-custom.has-toggle .custom-input {
+            padding-right: 42px !important;
+        }
+
         /* Profile Footer Custom */
         .profile-footer-custom {
             display: flex;
@@ -1916,10 +1921,10 @@
                         
                         <div class="form-group mb-3">
                             <label>Current Password</label>
-                            <div class="input-group-custom">
+                            <div class="input-group-custom has-toggle">
                                 <i class="fas fa-lock input-icon"></i>
                                 <input type="password" id="profilePassword" class="custom-input" placeholder="••••••••">
-                                <button type="button" class="btn-password-toggle-inside" onclick="togglePasswordVisibility('profilePassword', this.querySelector('i'))">
+                                <button type="button" class="btn-password-toggle-inside" onclick="togglePasswordVisibility('profilePassword', this.querySelector('i'))" aria-label="Show password">
                                     <i class="fas fa-eye"></i>
                                 </button>
                             </div>
@@ -1929,9 +1934,12 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label>New Password</label>
-                                <div class="input-group-custom">
+                                <div class="input-group-custom has-toggle">
                                     <i class="fas fa-key input-icon"></i>
                                     <input type="password" id="profileNewPassword" class="custom-input" placeholder="New Password">
+                                    <button type="button" class="btn-password-toggle-inside" onclick="togglePasswordVisibility('profileNewPassword', this.querySelector('i'))" aria-label="Show password">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
                                 </div>
                                 <div class="custom-error" id="profileNewPassword-error" style="display: none;">Password is required.</div>
                                 <div class="custom-error" id="profileNewPassword-format-error" style="display: none;">Min 8 chars with upper, lower, number, special.</div>
@@ -1939,9 +1947,12 @@
                             </div>
                             <div class="form-group">
                                 <label>Confirm New Password</label>
-                                <div class="input-group-custom">
+                                <div class="input-group-custom has-toggle">
                                     <i class="fas fa-check-double input-icon"></i>
                                     <input type="password" id="profileConfirmPassword" class="custom-input" placeholder="Confirm Password">
+                                    <button type="button" class="btn-password-toggle-inside" onclick="togglePasswordVisibility('profileConfirmPassword', this.querySelector('i'))" aria-label="Show password">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
                                 </div>
                                 <div class="custom-error" id="profileConfirmPassword-error" style="display: none;">Password confirmation is required.</div>
                                 <div class="custom-error" id="profileConfirmPassword-match-error" style="display: none;">Passwords do not match.</div>
