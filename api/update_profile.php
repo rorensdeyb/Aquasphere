@@ -74,6 +74,7 @@ try {
     $date_of_birth = assert_safe_string($data['birthday'] ?? $data['date_of_birth'] ?? '', 'date_of_birth', 32);
     $password = $data['password'] ?? '';
     $new_password = $data['newPassword'] ?? '';
+    $confirm_password = $data['confirmPassword'] ?? $data['confirm_password'] ?? '';
     
     // Validation
     $errors = [];
@@ -135,12 +136,14 @@ try {
         }
     }
     
-    // If passwords are provided, validate them
-    if (!empty($password) || !empty($new_password)) {
+    // If passwords are provided, validate them (BondNest-parity messages)
+    if (!empty($password) || !empty($new_password) || !empty($confirm_password)) {
         if (empty($password)) {
             $errors['password'] = 'Current password is required to change password.';
         } elseif (empty($new_password)) {
             $errors['newPassword'] = 'New password is required.';
+        } elseif (!empty($confirm_password) && $new_password !== $confirm_password) {
+            $errors['confirmPassword'] = 'Passwords do not match.';
         } else {
             $strong = preg_match('/[a-z]/', $new_password) &&
                       preg_match('/[A-Z]/', $new_password) &&
@@ -162,6 +165,8 @@ try {
             
             if (!$user || !password_verify($password, $user['password_hash'])) {
                 $errors['password'] = 'Current password is incorrect.';
+                } elseif (password_verify($new_password, $user['password_hash'])) {
+                    $errors['newPassword'] = 'Please enter a password different from your previous one.';
                 }
             }
         }

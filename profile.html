@@ -698,6 +698,77 @@
             text-underline-offset: 3px;
             cursor: pointer;
         }
+
+        /* Password-change OTP modal reuses email-otp look (BondNest parity) */
+        .password-otp-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 10060;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.25rem;
+        }
+        .password-otp-modal[hidden] {
+            display: none !important;
+        }
+
+        /* Password success auto-logout extras (BondNest 5th image parity) */
+        .password-success-check {
+            background: #ecfdf5 !important;
+            box-shadow: 0 10px 28px rgba(16, 185, 129, 0.28) !important;
+            animation: none !important;
+        }
+        .password-success-check i {
+            color: #16a34a !important;
+            font-size: 2.2rem !important;
+            animation: none !important;
+        }
+        .password-redirect-label {
+            margin: 0 0 0.5rem;
+            font-size: 0.9rem;
+            color: #607D8B;
+            position: relative;
+            z-index: 1;
+        }
+        .password-redirect-track {
+            width: 100%;
+            height: 5px;
+            background: #e2e8f0;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+        .password-redirect-fill {
+            height: 100%;
+            width: 0%;
+            border-radius: 6px;
+            background: linear-gradient(90deg, #2383B5, #155A7A);
+            transition: width 0.12s linear;
+        }
+        .password-login-now-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            width: 100%;
+            padding: 0.9rem 1rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            color: #ffffff;
+            background: linear-gradient(135deg, #2383B5 0%, #155A7A 100%);
+            box-shadow: 0 8px 24px rgba(35, 131, 181, 0.32);
+            position: relative;
+            z-index: 1;
+        }
+        .password-login-now-btn:hover {
+            filter: brightness(1.05);
+        }
         
         @keyframes fadeInModal {
             from {
@@ -1852,6 +1923,7 @@
                                     <i class="fas fa-eye"></i>
                                 </button>
                             </div>
+                            <div class="custom-error" id="profilePassword-incorrect" style="display: none;">Current password is incorrect.</div>
                         </div>
                         
                         <div class="form-row">
@@ -1863,6 +1935,7 @@
                                 </div>
                                 <div class="custom-error" id="profileNewPassword-error" style="display: none;">Password is required.</div>
                                 <div class="custom-error" id="profileNewPassword-format-error" style="display: none;">Min 8 chars with upper, lower, number, special.</div>
+                                <div class="custom-error" id="profileNewPassword-same" style="display: none;">Please enter a password different from your previous one.</div>
                             </div>
                             <div class="form-group">
                                 <label>Confirm New Password</label>
@@ -1872,6 +1945,7 @@
                                 </div>
                                 <div class="custom-error" id="profileConfirmPassword-error" style="display: none;">Password confirmation is required.</div>
                                 <div class="custom-error" id="profileConfirmPassword-match-error" style="display: none;">Passwords do not match.</div>
+                                <div class="custom-error" id="profileConfirmPassword-same" style="display: none;">Please enter a password different from your previous one.</div>
                             </div>
                         </div>
                     </div>
@@ -1888,18 +1962,59 @@
     </div>
 </div>
     
-    <!-- Password Change Success Modal -->
+    <!-- Password Change Success Modal (BondNest-style auto logout) -->
     <div class="password-change-modal" id="passwordChangeModal">
         <div class="password-change-content">
-            <div class="password-change-icon">
-                <i class="fas fa-check-circle"></i>
+            <div class="password-change-icon password-success-check">
+                <i class="fas fa-check"></i>
             </div>
-            <h3>Password Changed Successfully!</h3>
-            <p>For security reasons, please log in again with your new password.</p>
-            <div class="password-change-loader">
-                <div class="loader-dot"></div>
-                <div class="loader-dot"></div>
-                <div class="loader-dot"></div>
+            <h3>Password changed successfully.</h3>
+            <p>Your password has been updated. For security purposes, you will be logged out shortly.</p>
+            <p class="password-redirect-label" id="passwordRedirectLabel">Redirecting to login in 5s...</p>
+            <div class="password-redirect-track">
+                <div class="password-redirect-fill" id="passwordRedirectFill"></div>
+            </div>
+            <button type="button" class="password-login-now-btn" id="passwordLoginNowBtn">
+                <i class="fas fa-sign-in-alt"></i> Log in now
+            </button>
+        </div>
+    </div>
+
+    <!-- Password Change OTP Verification Modal (BondNest 4th image parity) -->
+    <div class="email-otp-modal password-otp-modal" id="passwordChangeOtpModal" hidden>
+        <div class="email-otp-backdrop" id="passwordChangeOtpBackdrop"></div>
+        <div class="email-otp-dialog" role="dialog" aria-modal="true" aria-labelledby="passwordChangeOtpTitle">
+            <button type="button" class="email-otp-close" id="passwordChangeOtpCloseBtn" aria-label="Close dialog">
+                <i class="fas fa-times" aria-hidden="true"></i>
+            </button>
+            <div class="email-otp-icon-wrap" aria-hidden="true" style="background: #e6f4f6;">
+                <i class="fas fa-envelope-open-text" style="color: #155A7A;"></i>
+            </div>
+            <h3 class="email-otp-title" id="passwordChangeOtpTitle">Verify password change</h3>
+            <p class="email-otp-lead" id="passwordChangeOtpLead">We've sent a 6-digit verification code to your email. Please enter it below to confirm your password change.</p>
+            <div class="email-otp-digits" id="passwordChangeOtpDigits" role="group" aria-label="6-digit password verification code">
+                <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="email-otp-digit" data-password-otp="0" aria-label="Digit 1 of 6" autocomplete="one-time-code">
+                <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="email-otp-digit" data-password-otp="1" aria-label="Digit 2 of 6" autocomplete="off">
+                <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="email-otp-digit" data-password-otp="2" aria-label="Digit 3 of 6" autocomplete="off">
+                <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="email-otp-digit" data-password-otp="3" aria-label="Digit 4 of 6" autocomplete="off">
+                <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="email-otp-digit" data-password-otp="4" aria-label="Digit 5 of 6" autocomplete="off">
+                <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="email-otp-digit" data-password-otp="5" aria-label="Digit 6 of 6" autocomplete="off">
+            </div>
+            <div class="email-otp-error" id="passwordChangeOtpError" hidden role="alert">
+                <span id="passwordChangeOtpErrorText"></span>
+            </div>
+            <p class="email-otp-resend-row" id="passwordChangeOtpResendRow">
+                <span>Didn't receive the code?</span>
+                <button type="button" class="email-otp-resend-btn" id="passwordChangeOtpResendBtn">
+                    <span id="passwordChangeOtpResendLabel">Resend Code</span>
+                </button>
+                <span class="email-otp-timer" id="passwordChangeOtpTimer" aria-live="polite"></span>
+            </p>
+            <div class="email-otp-actions">
+                <button type="button" class="email-otp-verify-btn" id="passwordChangeOtpVerifyBtn">
+                    <span id="passwordChangeOtpVerifyLabel">Verify &amp; Save</span>
+                </button>
+                <button type="button" class="email-otp-cancel" id="passwordChangeOtpCancelBtn">Cancel</button>
             </div>
         </div>
     </div>
@@ -2508,8 +2623,13 @@
             
             if (requireNow && curr && newv && curr === newv) {
                 const same = document.getElementById('profileNewPassword-same');
-                if (same) same.style.display = 'block';
+                if (same) {
+                    same.textContent = 'Please enter a password different from your previous one.';
+                    same.style.display = 'block';
+                }
                 markProfileError(newEl);
+                const ngroup = newEl?.closest('.form-group');
+                if (ngroup) ngroup.classList.add('error');
                 ok = false;
             } else {
                 const same = document.getElementById('profileNewPassword-same');
@@ -2518,8 +2638,13 @@
             
             if (requireNow && curr && conf && curr === conf) {
                 const same = document.getElementById('profileConfirmPassword-same');
-                if (same) same.style.display = 'block';
+                if (same) {
+                    same.textContent = 'Please enter a password different from your previous one.';
+                    same.style.display = 'block';
+                }
                 markProfileError(confirmEl);
+                const cgroup = confirmEl?.closest('.form-group');
+                if (cgroup) cgroup.classList.add('error');
                 ok = false;
             } else {
                 const same = document.getElementById('profileConfirmPassword-same');
@@ -3207,6 +3332,347 @@
             wire('emailChangeOtpResendBtn', submitEmailOtpResend);
         }
         wireEmailChangeOtp();
+
+        // ---------- Password-change OTP (BondNest-style verification + auto logout) ----------
+        let passwordOtpResendInterval = null;
+        let passwordOtpResendRemaining = 0;
+        let passwordOtpVerifyInProgress = false;
+        let passwordOtpAutoVerifyTimeout = null;
+        let passwordLogoutTimer = null;
+        let passwordLogoutInterval = null;
+        window.__verifiedPasswordChange = false;
+
+        function getPasswordOtpDigitInputs() {
+            return Array.from(document.querySelectorAll('[data-password-otp]'));
+        }
+        function getPasswordOtpCode() {
+            return getPasswordOtpDigitInputs().map(d => (d.value || '').replace(/\D/g, '')).join('');
+        }
+        function clearPasswordOtpDigits() {
+            getPasswordOtpDigitInputs().forEach(d => { d.value = ''; });
+        }
+        function setPasswordOtpError(message) {
+            const wrap = document.getElementById('passwordChangeOtpError');
+            const text = document.getElementById('passwordChangeOtpErrorText');
+            if (!wrap || !text) return;
+            if (message) { text.textContent = message; wrap.hidden = false; wrap.style.display = 'block'; }
+            else { text.textContent = ''; wrap.hidden = true; wrap.style.display = 'none'; }
+        }
+        function setPasswordOtpVerifyLoading(loading) {
+            const btn = document.getElementById('passwordChangeOtpVerifyBtn');
+            const label = document.getElementById('passwordChangeOtpVerifyLabel');
+            if (!btn) return;
+            btn.disabled = loading;
+            if (label) label.textContent = loading ? 'Verifying...' : 'Verify & Save';
+        }
+        function openPasswordChangeOtpModal(email) {
+            const modal = document.getElementById('passwordChangeOtpModal');
+            if (!modal) return;
+            passwordOtpVerifyInProgress = false;
+            setPasswordOtpVerifyLoading(false);
+            setPasswordOtpError('');
+            clearPasswordOtpDigits();
+            const lead = document.getElementById('passwordChangeOtpLead');
+            if (lead) lead.textContent = `We've sent a 6-digit verification code to ${email || 'your email'}. Please enter it below to confirm your password change.`;
+            modal.hidden = false;
+            document.body.style.overflow = 'hidden';
+            startPasswordOtpResendCooldown(60);
+            setTimeout(() => { const f = getPasswordOtpDigitInputs()[0]; if (f) f.focus(); }, 80);
+        }
+        function closePasswordChangeOtpModal() {
+            const modal = document.getElementById('passwordChangeOtpModal');
+            if (!modal || modal.hidden) return;
+            if (passwordOtpAutoVerifyTimeout) { clearTimeout(passwordOtpAutoVerifyTimeout); passwordOtpAutoVerifyTimeout = null; }
+            modal.hidden = true;
+            // Keep body locked only if another modal is open
+            const emailModal = document.getElementById('emailChangeOtpModal');
+            const pwdSuccess = document.getElementById('passwordChangeModal');
+            if ((!emailModal || emailModal.hidden) && (!pwdSuccess || !pwdSuccess.classList.contains('active'))) {
+                document.body.style.overflow = '';
+            }
+            clearPasswordOtpResendCooldown();
+            passwordOtpVerifyInProgress = false;
+            setPasswordOtpVerifyLoading(false);
+        }
+        function startPasswordOtpResendCooldown(seconds) {
+            const btn = document.getElementById('passwordChangeOtpResendBtn');
+            const timer = document.getElementById('passwordChangeOtpTimer');
+            passwordOtpResendRemaining = seconds;
+            if (btn) btn.disabled = true;
+            if (passwordOtpResendInterval) clearInterval(passwordOtpResendInterval);
+            const tick = () => {
+                if (passwordOtpResendRemaining <= 0) {
+                    if (passwordOtpResendInterval) { clearInterval(passwordOtpResendInterval); passwordOtpResendInterval = null; }
+                    if (timer) timer.textContent = '';
+                    if (btn) btn.disabled = false;
+                    return;
+                }
+                if (timer) timer.textContent = ` (${passwordOtpResendRemaining}s)`;
+                passwordOtpResendRemaining -= 1;
+            };
+            tick();
+            passwordOtpResendInterval = setInterval(tick, 1000);
+        }
+        function clearPasswordOtpResendCooldown() {
+            if (passwordOtpResendInterval) { clearInterval(passwordOtpResendInterval); passwordOtpResendInterval = null; }
+            passwordOtpResendRemaining = 0;
+            const timer = document.getElementById('passwordChangeOtpTimer');
+            if (timer) timer.textContent = '';
+            const btn = document.getElementById('passwordChangeOtpResendBtn');
+            if (btn) btn.disabled = false;
+        }
+        function schedulePasswordOtpAutoVerify() {
+            if (passwordOtpAutoVerifyTimeout) clearTimeout(passwordOtpAutoVerifyTimeout);
+            passwordOtpAutoVerifyTimeout = setTimeout(() => {
+                passwordOtpAutoVerifyTimeout = null;
+                const modal = document.getElementById('passwordChangeOtpModal');
+                if (!modal || modal.hidden) return;
+                if (getPasswordOtpCode().length !== 6) return;
+                if (passwordOtpVerifyInProgress) return;
+                verifyPasswordChangeOtp();
+            }, 300);
+        }
+        function showPasswordFieldError(fieldId, message) {
+            // fieldId is like profilePassword, profileNewPassword, profileConfirmPassword
+            const input = document.getElementById(fieldId);
+            if (!input) { showNotification(message, 'error'); return; }
+            // Map to the right boxed error div
+            let errEl = null;
+            if (fieldId === 'profilePassword') {
+                errEl = document.getElementById('profilePassword-incorrect');
+            } else if (fieldId === 'profileNewPassword') {
+                if (/different from your previous/i.test(message)) {
+                    errEl = document.getElementById('profileNewPassword-same');
+                } else {
+                    errEl = document.getElementById('profileNewPassword-format-error') || document.getElementById('profileNewPassword-error');
+                }
+                if (errEl && errEl.id !== 'profileNewPassword-same' && errEl.id !== 'profileNewPassword-error' && errEl.id !== 'profileNewPassword-format-error') {
+                    errEl = document.getElementById('profileNewPassword-error');
+                }
+            } else if (fieldId === 'profileConfirmPassword') {
+                if (/different from your previous/i.test(message)) {
+                    errEl = document.getElementById('profileConfirmPassword-same');
+                } else if (/match/i.test(message)) {
+                    errEl = document.getElementById('profileConfirmPassword-match-error');
+                } else {
+                    errEl = document.getElementById('profileConfirmPassword-error');
+                }
+            }
+            if (errEl) {
+                // For generic messages, update text so server wording is preserved
+                if (fieldId !== 'profilePassword' || true) {
+                    // Keep BondNest wording exactly for the two required messages
+                    if (/incorrect/i.test(message) && fieldId === 'profilePassword') {
+                        errEl.textContent = 'Current password is incorrect.';
+                    } else if (/different from your previous/i.test(message)) {
+                        errEl.textContent = 'Please enter a password different from your previous one.';
+                    } else {
+                        errEl.textContent = message;
+                    }
+                }
+                errEl.style.display = 'block';
+            } else {
+                showNotification(message, 'error');
+            }
+            markProfileError(input);
+            const group = input.closest('.form-group');
+            if (group) group.classList.add('error');
+            checkProfileRequiredFields();
+            errEl?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        async function requestPasswordChangeOtp() {
+            const currentPassword = (document.getElementById('profilePassword').value || '').trim();
+            const newPassword = (document.getElementById('profileNewPassword').value || '').trim();
+            const confirmPassword = (document.getElementById('profileConfirmPassword').value || '').trim();
+            try {
+                const resp = await fetch('api/send_password_change_otp.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ current_password: currentPassword, new_password: newPassword, confirm_password: confirmPassword })
+                });
+                const data = await resp.json().catch(() => ({}));
+                if (!resp.ok || !data.success) {
+                    if (data.field) {
+                        showPasswordFieldError(data.field, data.message || 'Password validation failed.');
+                    } else {
+                        showNotification(data.message || 'Could not send verification code.', 'error');
+                    }
+                    return null;
+                }
+                return data.email || '';
+            } catch (e) {
+                showNotification('Could not send verification code. Check your connection.', 'error');
+                return null;
+            }
+        }
+        async function submitPasswordOtpResend() {
+            const btn = document.getElementById('passwordChangeOtpResendBtn');
+            const label = document.getElementById('passwordChangeOtpResendLabel');
+            if (btn) btn.disabled = true;
+            if (label) label.textContent = 'Sending...';
+            try {
+                const resp = await fetch('api/send_password_change_otp.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ resend: true })
+                });
+                const data = await resp.json().catch(() => ({}));
+                if (!resp.ok || !data.success) {
+                    setPasswordOtpError(data.message || 'Could not resend code.');
+                    return false;
+                }
+                clearPasswordOtpDigits();
+                setPasswordOtpError('');
+                const lead = document.getElementById('passwordChangeOtpLead');
+                if (lead && data.email) lead.textContent = `A new code was sent to ${data.email}. Enter it below to confirm your password change.`;
+                else if (lead) lead.textContent = 'A new code was sent. Enter it below to confirm your password change.';
+                startPasswordOtpResendCooldown(60);
+                return true;
+            } catch (e) {
+                setPasswordOtpError('Could not resend code. Check your connection.');
+                return false;
+            } finally {
+                if (label) label.textContent = 'Resend Code';
+                const btn2 = document.getElementById('passwordChangeOtpResendBtn');
+                if (btn2 && passwordOtpResendRemaining <= 0 && !passwordOtpResendInterval) btn2.disabled = false;
+            }
+        }
+        async function verifyPasswordChangeOtp() {
+            if (passwordOtpVerifyInProgress) return;
+            const code = getPasswordOtpCode();
+            if (code.length !== 6) {
+                setPasswordOtpError('Please enter the 6-digit code from your email.');
+                return;
+            }
+            if (passwordOtpAutoVerifyTimeout) { clearTimeout(passwordOtpAutoVerifyTimeout); passwordOtpAutoVerifyTimeout = null; }
+            passwordOtpVerifyInProgress = true;
+            setPasswordOtpVerifyLoading(true);
+            setPasswordOtpError('');
+            try {
+                const resp = await fetch('api/verify_password_change_otp.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ code: code })
+                });
+                const data = await resp.json().catch(() => ({}));
+                if (!resp.ok || !data.success) {
+                    setPasswordOtpError(data.message || 'Invalid or expired verification code.');
+                    return;
+                }
+                window.__verifiedPasswordChange = true;
+                closePasswordChangeOtpModal();
+                // Save any other profile changes (without password fields, already applied), then show success + logout
+                await saveProfileFieldsAfterPasswordChange();
+            } catch (e) {
+                setPasswordOtpError('Could not reach the server. Check your connection and try again.');
+            } finally {
+                passwordOtpVerifyInProgress = false;
+                setPasswordOtpVerifyLoading(false);
+            }
+        }
+        function wirePasswordChangeOtp() {
+            const digits = getPasswordOtpDigitInputs();
+            if (digits.length && !digits[0].dataset.passwordOtpWired) {
+                digits[0].dataset.passwordOtpWired = '1';
+                digits.forEach((input, idx) => {
+                    input.addEventListener('input', (e) => {
+                        const v = (e.target.value || '').replace(/\D/g, '').slice(-1);
+                        e.target.value = v;
+                        setPasswordOtpError('');
+                        if (v && idx < digits.length - 1) digits[idx + 1].focus();
+                        if (getPasswordOtpCode().length === 6) schedulePasswordOtpAutoVerify();
+                    });
+                    input.addEventListener('keydown', (e) => {
+                        if (e.key === 'Backspace' && !input.value && idx > 0) digits[idx - 1].focus();
+                    });
+                    input.addEventListener('paste', (e) => {
+                        e.preventDefault();
+                        const raw = ((e.clipboardData || window.clipboardData).getData('text') || '').replace(/\D/g, '').slice(0, 6).split('');
+                        digits.forEach((d, i) => { d.value = raw[i] || ''; });
+                        const lastIdx = Math.min(raw.length, digits.length) - 1;
+                        if (lastIdx >= 0) digits[lastIdx].focus();
+                        setPasswordOtpError('');
+                        if (getPasswordOtpCode().length === 6) schedulePasswordOtpAutoVerify();
+                    });
+                });
+            }
+            const wire = (id, fn) => {
+                const el = document.getElementById(id);
+                if (el && !el.dataset.passwordOtpWired) { el.dataset.passwordOtpWired = '1'; el.addEventListener('click', fn); }
+            };
+            wire('passwordChangeOtpBackdrop', closePasswordChangeOtpModal);
+            wire('passwordChangeOtpCloseBtn', closePasswordChangeOtpModal);
+            wire('passwordChangeOtpCancelBtn', closePasswordChangeOtpModal);
+            wire('passwordChangeOtpVerifyBtn', verifyPasswordChangeOtp);
+            wire('passwordChangeOtpResendBtn', submitPasswordOtpResend);
+            wire('passwordLoginNowBtn', doPasswordLogoutNow);
+        }
+        wirePasswordChangeOtp();
+
+        function showPasswordChangeSuccessThenLogout() {
+            const modal = document.getElementById('passwordChangeModal');
+            const fill = document.getElementById('passwordRedirectFill');
+            const label = document.getElementById('passwordRedirectLabel');
+            if (!modal) {
+                doPasswordLogoutNow();
+                return;
+            }
+            if (passwordLogoutTimer) clearTimeout(passwordLogoutTimer);
+            if (passwordLogoutInterval) clearInterval(passwordLogoutInterval);
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            const totalMs = 5000;
+            const start = Date.now();
+            if (fill) fill.style.width = '0%';
+            if (label) label.textContent = 'Redirecting to login in 5s...';
+            passwordLogoutInterval = setInterval(() => {
+                const elapsed = Date.now() - start;
+                const pct = Math.min((elapsed / totalMs) * 100, 100);
+                if (fill) fill.style.width = pct + '%';
+                const remaining = Math.max(Math.ceil((totalMs - elapsed) / 1000), 0);
+                if (label) label.textContent = `Redirecting to login in ${remaining}s...`;
+            }, 100);
+            passwordLogoutTimer = setTimeout(() => {
+                doPasswordLogoutNow();
+            }, totalMs);
+        }
+        async function doPasswordLogoutNow() {
+            if (passwordLogoutTimer) { clearTimeout(passwordLogoutTimer); passwordLogoutTimer = null; }
+            if (passwordLogoutInterval) { clearInterval(passwordLogoutInterval); passwordLogoutInterval = null; }
+            try { localStorage.removeItem('loggedInUser'); } catch (_) {}
+            try { sessionStorage.removeItem('userData'); } catch (_) {}
+            try { await fetch('api/logout.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include', body: JSON.stringify({}) }); } catch (_) {}
+            window.location.href = 'login.html';
+        }
+        async function saveProfileFieldsAfterPasswordChange() {
+            // Persist any non-password profile edits made alongside the password change,
+            // then show the BondNest-style success + auto logout.
+            const userData = {
+                username: document.getElementById('profileUsername').value.trim(),
+                email: document.getElementById('profileEmail').value.trim(),
+                firstName: document.getElementById('profileFirstName').value.trim(),
+                lastName: document.getElementById('profileLastName').value.trim(),
+                gender: document.getElementById('profileGender').value,
+                birthday: document.getElementById('profileBirthday').value,
+                first_name: document.getElementById('profileFirstName').value.trim(),
+                last_name: document.getElementById('profileLastName').value.trim(),
+                date_of_birth: document.getElementById('profileBirthday').value
+            };
+            try {
+                const resp = await fetch('api/update_profile.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(userData)
+                });
+                await resp.json().catch(() => ({}));
+            } catch (_) {}
+            try {
+                document.getElementById('profilePassword').value = '';
+                document.getElementById('profileNewPassword').value = '';
+                document.getElementById('profileConfirmPassword').value = '';
+            } catch (_) {}
+            showPasswordChangeSuccessThenLogout();
+        }
         
         // Save Profile
         async function saveProfile(event) {
@@ -3241,6 +3707,19 @@
                 if (firstError) {
                     firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }
+                return;
+            }
+
+            const wantsPasswordChange = anyPasswordFilled();
+
+            // Password-change OTP gate (BondNest parity): verify via email code before saving
+            if (wantsPasswordChange && !window.__verifiedPasswordChange) {
+                const updateBtnGate = document.getElementById('updateProfileBtn');
+                const origLabel = updateBtnGate ? updateBtnGate.innerHTML : '';
+                if (updateBtnGate) { updateBtnGate.disabled = true; updateBtnGate.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Sending code...'; }
+                const sentEmail = await requestPasswordChangeOtp();
+                if (updateBtnGate) { updateBtnGate.innerHTML = origLabel; checkProfileRequiredFields(); }
+                if (sentEmail !== null) openPasswordChangeOtpModal(sentEmail);
                 return;
             }
             
@@ -3294,11 +3773,17 @@
                 date_of_birth: document.getElementById('profileBirthday').value
             };
             
-            if (currentPassword) {
-                userData.password = currentPassword;
-            }
-            if (newPassword) {
-                userData.newPassword = newPassword;
+            // When OTP flow already applied the new password, don't resend it via update_profile.
+            if (!window.__verifiedPasswordChange) {
+                if (currentPassword) {
+                    userData.password = currentPassword;
+                }
+                if (newPassword) {
+                    userData.newPassword = newPassword;
+                }
+                if (confirmPassword) {
+                    userData.confirmPassword = confirmPassword;
+                }
             }
             
             if (updateBtn) {
@@ -3317,7 +3802,7 @@
             .then(data => {
                 if (data.success) {
                     if (originalProfileData) originalProfileData.email = userData.email;
-                    const passwordChanged = newPassword && newPassword.length > 0;
+                    const passwordChanged = window.__verifiedPasswordChange || (newPassword && newPassword.length > 0);
                     
                     const updatedUserData = {
                         username: document.getElementById('profileUsername').value.trim(),
@@ -3340,23 +3825,13 @@
                     }
                     
                     if (passwordChanged) {
-                        // Show password change success modal
-                        const passwordModal = document.getElementById('passwordChangeModal');
-                        if (passwordModal) {
-                            passwordModal.classList.add('active');
-                            document.body.style.overflow = 'hidden';
-                        }
-                        
-                        // Redirect after giving user time to read (5 seconds).
-                        // The server session must be destroyed first: login.html
-                        // auto-redirects live sessions (admins to admin side),
-                        // so without logout the user never actually lands on login.
-                        setTimeout(async () => {
-                            localStorage.removeItem('loggedInUser');
-                            sessionStorage.removeItem('userData');
-                            try { await fetch('api/logout.php', { credentials: 'include' }); } catch (_) {}
-                            window.location.href = 'login.html';
-                        }, 5000);
+                        try {
+                            document.getElementById('profilePassword').value = '';
+                            document.getElementById('profileNewPassword').value = '';
+                            document.getElementById('profileConfirmPassword').value = '';
+                        } catch (_) {}
+                        // BondNest-style success + auto logout with progress + Log in now
+                        showPasswordChangeSuccessThenLogout();
                     } else {
                         showNotification('Profile updated successfully!', 'success');
                         // Reload the page to show updated values
@@ -3405,9 +3880,10 @@
                                     input.closest('.form-group').classList.add('error');
                                 }
                                 showNotification(errorMsg, 'error');
-                            } else if (field === 'password' && errorMsg.includes('incorrect')) {
+                            } else if (field === 'password' && errorMsg.toLowerCase().includes('incorrect')) {
                                 const errorEl = document.getElementById('profilePassword-incorrect');
                                 if (errorEl) {
+                                    errorEl.textContent = 'Current password is incorrect.';
                                     errorEl.style.display = 'block';
                                     const passwordInput = document.getElementById('profilePassword');
                                     if (passwordInput) {
@@ -3417,6 +3893,60 @@
                                             formGroup.classList.add('error');
                                         }
                                     }
+                                } else {
+                                    showNotification(errorMsg, 'error');
+                                }
+                            } else if (field === 'newPassword') {
+                                if (/different from your previous/i.test(errorMsg)) {
+                                    const sameEl = document.getElementById('profileNewPassword-same');
+                                    if (sameEl) {
+                                        sameEl.textContent = 'Please enter a password different from your previous one.';
+                                        sameEl.style.display = 'block';
+                                    }
+                                } else {
+                                    const formatEl = document.getElementById('profileNewPassword-format-error');
+                                    const reqEl = document.getElementById('profileNewPassword-error');
+                                    const target = formatEl || reqEl;
+                                    if (target) {
+                                        target.textContent = errorMsg;
+                                        target.style.display = 'block';
+                                    } else {
+                                        showNotification(errorMsg, 'error');
+                                    }
+                                }
+                                const newInput = document.getElementById('profileNewPassword');
+                                if (newInput) {
+                                    markProfileError(newInput);
+                                    const fg = newInput.closest('.form-group');
+                                    if (fg) fg.classList.add('error');
+                                }
+                            } else if (field === 'confirmPassword' || field === 'confirm_password') {
+                                if (/different from your previous/i.test(errorMsg)) {
+                                    const sameEl = document.getElementById('profileConfirmPassword-same');
+                                    if (sameEl) {
+                                        sameEl.textContent = 'Please enter a password different from your previous one.';
+                                        sameEl.style.display = 'block';
+                                    }
+                                } else if (/match/i.test(errorMsg)) {
+                                    const mEl = document.getElementById('profileConfirmPassword-match-error');
+                                    if (mEl) {
+                                        mEl.textContent = 'Passwords do not match.';
+                                        mEl.style.display = 'block';
+                                    }
+                                } else {
+                                    const reqEl = document.getElementById('profileConfirmPassword-error');
+                                    if (reqEl) {
+                                        reqEl.textContent = errorMsg;
+                                        reqEl.style.display = 'block';
+                                    } else {
+                                        showNotification(errorMsg, 'error');
+                                    }
+                                }
+                                const cInput = document.getElementById('profileConfirmPassword');
+                                if (cInput) {
+                                    markProfileError(cInput);
+                                    const fg = cInput.closest('.form-group');
+                                    if (fg) fg.classList.add('error');
                                 }
                             } else {
                                 showNotification(errorMsg, 'error');
