@@ -415,7 +415,69 @@
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Storefront pagination */
+        .shop-pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            background: white;
+            border-radius: 14px;
+            padding: 1rem 1.5rem;
             margin-bottom: 3rem;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(35, 131, 181, 0.1);
+            flex-wrap: wrap;
+        }
+
+        .shop-page-info {
+            color: #607D8B;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .shop-page-controls {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .shop-page-btn {
+            padding: 8px 16px;
+            border: 1.5px solid #D5E5ED;
+            background: white;
+            color: #155A7A;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .shop-page-btn:hover:not(:disabled) {
+            background: #2383B5;
+            color: white;
+            border-color: #2383B5;
+        }
+
+        .shop-page-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .shop-page-btn.active {
+            background: linear-gradient(135deg, #2383B5, #155A7A);
+            color: white;
+            border-color: #2383B5;
+        }
+
+        .shop-page-ellipsis {
+            padding: 8px 4px;
+            color: #607D8B;
         }
         
         /* Override Bootstrap success alert colors to blue */
@@ -1486,7 +1548,13 @@
                     <p>Loading products...</p>
                 </div>
             </div>
-            
+
+            <!-- Pagination: 2 rows x 4 products per page -->
+            <div class="shop-pagination" id="paginationContainer" style="display: none;">
+                <div class="shop-page-info" id="paginationInfo"></div>
+                <div class="shop-page-controls" id="paginationControls"></div>
+            </div>
+
         </div>
     </main>
 
@@ -1618,41 +1686,126 @@
             return false;
         }
         
-        // Search functionality
+        // Storefront pagination state: 2 rows x 4 products = 8 per page
+        let dashCurrentPage = 1;
+        const dashItemsPerPage = 8;
+        let dashSearchTerm = '';
+        let dashFilterValue = 'all';
+
+        // Search functionality (resets to page 1)
         document.getElementById('searchInput').addEventListener('input', function(e) {
-            const searchTerm = e.target.value.toLowerCase();
-            const productCards = document.querySelectorAll('.product-card');
-            
-            productCards.forEach(card => {
-                const title = card.querySelector('.product-title').textContent.toLowerCase();
-                const description = card.querySelector('.product-description').textContent.toLowerCase();
-                
-                if (title.includes(searchTerm) || description.includes(searchTerm)) {
-                    card.style.display = 'flex';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
+            dashSearchTerm = e.target.value.toLowerCase();
+            dashCurrentPage = 1;
+            renderProductGrid();
         });
-        
-        // Filter functionality
+
+        // Filter functionality (resets to page 1)
         document.getElementById('filterSelect').addEventListener('change', function(e) {
-            const filterValue = e.target.value;
-            const productCards = document.querySelectorAll('.product-card');
-            
-            productCards.forEach(card => {
-                if (filterValue === 'all') {
-                    card.style.display = 'flex';
-                } else {
-                    const category = card.getAttribute('data-category');
-                    if (category && category.toLowerCase().includes(filterValue.toLowerCase())) {
-                        card.style.display = 'flex';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                }
-            });
+            dashFilterValue = e.target.value;
+            dashCurrentPage = 1;
+            renderProductGrid();
         });
+
+        // Products matching the current search + filter
+        function getFilteredProducts() {
+            return (products || []).filter(p => {
+                if (dashFilterValue !== 'all') {
+                    const category = (p.category || '').toLowerCase();
+                    if (!category.includes(dashFilterValue.toLowerCase())) return false;
+                }
+                if (dashSearchTerm) {
+                    const title = (p.label || '').toLowerCase();
+                    const description = (p.description || '').toLowerCase();
+                    if (!title.includes(dashSearchTerm) && !description.includes(dashSearchTerm)) return false;
+                }
+                return true;
+            });
+        }
+
+        // Render the current page slice + pagination controls
+        function renderProductGrid() {
+            const filtered = getFilteredProducts();
+            const totalPages = Math.max(1, Math.ceil(filtered.length / dashItemsPerPage));
+            if (dashCurrentPage > totalPages) dashCurrentPage = totalPages;
+            const start = (dashCurrentPage - 1) * dashItemsPerPage;
+            renderProducts(filtered.slice(start, start + dashItemsPerPage));
+            renderShopPagination(filtered.length, totalPages);
+        }
+
+        function renderShopPagination(totalItems, totalPages) {
+            const container = document.getElementById('paginationContainer');
+            const info = document.getElementById('paginationInfo');
+            const controls = document.getElementById('paginationControls');
+            if (!container || !info || !controls) return;
+
+            if (totalItems === 0) {
+                container.style.display = 'none';
+                return;
+            }
+            container.style.display = 'flex';
+
+            const startItem = (dashCurrentPage - 1) * dashItemsPerPage + 1;
+            const endItem = Math.min(dashCurrentPage * dashItemsPerPage, totalItems);
+            info.textContent = `Showing ${startItem}-${endItem} of ${totalItems} products`;
+            controls.innerHTML = '';
+
+            const goTo = (page) => {
+                if (page < 1 || page > totalPages || page === dashCurrentPage) return;
+                dashCurrentPage = page;
+                renderProductGrid();
+                document.getElementById('productsGrid').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            };
+
+            const prevBtn = document.createElement('button');
+            prevBtn.type = 'button';
+            prevBtn.className = 'shop-page-btn';
+            prevBtn.innerHTML = '<i class="fas fa-chevron-left"></i> Previous';
+            prevBtn.disabled = dashCurrentPage === 1;
+            prevBtn.onclick = () => goTo(dashCurrentPage - 1);
+            controls.appendChild(prevBtn);
+
+            // Page numbers (max 5 visible)
+            let startPage = Math.max(1, dashCurrentPage - 2);
+            let endPage = Math.min(totalPages, dashCurrentPage + 2);
+            if (endPage - startPage < 4) {
+                if (startPage === 1) {
+                    endPage = Math.min(5, totalPages);
+                } else {
+                    startPage = Math.max(1, totalPages - 4);
+                }
+            }
+            const addPageBtn = (num) => {
+                const b = document.createElement('button');
+                b.type = 'button';
+                b.className = 'shop-page-btn' + (num === dashCurrentPage ? ' active' : '');
+                b.textContent = num;
+                b.onclick = () => goTo(num);
+                controls.appendChild(b);
+            };
+            const addEllipsis = () => {
+                const s = document.createElement('span');
+                s.className = 'shop-page-ellipsis';
+                s.textContent = '...';
+                controls.appendChild(s);
+            };
+            if (startPage > 1) {
+                addPageBtn(1);
+                if (startPage > 2) addEllipsis();
+            }
+            for (let i = startPage; i <= endPage; i++) addPageBtn(i);
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) addEllipsis();
+                addPageBtn(totalPages);
+            }
+
+            const nextBtn = document.createElement('button');
+            nextBtn.type = 'button';
+            nextBtn.className = 'shop-page-btn';
+            nextBtn.innerHTML = 'Next <i class="fas fa-chevron-right"></i>';
+            nextBtn.disabled = dashCurrentPage === totalPages;
+            nextBtn.onclick = () => goTo(dashCurrentPage + 1);
+            controls.appendChild(nextBtn);
+        }
         
         // Load products from API
         async function loadProducts() {
@@ -1690,7 +1843,8 @@
                         preloadProductImages(products),
                         new Promise(resolve => setTimeout(resolve, 2500))
                     ]);
-                    renderProducts(products);
+                    dashCurrentPage = 1;
+                    renderProductGrid();
                 } else {
                     console.log('No products or success=false:', data);
                     document.getElementById('productsGrid').innerHTML = '<div class="text-center text-muted" style="padding: 3rem;"><p>No products available. Please check back later.</p></div>';
