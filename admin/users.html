@@ -746,17 +746,19 @@
             flex: 1;
             overflow-y: auto;
             padding: 0 24px 24px;
-            background: #f4f8fb;
+            background: #edf2f7;
         }
         .up-profile {
-            text-align: left;
-            margin: -48px 0 16px;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin: -56px 0 16px;
             position: relative;
             z-index: 2;
         }
         .up-avatar {
-            width: 96px;
-            height: 96px;
+            width: 104px;
+            height: 104px;
             border-radius: 50%;
             background: #dbeafe;
             border: 4px solid #ffffff;
@@ -765,16 +767,16 @@
             align-items: center;
             justify-content: center;
             position: relative;
-            margin-bottom: 10px;
+            flex-shrink: 0;
         }
         .up-avatar i {
-            font-size: 2.6rem;
+            font-size: 2.8rem;
             color: #155A7A;
         }
         .up-status-dot {
             position: absolute;
-            right: 4px;
-            bottom: 6px;
+            right: 6px;
+            bottom: 8px;
             width: 18px;
             height: 18px;
             border-radius: 50%;
@@ -784,8 +786,12 @@
         .up-status-dot.suspended {
             background: #ef4444;
         }
+        .up-idblock {
+            min-width: 0;
+            padding-top: 56px;
+        }
         .up-name {
-            font-size: 1.3rem;
+            font-size: 1.35rem;
             font-weight: 800;
             color: #0f172a;
             margin: 0 0 2px;
@@ -869,17 +875,25 @@
             align-items: center;
             justify-content: center;
         }
-        .up-grid {
+        .up-rows {
+            margin-top: 0.25rem;
+        }
+        .up-row {
+            padding: 0.55rem 0;
+            border-bottom: 1px solid #eef2f6;
+        }
+        .up-row:last-child {
+            border-bottom: none;
+            padding-bottom: 0.1rem;
+        }
+        .up-row.cols2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 0.4rem 1.5rem;
+            gap: 1.5rem;
         }
         .up-field {
-            padding: 0.45rem 0;
+            padding: 0;
             min-width: 0;
-        }
-        .up-field.full {
-            grid-column: 1 / -1;
         }
         .up-label {
             font-size: 0.68rem;
@@ -1885,28 +1899,34 @@
                         <i class="fas fa-user"></i>
                         <span class="up-status-dot${isSuspended ? ' suspended' : ''}"></span>
                     </div>
-                    <h3 class="up-name">${escapeHtml(fullName)}</h3>
-                    <p class="up-sub">@${escapeHtml(user.username || '')} &middot; ${escapeHtml(user.email || '')}</p>
-                    <div class="up-pills">
-                        ${rolePill}
-                        ${statusPill}
+                    <div class="up-idblock">
+                        <h3 class="up-name">${escapeHtml(fullName)}</h3>
+                        <p class="up-sub">@${escapeHtml(user.username || '')} &middot; ${escapeHtml(user.email || '')}</p>
+                        <div class="up-pills">
+                            ${rolePill}
+                            ${statusPill}
+                        </div>
                     </div>
                 </div>
 
                 <div class="up-card">
                     <h4 class="up-card-title"><i class="fas fa-user"></i> Account Info</h4>
-                    <div class="up-grid">
-                        <div class="up-field">
-                            <div class="up-label">User ID</div>
-                            <div class="up-value">#${user.id}</div>
+                    <div class="up-rows">
+                        <div class="up-row cols2">
+                            <div class="up-field">
+                                <div class="up-label">User ID</div>
+                                <div class="up-value">#${user.id}</div>
+                            </div>
+                            <div class="up-field">
+                                <div class="up-label">Username</div>
+                                <div class="up-value">${escapeHtml(user.username || 'N/A')}</div>
+                            </div>
                         </div>
-                        <div class="up-field">
-                            <div class="up-label">Username</div>
-                            <div class="up-value">${escapeHtml(user.username || 'N/A')}</div>
-                        </div>
-                        <div class="up-field full">
-                            <div class="up-label">Email</div>
-                            <div class="up-value">${escapeHtml(user.email || 'N/A')}</div>
+                        <div class="up-row">
+                            <div class="up-field">
+                                <div class="up-label">Email</div>
+                                <div class="up-value">${escapeHtml(user.email || 'N/A')}</div>
+                            </div>
                         </div>
                     </div>
                     ${reasonHtml}
@@ -1914,18 +1934,22 @@
 
                 <div class="up-card">
                     <h4 class="up-card-title"><i class="fas fa-id-card"></i> Personal Info</h4>
-                    <div class="up-grid">
-                        <div class="up-field">
-                            <div class="up-label">Full Name</div>
-                            <div class="up-value">${escapeHtml(fullName)}</div>
+                    <div class="up-rows">
+                        <div class="up-row cols2">
+                            <div class="up-field">
+                                <div class="up-label">Full Name</div>
+                                <div class="up-value">${escapeHtml(fullName)}</div>
+                            </div>
+                            <div class="up-field">
+                                <div class="up-label">Gender</div>
+                                <div class="up-value">${formatGender(user.gender)}</div>
+                            </div>
                         </div>
-                        <div class="up-field">
-                            <div class="up-label">Gender</div>
-                            <div class="up-value">${formatGender(user.gender)}</div>
-                        </div>
-                        <div class="up-field full">
-                            <div class="up-label">Birthday</div>
-                            <div class="up-value">${user.date_of_birth ? formatDate(user.date_of_birth) : 'N/A'}</div>
+                        <div class="up-row">
+                            <div class="up-field">
+                                <div class="up-label">Birthday</div>
+                                <div class="up-value">${user.date_of_birth ? formatDate(user.date_of_birth) : 'N/A'}</div>
+                            </div>
                         </div>
                     </div>
                 </div>
