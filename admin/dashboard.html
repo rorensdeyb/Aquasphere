@@ -579,6 +579,16 @@
             color: #b45309;
         }
 
+        .dash-panels > div {
+            display: flex;
+        }
+
+        .dash-panels .content-card {
+            flex: 1;
+            width: 100%;
+            margin-bottom: 0;
+        }
+
         @media (max-width: 992px) {
             .dash-top {
                 grid-template-columns: 1fr;
@@ -708,7 +718,7 @@
         </div>
 
         <!-- Orders by Status and Recent Orders -->
-        <div class="row">
+        <div class="row dash-panels">
             <div class="col-lg-6">
                 <div class="content-card">
                     <h5>Orders by Status</h5>
