@@ -511,27 +511,20 @@
             padding: 60px 20px;
         }
 
-        .view-all-orders {
-            display: flex;
+        .view-all-link {
+            display: inline-flex;
             align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            margin-top: 1rem;
-            padding: 0.8rem;
-            border-radius: 12px;
-            background: #f0f7fc;
-            border: 1px solid #d8e8f3;
-            color: #155A7A;
+            gap: 0.35rem;
+            color: #2383B5;
             font-weight: 700;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             text-decoration: none;
-            transition: all 0.2s ease;
+            white-space: nowrap;
+            transition: color 0.2s ease;
         }
 
-        .view-all-orders:hover {
-            background: #2383B5;
-            border-color: #2383B5;
-            color: #ffffff;
+        .view-all-link:hover {
+            color: #155A7A;
         }
 
         .recent-empty i {
@@ -642,6 +635,12 @@
                 </a>
             </li>
             <li>
+                <a href="recent_orders.html">
+                    <i class="fas fa-history"></i>
+                    Recent Orders
+                </a>
+            </li>
+            <li>
                 <a href="products.html">
                     <i class="fas fa-box"></i>
                     Product Management
@@ -723,6 +722,10 @@
                 <div class="content-card">
                     <div class="recent-head">
                         <h5>Recent Orders</h5>
+                        <a href="recent_orders.html" class="view-all-link">
+                            View All
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
                     </div>
                     <div id="recent-orders-list">
                         <div class="recent-empty">
@@ -730,10 +733,6 @@
                             <p style="margin: 0;">Loading...</p>
                         </div>
                     </div>
-                    <a href="orders.html" class="view-all-orders">
-                        View All Orders
-                        <i class="fas fa-arrow-right"></i>
-                    </a>
                 </div>
             </div>
         </div>
