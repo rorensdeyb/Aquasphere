@@ -680,13 +680,35 @@
             transform: translateX(0);
         }
         .user-panel-header {
-            background: linear-gradient(135deg, #2383B5, #155A7A);
+            background: linear-gradient(135deg, #155A7A 0%, #2383B5 100%);
             color: white;
-            padding: 20px 24px;
+            padding: 22px 24px 64px;
             display: flex;
             align-items: center;
             gap: 14px;
             flex-shrink: 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .user-panel-header::before {
+            content: '';
+            position: absolute;
+            top: -70px;
+            right: -40px;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+        }
+        .user-panel-header::after {
+            content: '';
+            position: absolute;
+            bottom: -90px;
+            right: 90px;
+            width: 170px;
+            height: 170px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.06);
         }
         .user-panel-back {
             background: rgba(255,255,255,0.15);
@@ -694,137 +716,236 @@
             color: white;
             width: 36px;
             height: 36px;
-            border-radius: 10px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             transition: background 0.2s;
             flex-shrink: 0;
+            position: relative;
+            z-index: 1;
         }
         .user-panel-back:hover {
             background: rgba(255,255,255,0.3);
         }
+        .user-panel-header-info {
+            position: relative;
+            z-index: 1;
+        }
         .user-panel-header-info h3 {
             margin: 0;
-            font-size: 1.15rem;
+            font-size: 1.2rem;
             font-weight: 700;
         }
         .user-panel-header-info small {
-            opacity: 0.8;
-            font-size: 0.82rem;
+            opacity: 0.75;
+            font-size: 0.8rem;
         }
         .user-panel-body {
             flex: 1;
             overflow-y: auto;
-            padding: 24px;
+            padding: 0 24px 24px;
+            background: #f4f8fb;
         }
-        .user-panel-avatar {
-            width: 72px;
-            height: 72px;
+        .up-profile {
+            text-align: left;
+            margin: -48px 0 16px;
+            position: relative;
+            z-index: 2;
+        }
+        .up-avatar {
+            width: 96px;
+            height: 96px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #e0f2fe, #bfdbfe);
+            background: #dbeafe;
+            border: 4px solid #ffffff;
+            box-shadow: 0 6px 18px rgba(21, 90, 122, 0.25);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 20px;
-            box-shadow: 0 4px 14px rgba(14, 165, 233, 0.25);
+            position: relative;
+            margin-bottom: 10px;
         }
-        .user-panel-avatar i {
-            font-size: 2rem;
+        .up-avatar i {
+            font-size: 2.6rem;
             color: #155A7A;
         }
-        .user-panel-section {
-            margin-bottom: 0;
-            background: #f8fbfe;
-            border: 1px solid #e8f1f8;
-            border-radius: 10px;
-            padding: 14px 16px;
-            margin-bottom: 12px;
+        .up-status-dot {
+            position: absolute;
+            right: 4px;
+            bottom: 6px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 3px solid #ffffff;
+            background: #22c55e;
         }
-        .user-panel-section:last-child {
-            margin-bottom: 0;
+        .up-status-dot.suspended {
+            background: #ef4444;
         }
-        .user-panel-section-title {
-            font-size: 0.68rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #2383B5;
-            margin-bottom: 10px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid #D5E5ED;
+        .up-name {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin: 0 0 2px;
+            overflow-wrap: anywhere;
+        }
+        .up-sub {
+            font-size: 0.82rem;
+            color: #7d93a5;
+            margin: 0 0 10px;
+            overflow-wrap: anywhere;
+        }
+        .up-pills {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 0.5rem;
+            flex-wrap: wrap;
         }
-        .user-panel-section-title i {
-            font-size: 0.7rem;
-            color: #155A7A;
-        }
-        .user-panel-field {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            padding: 8px 0;
-        }
-        .user-panel-field:not(:last-child) {
-            border-bottom: 1px solid #f1f5f9;
-        }
-        .user-panel-field-label {
-            font-size: 0.82rem;
-            color: #607D8B;
-            font-weight: 500;
-            flex-shrink: 0;
-            margin-right: 12px;
-        }
-        .user-panel-field-value {
-            font-size: 0.88rem;
-            color: #0f172a;
-            font-weight: 600;
-            text-align: right;
-            word-break: break-word;
-        }
-        .user-panel-status-badge {
+        .up-role {
             display: inline-flex;
             align-items: center;
-            gap: 5px;
-            padding: 4px 12px;
+            gap: 0.35rem;
+            background: #475569;
+            color: #ffffff;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.3rem 0.85rem;
             border-radius: 20px;
-            font-size: 0.78rem;
-            font-weight: 600;
         }
-        .user-panel-status-badge.active {
+        .up-role.admin {
+            background: #dc2626;
+        }
+        .up-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.3rem 0.85rem;
+            border-radius: 20px;
+        }
+        .up-status.active {
             background: #dcfce7;
-            color: #166534;
+            color: #15803d;
         }
-        .user-panel-status-badge.suspended {
-            background: #fef2f2;
-            color: #b84252;
+        .up-status.suspended {
+            background: #fee2e2;
+            color: #b91c1c;
         }
-        .user-panel-reason-box {
+        .up-card {
+            background: #ffffff;
+            border: 1px solid #e3ecf2;
+            border-radius: 16px;
+            padding: 1rem 1.15rem;
+            margin-bottom: 0.9rem;
+            box-shadow: 0 2px 8px rgba(21, 90, 122, 0.05);
+        }
+        .up-card:last-child {
+            margin-bottom: 0;
+        }
+        .up-card-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            color: #2383B5;
+            margin: 0 0 0.25rem;
+            padding-bottom: 0.6rem;
+            border-bottom: 1px solid #e6edf3;
+        }
+        .up-card-title i {
+            font-size: 0.8rem;
+            color: #2383B5;
+            background: #e8f3fa;
+            width: 26px;
+            height: 26px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .up-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.4rem 1.5rem;
+        }
+        .up-field {
+            padding: 0.45rem 0;
+            min-width: 0;
+        }
+        .up-field.full {
+            grid-column: 1 / -1;
+        }
+        .up-label {
+            font-size: 0.68rem;
+            font-weight: 600;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            color: #7d93a5;
+            margin-bottom: 0.15rem;
+        }
+        .up-value {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #0f172a;
+            overflow-wrap: anywhere;
+        }
+        .up-reason-box {
             background: #fef2f2;
             border: 1px solid #f8b4bf;
             border-radius: 10px;
-            padding: 12px 14px;
-            margin-top: 8px;
+            padding: 0.7rem 0.85rem;
+            margin-top: 0.6rem;
         }
-        .user-panel-reason-box .reason-label {
-            font-size: 0.72rem;
+        .up-reason-box .reason-label {
+            font-size: 0.7rem;
             font-weight: 700;
             text-transform: uppercase;
+            letter-spacing: 0.6px;
             color: #b84252;
-            margin-bottom: 4px;
+            margin-bottom: 0.25rem;
         }
-        .user-panel-reason-box .reason-text {
+        .up-reason-box .reason-text {
             font-size: 0.85rem;
             color: #4a1523;
             line-height: 1.5;
+            overflow-wrap: anywhere;
         }
-        .user-panel-content-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 0;
+        .up-timeline {
+            position: relative;
+            padding-left: 1.1rem;
+            margin-top: 0.3rem;
+        }
+        .up-timeline::before {
+            content: '';
+            position: absolute;
+            left: 4px;
+            top: 8px;
+            bottom: 8px;
+            width: 2px;
+            background: #d8e4ec;
+            border-radius: 2px;
+        }
+        .up-timeline-item {
+            position: relative;
+            padding: 0.45rem 0;
+        }
+        .up-timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -1.1rem;
+            top: 0.85rem;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #2383B5;
+            border: 2px solid #ffffff;
+            box-shadow: 0 0 0 2px #d8e4ec;
         }
 
         /* Center notice */
@@ -1732,78 +1853,87 @@
             const isSuspended = parseInt(user.suspended || 0) === 1;
             const fullName = [user.first_name, user.last_name].filter(Boolean).join(' ') || 'N/A';
 
-            title.textContent = user.username || 'User Details';
-            subtitle.textContent = user.email || '';
+            title.textContent = 'User Details';
+            subtitle.textContent = 'Account overview';
 
-            let statusHtml = isSuspended
-                ? '<span class="user-panel-status-badge suspended"><i class="fas fa-ban"></i> Suspended</span>'
-                : '<span class="user-panel-status-badge active"><i class="fas fa-check-circle"></i> Active</span>';
+            const statusPill = isSuspended
+                ? '<span class="up-status suspended"><i class="fas fa-ban"></i> Suspended</span>'
+                : '<span class="up-status active"><i class="fas fa-check"></i> Active</span>';
+
+            const rolePill = user.is_admin == 1
+                ? '<span class="up-role admin"><i class="fas fa-tag"></i> Admin</span>'
+                : '<span class="up-role"><i class="fas fa-tag"></i> User</span>';
 
             let reasonHtml = '';
             if (isSuspended && user.suspension_reason) {
                 reasonHtml = `
-                    <div class="user-panel-reason-box">
+                    <div class="up-reason-box">
                         <div class="reason-label"><i class="fas fa-exclamation-triangle me-1"></i> Suspension Reason</div>
                         <div class="reason-text">${escapeHtml(user.suspension_reason)}</div>
                     </div>`;
             }
 
             body.innerHTML = `
-                <div class="user-panel-avatar">
-                    <i class="fas fa-user"></i>
+                <div class="up-profile">
+                    <div class="up-avatar">
+                        <i class="fas fa-user"></i>
+                        <span class="up-status-dot${isSuspended ? ' suspended' : ''}"></span>
+                    </div>
+                    <h3 class="up-name">${escapeHtml(fullName)}</h3>
+                    <p class="up-sub">@${escapeHtml(user.username || '')} &middot; ${escapeHtml(user.email || '')}</p>
+                    <div class="up-pills">
+                        ${rolePill}
+                        ${statusPill}
+                    </div>
                 </div>
 
-                <div class="user-panel-content-grid">
-                    <div class="user-panel-section">
-                        <div class="user-panel-section-title"><i class="fas fa-user-shield"></i> Account Info</div>
-                        <div class="user-panel-field">
-                            <span class="user-panel-field-label">User ID</span>
-                            <span class="user-panel-field-value">#${user.id}</span>
+                <div class="up-card">
+                    <h4 class="up-card-title"><i class="fas fa-user"></i> Account Info</h4>
+                    <div class="up-grid">
+                        <div class="up-field">
+                            <div class="up-label">User ID</div>
+                            <div class="up-value">#${user.id}</div>
                         </div>
-                        <div class="user-panel-field">
-                            <span class="user-panel-field-label">Username</span>
-                            <span class="user-panel-field-value">${escapeHtml(user.username || 'N/A')}</span>
+                        <div class="up-field">
+                            <div class="up-label">Username</div>
+                            <div class="up-value">${escapeHtml(user.username || 'N/A')}</div>
                         </div>
-                        <div class="user-panel-field">
-                            <span class="user-panel-field-label">Email</span>
-                            <span class="user-panel-field-value">${escapeHtml(user.email || 'N/A')}</span>
-                        </div>
-                        <div class="user-panel-field">
-                            <span class="user-panel-field-label">Role</span>
-                            <span class="user-panel-field-value">${user.is_admin == 1 ? '<span class="badge bg-danger">Admin</span>' : '<span class="badge bg-secondary">User</span>'}</span>
-                        </div>
-                        <div class="user-panel-field">
-                            <span class="user-panel-field-label">Status</span>
-                            <span class="user-panel-field-value">${statusHtml}</span>
-                        </div>
-                        ${reasonHtml}
-                    </div>
-
-                    <div class="user-panel-section">
-                        <div class="user-panel-section-title"><i class="fas fa-id-card"></i> Personal Info</div>
-                        <div class="user-panel-field">
-                            <span class="user-panel-field-label">Full Name</span>
-                            <span class="user-panel-field-value">${escapeHtml(fullName)}</span>
-                        </div>
-                        <div class="user-panel-field">
-                            <span class="user-panel-field-label">Gender</span>
-                            <span class="user-panel-field-value">${formatGender(user.gender)}</span>
-                        </div>
-                        <div class="user-panel-field">
-                            <span class="user-panel-field-label">Birthday</span>
-                            <span class="user-panel-field-value">${user.date_of_birth ? formatDate(user.date_of_birth) : 'N/A'}</span>
+                        <div class="up-field full">
+                            <div class="up-label">Email</div>
+                            <div class="up-value">${escapeHtml(user.email || 'N/A')}</div>
                         </div>
                     </div>
+                    ${reasonHtml}
+                </div>
 
-                    <div class="user-panel-section">
-                        <div class="user-panel-section-title"><i class="fas fa-clock"></i> Activity</div>
-                        <div class="user-panel-field">
-                            <span class="user-panel-field-label">Joined</span>
-                            <span class="user-panel-field-value">${formatDate(user.created_at)}</span>
+                <div class="up-card">
+                    <h4 class="up-card-title"><i class="fas fa-id-card"></i> Personal Info</h4>
+                    <div class="up-grid">
+                        <div class="up-field">
+                            <div class="up-label">Full Name</div>
+                            <div class="up-value">${escapeHtml(fullName)}</div>
                         </div>
-                        <div class="user-panel-field">
-                            <span class="user-panel-field-label">Last Login</span>
-                            <span class="user-panel-field-value">${user.last_login ? formatDate(user.last_login) : 'Never'}</span>
+                        <div class="up-field">
+                            <div class="up-label">Gender</div>
+                            <div class="up-value">${formatGender(user.gender)}</div>
+                        </div>
+                        <div class="up-field full">
+                            <div class="up-label">Birthday</div>
+                            <div class="up-value">${user.date_of_birth ? formatDate(user.date_of_birth) : 'N/A'}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="up-card">
+                    <h4 class="up-card-title"><i class="fas fa-clock"></i> Activity</h4>
+                    <div class="up-timeline">
+                        <div class="up-timeline-item">
+                            <div class="up-label">Joined</div>
+                            <div class="up-value">${formatDate(user.created_at)}</div>
+                        </div>
+                        <div class="up-timeline-item">
+                            <div class="up-label">Last Login</div>
+                            <div class="up-value">${user.last_login ? formatDate(user.last_login) : 'Never'}</div>
                         </div>
                     </div>
                 </div>
