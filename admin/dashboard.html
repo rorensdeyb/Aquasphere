@@ -447,7 +447,7 @@
             display: flex;
             align-items: center;
             gap: 0.9rem;
-            padding: 0.8rem 0;
+            padding: 1rem 0;
             border-bottom: 1px solid #eef2f6;
         }
 
@@ -474,19 +474,19 @@
         }
 
         .recent-who strong {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             color: #0f172a;
         }
 
         .recent-who small {
-            font-size: 0.76rem;
+            font-size: 0.8rem;
             color: #94a3b8;
         }
 
         .recent-amount {
             font-weight: 800;
             color: #0f172a;
-            font-size: 0.92rem;
+            font-size: 0.95rem;
             white-space: nowrap;
         }
 
@@ -509,6 +509,29 @@
             text-align: center;
             color: #94a3b8;
             padding: 60px 20px;
+        }
+
+        .view-all-orders {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            padding: 0.8rem;
+            border-radius: 12px;
+            background: #f0f7fc;
+            border: 1px solid #d8e8f3;
+            color: #155A7A;
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .view-all-orders:hover {
+            background: #2383B5;
+            border-color: #2383B5;
+            color: #ffffff;
         }
 
         .recent-empty i {
@@ -700,19 +723,6 @@
                 <div class="content-card">
                     <div class="recent-head">
                         <h5>Recent Orders</h5>
-                        <nav aria-label="Recent orders pagination" id="recent-orders-pagination" style="display: none; margin-bottom: 0.3rem;">
-                            <ul class="pagination pagination-sm justify-content-end mb-0">
-                                <li class="page-item">
-                                    <button class="page-link" id="recent-prev" type="button">Prev</button>
-                                </li>
-                                <li class="page-item">
-                                    <span class="page-link bg-light border-0 text-muted" id="recent-page-indicator">1</span>
-                                </li>
-                                <li class="page-item">
-                                    <button class="page-link" id="recent-next" type="button">Next</button>
-                                </li>
-                            </ul>
-                        </nav>
                     </div>
                     <div id="recent-orders-list">
                         <div class="recent-empty">
@@ -720,6 +730,10 @@
                             <p style="margin: 0;">Loading...</p>
                         </div>
                     </div>
+                    <a href="orders.html" class="view-all-orders">
+                        View All Orders
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
                 </div>
             </div>
         </div>
@@ -862,10 +876,11 @@
             }
         }
         
-        // Display recent orders with pagination (7 per page)
+        // Display recent orders preview (fixed 5 latest, full list lives on orders.html)
+        const recentPreviewCount = 5;
+
         function displayRecentOrders(orders) {
             recentOrdersData = orders || [];
-            recentCurrentPage = 1;
             renderRecentOrdersPage();
         }
         
@@ -885,28 +900,19 @@
 
         function renderRecentOrdersPage() {
             const list = document.getElementById('recent-orders-list');
-            const total = recentOrdersData.length;
+            const preview = recentOrdersData.slice(0, recentPreviewCount);
 
-            if (total === 0) {
+            if (preview.length === 0) {
                 list.innerHTML = `
                     <div class="recent-empty">
                         <i class="fas fa-inbox"></i>
                         <p style="margin: 0;">No recent orders yet. Start ordering to see them here!</p>
                     </div>
                 `;
-                toggleRecentPagination(false);
                 return;
             }
 
-            const totalPages = Math.ceil(total / recentPerPage);
-            if (recentCurrentPage > totalPages) {
-                recentCurrentPage = totalPages;
-            }
-
-            const start = (recentCurrentPage - 1) * recentPerPage;
-            const paginated = recentOrdersData.slice(start, start + recentPerPage);
-
-            list.innerHTML = paginated.map(order => {
+            list.innerHTML = preview.map(order => {
                 const status = (order.status || '').toLowerCase();
                 const statusLabel = (order.status || '').replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
 
@@ -922,8 +928,6 @@
                     </div>
                 `;
             }).join('');
-
-            updateRecentPagination(totalPages);
         }
         
         function updateRecentPagination(totalPages) {
