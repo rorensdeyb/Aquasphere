@@ -210,6 +210,252 @@
             color: white;
         }
         
+        .page-header {
+            background: transparent;
+            box-shadow: none;
+            padding: 0;
+            margin-bottom: 1.25rem;
+            display: block;
+        }
+
+        .page-header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #155A7A;
+            margin: 0;
+        }
+
+        .page-header p {
+            color: #7d93a5;
+            margin: 0.25rem 0 0 0;
+            font-size: 0.92rem;
+        }
+
+        .users-card-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .users-card-title {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 0;
+        }
+
+        .users-count-pill {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #2383B5;
+            background: #e8f3fa;
+            padding: 0.25rem 0.7rem;
+            border-radius: 20px;
+            white-space: nowrap;
+        }
+
+        .users-search-wrap {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .users-search-box {
+            position: relative;
+        }
+
+        .users-search-box > i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #7d93a5;
+            font-size: 0.85rem;
+            pointer-events: none;
+        }
+
+        .users-search-box input {
+            border-radius: 10px;
+            border: 1.5px solid #cfdfe9;
+            padding: 9px 14px 9px 38px;
+            font-size: 0.88rem;
+            width: 300px;
+            max-width: 100%;
+        }
+
+        .users-search-box input:focus {
+            border-color: #2383B5;
+            box-shadow: 0 0 0 3px rgba(35, 131, 181, 0.12);
+            outline: none;
+        }
+
+        .users-search-btn {
+            background: linear-gradient(135deg, #2383B5, #155A7A);
+            border: none;
+            color: white;
+            border-radius: 10px;
+            padding: 9px 20px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+            white-space: nowrap;
+        }
+
+        .users-search-btn:hover {
+            filter: brightness(1.08);
+            color: white;
+        }
+
+        .users-table thead th {
+            background-color: #f1f6fa;
+            font-weight: 700;
+            color: #607D8B;
+            text-transform: uppercase;
+            font-size: 0.72rem;
+            letter-spacing: 0.6px;
+            border-bottom: none;
+            padding: 0.7rem 0.75rem;
+            white-space: nowrap;
+        }
+
+        .users-table thead th:first-child {
+            border-radius: 10px 0 0 10px;
+        }
+
+        .users-table thead th:last-child {
+            border-radius: 0 10px 10px 0;
+        }
+
+        .users-table tbody td {
+            padding: 0.8rem 0.75rem;
+            font-size: 0.88rem;
+            vertical-align: middle;
+            border-bottom: 1px solid #eef2f6;
+        }
+
+        .user-cell {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            min-width: 0;
+        }
+
+        .user-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .user-names {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            line-height: 1.35;
+        }
+
+        .user-names strong {
+            color: #0f172a;
+            font-size: 0.88rem;
+            white-space: nowrap;
+        }
+
+        .user-names small {
+            color: #7d93a5;
+            font-size: 0.78rem;
+        }
+
+        .u-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.28rem 0.8rem;
+            border-radius: 20px;
+            white-space: nowrap;
+        }
+
+        .u-pill .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        .u-role-user { background: #eef2f6; color: #475569; }
+        .u-role-admin { background: #fee2e2; color: #dc2626; }
+        .u-status-active { background: #dcfce7; color: #15803d; }
+        .u-status-suspended { background: #fee2e2; color: #b91c1c; }
+
+        .u-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            white-space: nowrap;
+        }
+
+        .u-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: filter 0.2s ease;
+            padding: 0.5rem 0.7rem;
+        }
+
+        .u-btn:hover {
+            filter: brightness(0.96);
+        }
+
+        .u-view {
+            background: #e3f0fa;
+            color: #155A7A;
+        }
+
+        .u-suspend {
+            background: #fee2e2;
+            color: #dc2626;
+            padding: 0.5rem 0.9rem;
+        }
+
+        .u-lift {
+            background: #dcfce7;
+            color: #15803d;
+            padding: 0.5rem 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .users-search-box input {
+                width: 100%;
+            }
+
+            .users-search-wrap {
+                width: 100%;
+            }
+        }
+
         /* Modal Styles */
         .modal-header {
             background: linear-gradient(135deg, #2383B5, #155A7A);
@@ -684,28 +930,31 @@
     <!-- Main Content -->
     <div class="main-content">
         <div class="page-header">
-            <h1><i class="fas fa-users me-2"></i>User Management</h1>
-            <div>
-                <span class="badge bg-primary" id="totalUsersCount">0 Users</span>
-            </div>
+            <h1>User Management</h1>
+            <p>View and manage registered accounts</p>
         </div>
 
         <div class="content-card">
-            <div class="search-bar">
-                <input type="text" class="form-control" id="searchInput" placeholder="Search by username, email, or name..." autocomplete="off">
-                <button class="btn btn-primary" onclick="loadUsers()">
-                    <i class="fas fa-search"></i> Search
-                </button>
+            <div class="users-card-head">
+                <h5 class="users-card-title">All Users <span class="users-count-pill" id="totalUsersCount">0 Users</span></h5>
+                <div class="users-search-wrap">
+                    <div class="users-search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchInput" placeholder="Search by username, email, or name..." autocomplete="off">
+                    </div>
+                    <button class="users-search-btn" onclick="loadUsers()">
+                        <i class="fas fa-search"></i> Search
+                    </button>
+                </div>
             </div>
-            
+
             <div class="table-responsive">
-                <table class="table table-hover">
+                <table class="table table-hover users-table">
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Username</th>
+                            <th>User</th>
                             <th>Email</th>
-                            <th>Name</th>
                             <th>Gender</th>
                             <th>Role</th>
                             <th>Joined</th>
@@ -716,7 +965,7 @@
                     </thead>
                     <tbody id="usersTableBody">
                         <tr>
-                            <td colspan="10" class="text-center text-muted">Loading users...</td>
+                            <td colspan="9" class="text-center text-muted">Loading users...</td>
                         </tr>
                     </tbody>
                 </table>
@@ -929,7 +1178,7 @@
             const tbody = document.getElementById('usersTableBody');
             
             if (users.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="10" class="text-center text-muted">No users found</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="9" class="text-center text-muted">No users found</td></tr>';
                 return;
             }
             
@@ -951,40 +1200,63 @@
             tbody.innerHTML = users.map(user => {
                 const isSuspended = parseInt(user.suspended || 0) === 1;
                 const statusBadge = isSuspended
-                    ? '<span class="badge bg-danger">Suspended</span>'
-                    : '<span class="badge bg-success">Active</span>';
-                
+                    ? '<span class="u-pill u-status-suspended"><span class="dot"></span>Suspended</span>'
+                    : '<span class="u-pill u-status-active"><span class="dot"></span>Active</span>';
+
                 const reasonParam = encodeURIComponent(user.suspension_reason || '');
                 const emailParam = encodeURIComponent(user.email || '');
-                const viewBtn = `<button class="btn btn-view btn-sm" onclick="openUserPanel(${user.id})" title="View Details">
+                const viewBtn = `<button class="u-btn u-view" onclick="openUserPanel(${user.id})" title="View Details">
                     <i class="fas fa-eye"></i>
                 </button>`;
                 const suspendBtn = user.is_admin == 1 ? '' : `
-                    <button class="btn ${isSuspended ? 'btn-success' : 'btn-delete'} btn-sm" onclick="showSuspendModal(${user.id}, '${escapeHtml(user.username)}', ${isSuspended ? 1 : 0}, '${reasonParam}', '${emailParam}')">
+                    <button class="u-btn ${isSuspended ? 'u-lift' : 'u-suspend'}" onclick="showSuspendModal(${user.id}, '${escapeHtml(user.username)}', ${isSuspended ? 1 : 0}, '${reasonParam}', '${emailParam}')">
                         <i class="fas ${isSuspended ? 'fa-unlock' : 'fa-ban'}"></i> ${isSuspended ? 'Lift Suspension' : 'Suspend'}
                     </button>`;
+
+                const fullName = ((user.first_name || '') + ' ' + (user.last_name || '')).trim() || 'N/A';
+                const initial = ((user.first_name || user.username || '?').charAt(0) || '?').toUpperCase();
 
                 return `
                 <tr>
                     <td>${user.id}</td>
-                    <td><strong>${highlightText(user.username, searchTerm)}</strong></td>
+                    <td>
+                        <div class="user-cell">
+                            <span class="user-avatar" style="background: ${avatarColor(user.username)};">${escapeHtml(initial)}</span>
+                            <span class="user-names">
+                                <strong>${highlightText(fullName, searchTerm)}</strong>
+                                <small>@${highlightText(user.username, searchTerm)}</small>
+                            </span>
+                        </div>
+                    </td>
                     <td>${highlightText(user.email || 'N/A', searchTerm)}</td>
-                    <td>${highlightText((user.first_name || '') + ' ' + (user.last_name || '') || 'N/A', searchTerm)}</td>
                     <td>${formatGender(user.gender)}</td>
                     <td>
-                        ${user.is_admin == 1 
-                            ? '<span class="badge bg-danger">Admin</span>' 
-                            : '<span class="badge bg-secondary">User</span>'}
+                        ${user.is_admin == 1
+                            ? '<span class="u-pill u-role-admin">Admin</span>'
+                            : '<span class="u-pill u-role-user">User</span>'}
                     </td>
                     <td>${formatDate(user.created_at)}</td>
                     <td>${user.last_login ? formatDate(user.last_login) : 'Never'}</td>
                     <td>${statusBadge}</td>
-                    <td class="actions-cell">
-                        ${viewBtn}
-                        ${suspendBtn}
+                    <td>
+                        <div class="u-actions">
+                            ${viewBtn}
+                            ${suspendBtn}
+                        </div>
                     </td>
                 </tr>`;
             }).join('');
+        }
+
+        // Avatar background picked from the username so each user keeps one color
+        function avatarColor(username) {
+            const palette = ['#2383B5', '#14b8a6', '#e05260', '#8b5cf6', '#f59e0b', '#22c55e', '#ef6c9c'];
+            const name = String(username || '?');
+            let hash = 0;
+            for (let i = 0; i < name.length; i++) {
+                hash = (hash * 31 + name.charCodeAt(i)) >>> 0;
+            }
+            return palette[hash % palette.length];
         }
         
         // Display pagination
