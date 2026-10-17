@@ -295,197 +295,477 @@
             box-shadow: 0 0 0 0.2rem rgba(14, 165, 233, 0.25);
         }
 
-        /* Order details modal - Enhanced Design */
+        /* Order details modal - Redesigned */
         .order-details-modal .modal-dialog {
-            max-width: 900px;
+            max-width: 1060px;
         }
-        .order-details-modal .modal-header {
-            background: linear-gradient(135deg, #2383B5 0%, #155A7A 100%);
-            color: white;
+        .order-details-modal .modal-content {
             border: none;
-            padding: 1.1rem 1.5rem;
+            border-radius: 22px;
+            overflow: hidden;
+            box-shadow: 0 34px 90px rgba(0, 0, 0, 0.40);
         }
-        .order-details-modal .modal-header .modal-title {
-            color: white;
-            font-weight: 700;
+        .odm-header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #2C8FBA 0%, #14607F 100%);
+            color: #ffffff;
+            padding: 1.1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            border: none;
+        }
+        .odm-header::after {
+            content: '';
+            position: absolute;
+            right: -50px;
+            top: -80px;
+            width: 240px;
+            height: 240px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.10);
+            pointer-events: none;
+        }
+        .odm-head-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            position: relative;
+            z-index: 1;
+        }
+        .odm-head-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.18);
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 1.2rem;
         }
-        .order-details-modal .modal-header .btn-close {
-            filter: invert(1);
-            opacity: 0.9;
+        .odm-title {
+            margin: 0;
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.2;
         }
-        .order-details-modal .modal-header .btn-close:hover {
-            opacity: 1;
+        .odm-head-sub {
+            margin: 2px 0 0;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.82);
         }
-        .order-details-modal .modal-body {
-            background: linear-gradient(to bottom, #EAF7FC 0%, #ffffff 100%);
-            padding: 1.75rem;
-        }
-        .detail-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 0.75rem;
-            margin-bottom: 1rem;
-        }
-        .detail-grid.top-row {
-            grid-template-columns: 2fr 1fr;
-        }
-        .detail-card {
-            background: linear-gradient(135deg, #ffffff 0%, #EAF7FC 100%);
-            border: 1.5px solid #D5E5ED;
-            border-radius: 10px;
-            padding: 1rem 1.15rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.04);
-            position: relative;
-            overflow: hidden;
-        }
-        .detail-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #2383B5 0%, #155A7A 100%);
-        }
-        .detail-card:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 2px 10px rgba(14, 165, 233, 0.12);
-            border-color: #2383B5;
-        }
-        .detail-label {
-            font-size: 0.82rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: #607D8B;
-            margin-bottom: 0.45rem;
-            font-weight: 700;
+        .odm-head-right {
             display: flex;
             align-items: center;
-            gap: 0.4rem;
-        }
-        .detail-label i {
-            font-size: 0.75rem;
-            color: #2383B5;
-        }
-        .detail-value {
-            font-weight: 700;
-            color: #0f172a;
-            line-height: 1.4;
-            word-break: break-word;
-            overflow-wrap: anywhere;
-            font-size: 1.05rem;
-        }
-        .detail-value small {
-            display: block;
-            margin-top: 0.2rem;
-            color: #6b7280;
-            font-weight: 500;
-            font-size: 0.92rem;
-            word-break: break-word;
-            overflow-wrap: anywhere;
-        }
-        .section-title {
-            font-size: 1rem;
-            font-weight: 700;
-            color: #0f172a;
-            margin: 1.25rem 0 0.6rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid #D5E5ED;
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-        }
-        .section-title i {
-            color: #2383B5;
-        }
-        .section-title:first-of-type {
-            margin-top: 0;
-        }
-        .address-card {
-            background: linear-gradient(135deg, #ffffff 0%, #EAF7FC 100%);
-            border: 1.5px solid #D5E5ED;
-            border-radius: 10px;
-            padding: 1rem 1.15rem;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+            gap: 12px;
             position: relative;
-            overflow: hidden;
-            margin-bottom: 1rem;
+            z-index: 1;
         }
-        .address-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #2383B5 0%, #155A7A 100%);
+        .odm-status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 8px 16px;
+            font-size: 0.76rem;
+            font-weight: 800;
         }
-        .address-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.55rem 1.5rem;
-            margin-top: 0.6rem;
-            font-size: 1rem;
-            color: #0f172a;
-            line-height: 1.5;
+        .odm-status-pill .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
         }
-        .address-grid .addr-item {
-            display: flex;
-            gap: 0.4rem;
-        }
-        .address-grid .addr-label {
-            font-weight: 700;
+        .odm-close {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.88);
             color: #155A7A;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.05rem;
+            transition: all 0.2s ease;
+        }
+        .odm-close:hover {
+            background: #ffffff;
+            color: #0F455E;
+            transform: rotate(90deg);
+        }
+        .order-details-modal .modal-body.odm-body {
+            background: #F1F5F9;
+            padding: 1.5rem;
+        }
+        .odm-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+            gap: 1rem;
+            align-items: start;
+        }
+        .odm-section-head {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .odm-section-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            background: #2383B5;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+        .odm-section-head h6 {
+            margin: 0;
+            font-size: 1.02rem;
+            font-weight: 800;
+            color: #0f172a;
+        }
+        .odm-meta {
+            margin-left: auto;
+            color: #64748b;
+            font-size: 0.83rem;
+            font-weight: 600;
+        }
+        .odm-card,
+        .odm-items-card,
+        .odm-totals-card {
+            background: #ffffff;
+            border: 1px solid #E2E8F0;
+            border-radius: 16px;
+            box-shadow: 0 6px 18px rgba(15, 23, 42, 0.05);
+        }
+        .odm-items-card {
+            overflow: hidden;
+        }
+        .odm-items-head,
+        .odm-item {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 90px 70px 100px;
+            gap: 8px;
+            align-items: center;
+        }
+        .odm-items-head {
+            padding: 12px 16px;
+            background: #F8FAFC;
+            border-bottom: 1px solid #E2E8F0;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.6px;
+            color: #0E7490;
+            text-transform: uppercase;
+        }
+        .odm-items-head span:not(:first-child) {
+            text-align: right;
+        }
+        .odm-item {
+            padding: 12px 16px;
+            border-bottom: 1px solid #EEF2F7;
+        }
+        .odm-item:last-child {
+            border-bottom: none;
+        }
+        .odm-item-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 0;
+        }
+        .odm-thumb {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: #E0F2FE;
+            color: #0369A1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+        .odm-item-name {
+            font-weight: 700;
+            color: #0f172a;
+            font-size: 0.95rem;
+            overflow-wrap: anywhere;
+        }
+        .odm-tag {
+            display: inline-block;
+            margin-top: 5px;
+            padding: 2px 8px;
+            border-radius: 6px;
+            background: #E0F2FE;
+            color: #0369A1;
+            font-size: 0.66rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+        .odm-price {
+            text-align: right;
+            color: #334155;
+            font-size: 0.92rem;
+            font-weight: 600;
+        }
+        .odm-qty {
+            display: flex;
+            justify-content: flex-end;
+        }
+        .odm-qty span {
+            background: #EAF7FC;
+            border: 1px solid #D5E5ED;
+            color: #155A7A;
+            border-radius: 8px;
+            padding: 3px 10px;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+        .odm-sub {
+            text-align: right;
+            color: #0f172a;
+            font-size: 0.92rem;
+            font-weight: 800;
+        }
+        .odm-totals-card {
+            margin-top: 12px;
+            padding: 4px 16px 16px;
+        }
+        .odm-total-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #EEF2F7;
+            font-size: 0.95rem;
+            color: #475569;
+        }
+        .odm-total-row strong {
+            color: #0f172a;
+            font-weight: 800;
+        }
+        .odm-grand {
+            margin-top: 14px;
+            border-radius: 14px;
+            padding: 14px 18px;
+            background: linear-gradient(135deg, #1D7EA6 0%, #14506E 100%);
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            box-shadow: 0 14px 30px rgba(20, 80, 110, 0.30);
+        }
+        .odm-grand-label {
+            font-size: 0.92rem;
+            font-weight: 700;
+        }
+        .odm-grand-sub {
+            font-size: 0.78rem;
+            color: rgba(255, 255, 255, 0.78);
+            margin-top: 2px;
+        }
+        .odm-grand-val {
+            font-size: 1.6rem;
+            font-weight: 800;
             white-space: nowrap;
         }
-        .address-grid .addr-value {
-            font-weight: 500;
-            color: #0f172a;
-            word-break: break-word;
+        .odm-mini-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 12px;
         }
-        .order-details-modal .table {
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+        .odm-mini {
+            background: #ffffff;
+            border: 1px solid #E2E8F0;
+            border-radius: 14px;
+            padding: 12px 14px;
+            box-shadow: 0 6px 18px rgba(15, 23, 42, 0.05);
         }
-        .order-details-modal .table thead {
-            background: linear-gradient(135deg, #2383B5 0%, #155A7A 100%);
-            color: white;
-        }
-        .order-details-modal .table thead th {
-            border: none;
-            padding: 0.8rem 0.9rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            font-size: 0.85rem;
+        .odm-mini-head {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 0.7rem;
+            font-weight: 800;
             letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: #0E7490;
+            margin-bottom: 8px;
         }
-        .order-details-modal .table tbody td {
-            padding: 0.8rem 0.9rem;
-            border-color: #D5E5ED;
-            vertical-align: middle;
-            font-size: 1rem;
+        .odm-mini-head i {
+            color: #2383B5;
         }
-        .order-details-modal .table tfoot {
-            background: #EAF7FC;
-        }
-        .order-details-modal .table tfoot th {
-            padding: 0.8rem 0.9rem;
-            border: none;
-            font-weight: 700;
+        .odm-mini-val {
+            font-weight: 800;
             color: #0f172a;
             font-size: 1rem;
+            overflow-wrap: anywhere;
         }
-        .order-details-modal .table tfoot tr:last-child th {
-            background: linear-gradient(135deg, #2383B5 0%, #155A7A 100%);
-            color: white;
-            font-size: 1.1rem;
+        .odm-mini-sub {
+            color: #64748b;
+            font-size: 0.8rem;
+            margin-top: 3px;
+        }
+        .odm-side {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .odm-card {
+            padding: 14px 16px;
+        }
+        .odm-card-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+            color: #0E7490;
+            margin-bottom: 12px;
+        }
+        .odm-card-label i {
+            color: #2383B5;
+        }
+        .odm-chip {
+            margin-left: auto;
+            text-transform: none;
+            letter-spacing: 0;
+            padding: 3px 10px;
+            border-radius: 999px;
+            background: #EAF7FC;
+            border: 1px solid #D5E5ED;
+            color: #155A7A;
+            font-size: 0.72rem;
+            font-weight: 800;
+        }
+        .odm-customer {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .odm-avatar {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: #DBEAFE;
+            color: #1D4ED8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.15rem;
+            flex-shrink: 0;
+        }
+        .odm-cname {
+            font-weight: 800;
+            color: #0f172a;
+        }
+        .odm-cemail {
+            color: #64748b;
+            font-size: 0.85rem;
+            overflow-wrap: anywhere;
+        }
+        .odm-field {
+            margin-bottom: 12px;
+        }
+        .odm-field:last-child {
+            margin-bottom: 0;
+        }
+        .odm-field-label {
+            font-size: 0.7rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: #94A3B8;
+            margin-bottom: 3px;
+        }
+        .odm-field-value {
+            font-weight: 700;
+            color: #0f172a;
+            font-size: 0.95rem;
+            line-height: 1.45;
+            overflow-wrap: anywhere;
+        }
+        .odm-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 14px 1.5rem;
+            background: #ffffff;
+            border-top: 1px solid #E2E8F0;
+        }
+        .odm-foot-note {
+            color: #64748b;
+            font-size: 0.87rem;
+            font-weight: 600;
+        }
+        .odm-foot-actions {
+            display: flex;
+            gap: 10px;
+            margin-left: auto;
+        }
+        .odm-btn {
+            border-radius: 12px;
+            padding: 11px 22px;
+            font-weight: 700;
+            font-size: 0.93rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+        .odm-btn-close {
+            background: #ffffff;
+            border: 1px solid #D5E5ED;
+            color: #334155;
+        }
+        .odm-btn-close:hover {
+            background: #F1F5F9;
+            color: #0f172a;
+        }
+        .odm-btn-update {
+            background: linear-gradient(135deg, #2383B5, #155A7A);
+            border: none;
+            color: #ffffff;
+            box-shadow: 0 12px 26px rgba(21, 90, 122, 0.30);
+        }
+        .odm-btn-update:hover {
+            background: linear-gradient(135deg, #155A7A, #0F455E);
+            color: #ffffff;
+            transform: translateY(-1px);
+        }
+        @media (max-width: 991.98px) {
+            .odm-grid {
+                grid-template-columns: 1fr;
+            }
+            .odm-mini-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        @media (max-width: 575.98px) {
+            .odm-items-head,
+            .odm-item {
+                grid-template-columns: minmax(0, 1fr) 64px 54px 76px;
+            }
+            .odm-footer {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .odm-foot-actions {
+                margin-left: 0;
+            }
         }
 
         /* Update status modal styling */
@@ -639,14 +919,32 @@
 
     <!-- Order Details Modal -->
     <div class="modal fade order-details-modal" id="orderDetailsModal" tabindex="-1">
-        <div class="modal-dialog modal-xl">
+        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title"><i class="fas fa-receipt me-2"></i>Order Details #<span id="modalOrderId"></span></h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <div class="odm-header">
+                    <div class="odm-head-left">
+                        <div class="odm-head-icon"><i class="fas fa-receipt"></i></div>
+                        <div>
+                            <h5 class="odm-title">Order #<span id="modalOrderId"></span></h5>
+                            <p class="odm-head-sub">Order details</p>
+                        </div>
+                    </div>
+                    <div class="odm-head-right">
+                        <span class="status-badge pending odm-status-pill" id="modalStatusPill"><span class="dot"></span> PENDING</span>
+                        <button type="button" class="odm-close" data-bs-dismiss="modal" aria-label="Close"><i class="fas fa-xmark"></i></button>
+                    </div>
                 </div>
-                <div class="modal-body" id="orderDetailsContent">
+                <div class="modal-body odm-body" id="orderDetailsContent">
                     Loading...
+                </div>
+                <div class="odm-footer">
+                    <div class="odm-foot-note" id="odmFootNote">Order details</div>
+                    <div class="odm-foot-actions">
+                        <button type="button" class="btn odm-btn odm-btn-close" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn odm-btn odm-btn-update" id="odmUpdateBtn" onclick="updateFromDetails()">
+                            <i class="fas fa-arrows-rotate"></i> Update
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -886,6 +1184,32 @@
         }
         
         // View order details
+        let currentDetailOrder = null;
+
+        function odmSplitDateTime(value) {
+            if (!value) return { date: 'N/A', time: '' };
+            const str = String(value);
+            const idx = str.lastIndexOf(',');
+            if (idx === -1) return { date: str, time: '' };
+            return { date: str.slice(0, idx).trim(), time: str.slice(idx + 1).trim() };
+        }
+
+        function odmItemTag(name) {
+            const n = (name || '').toLowerCase();
+            if (n.includes('refill')) return 'Refill';
+            if (n.includes('new set')) return 'New Set';
+            return '';
+        }
+
+        function odmField(label, value) {
+            if (!value) return '';
+            return `
+                <div class="odm-field">
+                    <div class="odm-field-label">${label}</div>
+                    <div class="odm-field-value">${escapeHtml(value)}</div>
+                </div>`;
+        }
+
         async function viewOrderDetails(orderId) {
             const response = await fetch(`../api/admin/get_orders.php?page=1&limit=1000`);
             const data = await response.json();
@@ -902,98 +1226,141 @@
             }
             
             const address = order.delivery_address;
-            const addressText = formatAddress(address);
+            const addrObj = (address && typeof address === 'object') ? address : {};
+            const addrLine = (typeof address === 'string') ? address : '';
             const deliveryInfo = calculateDeliveryInfo(order);
+            const orderDate = odmSplitDateTime(formatDate(order.order_date));
             
-            const subtotal = order.items.reduce((sum, item) => sum + parseFloat(item.subtotal), 0);
+            const items = order.items || [];
+            const subtotal = items.reduce((sum, item) => sum + parseFloat(item.subtotal), 0);
             const deliveryFee = parseFloat(order.total_amount) - subtotal;
+            const totalUnits = items.reduce((sum, item) => sum + parseInt(item.quantity || 0, 10), 0);
             const status = order.status.toLowerCase();
             const statusLabel = order.status.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
+            const paymentMethod = order.payment_method || 'COD';
+            const paymentSub = paymentMethod.toUpperCase() === 'COD' ? 'Cash on delivery' : '';
+            
+            let delVal = '—';
+            let delSub = 'Not scheduled yet';
+            if (status === 'delivered') {
+                const del = odmSplitDateTime(deliveryInfo);
+                delVal = del.date;
+                delSub = del.time || 'Delivered';
+            } else if (status === 'cancelled') {
+                delVal = 'Cancelled';
+                delSub = '—';
+            }
+            
+            currentDetailOrder = { id: order.id, status: status };
             
             document.getElementById('modalOrderId').textContent = order.id;
+            const statusPill = document.getElementById('modalStatusPill');
+            statusPill.className = 'status-badge ' + status + ' odm-status-pill';
+            statusPill.innerHTML = `<span class="dot"></span> ${statusLabel}`;
+            document.getElementById('odmFootNote').textContent = `Order #${order.id} · ${items.length} item${items.length !== 1 ? 's' : ''}`;
+            
+            const streetLine = [addrObj.streetAddress || addrObj.address || addrLine, addrObj.barangay || ''].filter(Boolean).join(', ');
+            const cityLine = [addrObj.city || '', addrObj.province || ''].filter(Boolean).join(', ');
+            const regionLine = [addrObj.region || '', addrObj.postalCode || ''].filter(Boolean).join(' ');
+            
             document.getElementById('orderDetailsContent').innerHTML = `
-                <div class="detail-grid top-row">
-                    <div class="detail-card">
-                        <div class="detail-label"><i class="fas fa-user"></i>Customer</div>
-                        <div class="detail-value">
-                            ${escapeHtml(order.username || 'N/A')}
-                            <small>${escapeHtml(order.email || 'N/A')}</small>
+                <div class="odm-grid">
+                    <div class="odm-main">
+                        <div class="odm-section-head">
+                            <div class="odm-section-icon"><i class="fas fa-box-open"></i></div>
+                            <h6>Order Items</h6>
+                            <span class="odm-meta">${items.length} item${items.length !== 1 ? 's' : ''} · ${totalUnits} unit${totalUnits !== 1 ? 's' : ''}</span>
+                        </div>
+                        <div class="odm-items-card">
+                            <div class="odm-items-head">
+                                <span>Product</span>
+                                <span>Price</span>
+                                <span>Qty</span>
+                                <span>Subtotal</span>
+                            </div>
+                            ${items.map(item => {
+                                const tag = odmItemTag(item.product_name);
+                                return `
+                                <div class="odm-item">
+                                    <div class="odm-item-info">
+                                        <div class="odm-thumb"><i class="fas fa-bottle-water"></i></div>
+                                        <div>
+                                            <div class="odm-item-name">${escapeHtml(item.product_name)}</div>
+                                            ${tag ? `<span class="odm-tag">${tag}</span>` : ''}
+                                        </div>
+                                    </div>
+                                    <div class="odm-price">₱${parseFloat(item.product_price).toFixed(2)}</div>
+                                    <div class="odm-qty"><span>×${item.quantity}</span></div>
+                                    <div class="odm-sub">₱${parseFloat(item.subtotal).toFixed(2)}</div>
+                                </div>`;
+                            }).join('')}
+                        </div>
+                        <div class="odm-totals-card">
+                            <div class="odm-total-row"><span>Subtotal</span><strong>₱${subtotal.toFixed(2)}</strong></div>
+                            <div class="odm-total-row"><span>Delivery fee</span><strong>₱${deliveryFee.toFixed(2)}</strong></div>
+                            <div class="odm-grand">
+                                <div>
+                                    <div class="odm-grand-label">Total amount</div>
+                                    ${paymentSub ? `<div class="odm-grand-sub">${paymentSub}</div>` : ''}
+                                </div>
+                                <div class="odm-grand-val">₱${parseFloat(order.total_amount).toFixed(2)}</div>
+                            </div>
+                        </div>
+                        <div class="odm-mini-grid">
+                            <div class="odm-mini">
+                                <div class="odm-mini-head"><i class="fas fa-calendar-days"></i>Order Date</div>
+                                <div class="odm-mini-val">${escapeHtml(orderDate.date)}</div>
+                                ${orderDate.time ? `<div class="odm-mini-sub">${escapeHtml(orderDate.time)}</div>` : ''}
+                            </div>
+                            <div class="odm-mini">
+                                <div class="odm-mini-head"><i class="fas fa-truck"></i>Delivery Date</div>
+                                <div class="odm-mini-val">${escapeHtml(delVal)}</div>
+                                <div class="odm-mini-sub">${escapeHtml(delSub)}</div>
+                            </div>
+                            <div class="odm-mini">
+                                <div class="odm-mini-head"><i class="fas fa-credit-card"></i>Payment</div>
+                                <div class="odm-mini-val">${escapeHtml(paymentMethod)}</div>
+                                ${paymentSub ? `<div class="odm-mini-sub">${paymentSub}</div>` : ''}
+                            </div>
                         </div>
                     </div>
-                    <div class="detail-card">
-                        <div class="detail-label"><i class="fas fa-info-circle"></i>Status</div>
-                        <div class="detail-value"><span class="status-badge ${status}">${statusLabel}</span></div>
-                    </div>
-                </div>
-                <div class="detail-grid">
-                    <div class="detail-card">
-                        <div class="detail-label"><i class="fas fa-calendar-alt"></i>Order Date</div>
-                        <div class="detail-value">${formatDate(order.order_date)}</div>
-                    </div>
-                    <div class="detail-card">
-                        <div class="detail-label"><i class="fas fa-truck"></i>Delivery Date</div>
-                        <div class="detail-value">${deliveryInfo}</div>
-                    </div>
-                    <div class="detail-card">
-                        <div class="detail-label"><i class="fas fa-credit-card"></i>Payment</div>
-                        <div class="detail-value">${escapeHtml(order.payment_method || 'COD')}</div>
-                    </div>
-                </div>
-                
-                <div class="address-card">
-                    <div class="section-title" style="margin:0; padding-bottom:0.4rem;"><i class="fas fa-map-marker-alt"></i>Delivery Address</div>
-                    <div class="address-grid">
-                        <div class="addr-item"><span class="addr-label">Name:</span><span class="addr-value">${escapeHtml(address.fullName || address.name || '')}</span></div>
-                        <div class="addr-item"><span class="addr-label">Phone:</span><span class="addr-value">${escapeHtml(address.phoneNumber || address.phone || '')}</span></div>
-                        <div class="addr-item"><span class="addr-label">Street:</span><span class="addr-value">${escapeHtml(address.streetAddress || address.address || '')}, ${escapeHtml(address.barangay || '')}</span></div>
-                        <div class="addr-item"><span class="addr-label">City:</span><span class="addr-value">${escapeHtml(address.city || '')}, ${escapeHtml(address.province || '')}</span></div>
-                        <div class="addr-item"><span class="addr-label">Region:</span><span class="addr-value">${escapeHtml(address.region || '')} ${escapeHtml(address.postalCode || '')}</span></div>
-                        ${address.label ? `<div class="addr-item"><span class="addr-label">Label:</span><span class="addr-value">${escapeHtml(address.label)}</span></div>` : ''}
-                    </div>
-                </div>
-                </div>
-                
-                <h6 class="section-title"><i class="fas fa-box"></i>Order Items</h6>
-                <div class="table-responsive">
-                    <table class="table table-sm mb-0">
-                        <thead>
-                            <tr>
-                                <th>Product</th>
-                                <th>Price</th>
-                                <th>Qty</th>
-                                <th>Subtotal</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${order.items.map(item => `
-                                <tr>
-                                    <td><strong>${escapeHtml(item.product_name)}</strong></td>
-                                    <td>₱${parseFloat(item.product_price).toFixed(2)}</td>
-                                    <td>${item.quantity}</td>
-                                    <td><strong>₱${parseFloat(item.subtotal).toFixed(2)}</strong></td>
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <th colspan="3">Subtotal</th>
-                                <th>₱${subtotal.toFixed(2)}</th>
-                            </tr>
-                            <tr>
-                                <th colspan="3">Delivery Fee</th>
-                                <th>₱${deliveryFee.toFixed(2)}</th>
-                            </tr>
-                            <tr>
-                                <th colspan="3">Total</th>
-                                <th>₱${parseFloat(order.total_amount).toFixed(2)}</th>
-                            </tr>
-                        </tfoot>
-                    </table>
+                    <aside class="odm-side">
+                        <div class="odm-card">
+                            <div class="odm-card-label"><i class="fas fa-user"></i>Customer</div>
+                            <div class="odm-customer">
+                                <div class="odm-avatar"><i class="fas fa-user"></i></div>
+                                <div>
+                                    <div class="odm-cname">${escapeHtml(order.username || 'N/A')}</div>
+                                    <div class="odm-cemail">${escapeHtml(order.email || '')}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="odm-card">
+                            <div class="odm-card-label">
+                                <i class="fas fa-map-marker-alt"></i>Delivery Address
+                                ${addrObj.label ? `<span class="odm-chip">${escapeHtml(addrObj.label)}</span>` : ''}
+                            </div>
+                            ${odmField('Name', addrObj.fullName || addrObj.name || '')}
+                            ${odmField('Phone', addrObj.phoneNumber || addrObj.phone || '')}
+                            ${odmField('Street', streetLine)}
+                            ${odmField('City', cityLine)}
+                            ${odmField('Region', regionLine)}
+                            ${(!addrObj.streetAddress && !addrObj.address && !addrObj.fullName && addrLine) ? odmField('Address', addrLine) : ''}
+                        </div>
+                    </aside>
                 </div>
             `;
             
             const modal = new bootstrap.Modal(document.getElementById('orderDetailsModal'));
             modal.show();
+        }
+
+        // Jump from details modal into the status update modal
+        function updateFromDetails() {
+            if (!currentDetailOrder) return;
+            const detailsModal = bootstrap.Modal.getInstance(document.getElementById('orderDetailsModal'));
+            if (detailsModal) detailsModal.hide();
+            setTimeout(() => updateOrderStatus(currentDetailOrder.id, currentDetailOrder.status), 250);
         }
         
         // Update order status
