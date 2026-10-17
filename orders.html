@@ -1966,8 +1966,6 @@
             } catch (_) {}
         }
 
-        fastPaintOrders();
-
         // Load orders (fetch all, then navigate client-side)
         async function loadOrders() {
             try {
@@ -2887,6 +2885,11 @@
                 }
             });
         });
+
+        // Paint cached orders NOW (all top-level declarations like orderItemsCache
+        // are initialized by this point, so this no longer throws). Gives an
+        // instant paint on refresh; loadOrders() revalidates in the background.
+        fastPaintOrders();
     </script>
 
     <!-- Settings Modal -->
