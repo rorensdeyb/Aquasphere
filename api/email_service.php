@@ -470,28 +470,73 @@ function send_suspension_email_brevo($email, $username, $reason) {
         return false;
     }
 
-    $subject = "AquaSphere - Account Suspended";
-    $html_content = "
-    <!DOCTYPE html>
-    <html>
-    <head><meta charset='UTF-8'><title>Account Suspended</title></head>
-    <body style='font-family: Inter, system-ui, Segoe UI, sans-serif; color: #0f172a;'>
-        <div style='max-width:600px;margin:0 auto;padding:20px;'>
-            <div style='background:linear-gradient(135deg,#2383B5,#155A7A);padding:16px;border-radius:12px 12px 0 0;color:white;text-align:center;'>
-                <h2 style='margin:0;'>Account Suspended</h2>
-            </div>
-            <div style='background:#EAF7FC;padding:24px;border:1px solid #D5E5ED;border-top:none;border-radius:0 0 12px 12px;'>
-                <p>Hello <strong>$username</strong>,</p>
-                <p>Your AquaSphere account has been <strong>temporarily suspended</strong>.</p>
-                <p><strong>Reason provided by admin:</strong><br>" . nl2br(htmlspecialchars($reason)) . "</p>
-                <p>If you believe this is a mistake or need more information, please contact support.</p>
-                <p style='margin-top:24px;'>Thank you,<br>AquaSphere Team</p>
-            </div>
-        </div>
-    </body>
-    </html>";
+    $username_safe = htmlspecialchars($username, ENT_QUOTES, 'UTF-8');
+    $reason_html = nl2br(htmlspecialchars($reason, ENT_QUOTES, 'UTF-8'));
+    $contact_link = 'mailto:support@aquasphere.com';
 
-    $text_content = "Hello $username,\n\nYour AquaSphere account has been temporarily suspended.\nReason: $reason\n\nIf you believe this is a mistake, please contact support.\n\nThank you,\nAquaSphere Team";
+    $subject = "AquaSphere - Account Suspended";
+    $html_content = <<<HTML
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Account Suspended</title>
+</head>
+<body style="margin:0;padding:0;background:#eef1f4;font-family:Inter,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#eef1f4;">
+<tr>
+<td align="center" style="padding:32px 16px;">
+<table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;background:#ffffff;border:1px solid #e6e9ee;border-radius:16px;overflow:hidden;">
+<tr>
+<td style="background:#2c7ea6;padding:26px 28px;">
+<div style="color:rgba(255,255,255,0.78);font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;">AquaSphere Admin</div>
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-top:16px;">
+<tr>
+<td style="vertical-align:middle;padding-right:16px;">
+<div style="width:48px;height:48px;border-radius:50%;background:#f5c518;color:#1f2937;font-size:26px;font-weight:800;text-align:center;line-height:48px;">!</div>
+</td>
+<td style="vertical-align:middle;">
+<div style="color:#ffffff;font-size:25px;font-weight:800;line-height:1.15;">Account Suspended</div>
+<div style="color:rgba(255,255,255,0.9);font-size:14px;margin-top:6px;">This is a temporary hold on your account.</div>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td style="padding:28px;">
+<p style="margin:0 0 16px;font-size:16px;font-weight:700;color:#1f2937;">Hello {$username_safe},</p>
+<p style="margin:0 0 22px;font-size:15px;line-height:1.6;color:#3a4653;">Your AquaSphere account has been <strong>temporarily suspended</strong>.</p>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#eef2f6;border-radius:10px;">
+<tr>
+<td width="50%" style="padding:16px 18px;border-right:1px solid #dfe5ec;vertical-align:top;">
+<div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#94a3b8;">Status</div>
+<div style="font-size:15px;font-weight:700;color:#1f2937;margin-top:6px;"><span style="color:#f59e0b;">&#9679;</span> Temporarily suspended</div>
+</td>
+<td width="50%" style="padding:16px 18px;vertical-align:top;">
+<div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#94a3b8;">Decided by</div>
+<div style="font-size:15px;font-weight:700;color:#1f2937;margin-top:6px;">AquaSphere Admin</div>
+</td>
+</tr>
+</table>
+<div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#94a3b8;margin:22px 0 8px;">Reason provided by admin</div>
+<div style="background:#fdf6e7;border-left:4px solid #f0b429;border-radius:8px;padding:16px 18px;font-size:15px;line-height:1.6;color:#4a4536;">{$reason_html}</div>
+<p style="margin:22px 0 18px;font-size:15px;line-height:1.6;color:#3a4653;">If you believe this is a mistake or need more information, please contact the AquaSphere team.</p>
+<a href="{$contact_link}" style="display:inline-block;background:#2c7ea6;color:#ffffff;text-decoration:none;font-weight:700;font-size:15px;padding:13px 26px;border-radius:8px;">Contact AquaSphere</a>
+<div style="border-top:1px solid #e6e9ee;margin:28px 0 16px;"></div>
+<p style="margin:0;font-size:13px;line-height:1.5;color:#97a3b0;">This is an automated message from <strong style="color:#64748b;">AquaSphere Admin</strong> about a change to your account.</p>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</body>
+</html>
+HTML;
+
+    $text_content = "Hello $username,\n\nYour AquaSphere account has been temporarily suspended.\n\nReason provided by admin:\n$reason\n\nIf you believe this is a mistake or need more information, please contact the AquaSphere team (support@aquasphere.com).\n\nThis is an automated message from AquaSphere Admin about a change to your account.";
 
     $result = $brevo_service->send_email($email, $subject, $html_content, $text_content, $username);
     return $result['success'];
@@ -507,27 +552,76 @@ function send_unsuspension_email_brevo($email, $username) {
         return false;
     }
 
-    $subject = "AquaSphere - Suspension Lifted";
-    $html_content = "
-    <!DOCTYPE html>
-    <html>
-    <head><meta charset='UTF-8'><title>Suspension Lifted</title></head>
-    <body style='font-family: Inter, system-ui, Segoe UI, sans-serif; color: #0f172a;'>
-        <div style='max-width:600px;margin:0 auto;padding:20px;'>
-            <div style='background:linear-gradient(135deg,#22c55e,#16a34a);padding:16px;border-radius:12px 12px 0 0;color:white;text-align:center;'>
-                <h2 style='margin:0;'>Suspension Lifted</h2>
-            </div>
-            <div style='background:#EAF7FC;padding:24px;border:1px solid #D5E5ED;border-top:none;border-radius:0 0 12px 12px;'>
-                <p>Hello <strong>$username</strong>,</p>
-                <p>Your AquaSphere account suspension has been <strong>lifted</strong>. You can now sign in again.</p>
-                <p>If you have any concerns, please contact support.</p>
-                <p style='margin-top:24px;'>Thank you,<br>AquaSphere Team</p>
-            </div>
-        </div>
-    </body>
-    </html>";
+    $username_safe = htmlspecialchars($username, ENT_QUOTES, 'UTF-8');
+    $contact_link = 'mailto:support@aquasphere.com';
+    $scheme = (!empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off') ? 'https' : 'http';
+    $host = $_SERVER['HTTP_HOST'] ?? 'aquasphere.up.railway.app';
+    $signin_link = $scheme . '://' . $host . '/login.html';
 
-    $text_content = "Hello $username,\n\nYour AquaSphere account suspension has been lifted. You can now sign in again.\n\nThank you,\nAquaSphere Team";
+    $subject = "AquaSphere - Suspension Lifted";
+    $html_content = <<<HTML
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Suspension Lifted</title>
+</head>
+<body style="margin:0;padding:0;background:#eef1f4;font-family:Inter,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#eef1f4;">
+<tr>
+<td align="center" style="padding:32px 16px;">
+<table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;background:#ffffff;border:1px solid #e6e9ee;border-radius:16px;overflow:hidden;">
+<tr>
+<td style="background:#22a44e;padding:26px 28px;">
+<div style="color:rgba(255,255,255,0.82);font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;">AquaSphere Admin</div>
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-top:16px;">
+<tr>
+<td style="vertical-align:middle;padding-right:16px;">
+<div style="width:48px;height:48px;border-radius:50%;background:#ffffff;color:#22a44e;font-size:26px;font-weight:800;text-align:center;line-height:48px;">&#10003;</div>
+</td>
+<td style="vertical-align:middle;">
+<div style="color:#ffffff;font-size:25px;font-weight:800;line-height:1.15;">Suspension Lifted</div>
+<div style="color:rgba(255,255,255,0.92);font-size:14px;margin-top:6px;">Your account is active again.</div>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td style="padding:28px;">
+<p style="margin:0 0 16px;font-size:16px;font-weight:700;color:#1f2937;">Hello {$username_safe},</p>
+<p style="margin:0 0 22px;font-size:15px;line-height:1.6;color:#3a4653;">Your AquaSphere account suspension has been <strong style="text-decoration:underline;color:#1f2937;">lifted</strong>. You can now sign in again.</p>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#eef2f6;border-radius:10px;">
+<tr>
+<td width="50%" style="padding:16px 18px;border-right:1px solid #dfe5ec;vertical-align:top;">
+<div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#94a3b8;">Status</div>
+<div style="font-size:15px;font-weight:700;color:#1f2937;margin-top:6px;"><span style="color:#22c55e;">&#9679;</span> Active</div>
+</td>
+<td width="50%" style="padding:16px 18px;vertical-align:top;">
+<div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#94a3b8;">Sign in</div>
+<div style="font-size:15px;font-weight:700;color:#1f2937;margin-top:6px;">Available again</div>
+</td>
+</tr>
+</table>
+<div style="margin:24px 0 20px;">
+<a href="{$signin_link}" style="display:inline-block;background:#22a44e;color:#ffffff;text-decoration:none;font-weight:700;font-size:15px;padding:13px 26px;border-radius:8px;">Sign in to AquaSphere</a>
+</div>
+<p style="margin:0 0 20px;font-size:15px;line-height:1.6;color:#3a4653;">If you have any concerns, please <a href="{$contact_link}" style="color:#2c7ea6;font-weight:700;text-decoration:underline;">contact support</a>.</p>
+<p style="margin:0 0 4px;font-size:15px;line-height:1.6;color:#3a4653;">Thank you,<br><strong style="color:#1f2937;">AquaSphere Team</strong></p>
+<div style="border-top:1px solid #e6e9ee;margin:28px 0 16px;"></div>
+<p style="margin:0;font-size:13px;line-height:1.5;color:#97a3b0;">This is an automated message from <strong style="color:#64748b;">AquaSphere Admin</strong> about a change to your account.</p>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</body>
+</html>
+HTML;
+
+    $text_content = "Hello $username,\n\nYour AquaSphere account suspension has been lifted. You can now sign in again.\n\nIf you have any concerns, please contact support (support@aquasphere.com).\n\nThank you,\nAquaSphere Team\n\nThis is an automated message from AquaSphere Admin about a change to your account.";
 
     $result = $brevo_service->send_email($email, $subject, $html_content, $text_content, $username);
     return $result['success'];
