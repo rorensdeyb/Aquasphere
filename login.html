@@ -907,61 +907,135 @@
         #suspendedOverlay {
             position: fixed;
             inset: 0;
-            background: rgba(15, 23, 42, 0.35);
+            background: rgba(15, 23, 42, 0.45);
             display: none;
             align-items: center;
             justify-content: center;
             z-index: 2000;
-            backdrop-filter: blur(2px);
+            backdrop-filter: blur(4px);
             padding: 16px;
         }
         #suspendedCard {
+            position: relative;
+            overflow: hidden;
             background: #ffffff;
-            border-radius: 16px;
-            padding: 22px 22px 18px;
-            max-width: 420px;
+            border-radius: 20px;
+            padding: 32px 26px 26px;
+            max-width: 460px;
             width: 100%;
-            border: 1px solid #D5E5ED;
-            box-shadow: 0 18px 50px rgba(0,0,0,0.18);
+            border: 1px solid #f3dfe2;
+            box-shadow: 0 30px 70px rgba(0,0,0,0.28);
             text-align: center;
+            animation: suspendedPop 0.3s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        @keyframes suspendedPop {
+            from { transform: scale(0.92); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        #suspendedCard::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 200px;
+            background: radial-gradient(85% 100% at 50% 0%, rgba(254,205,211,0.9) 0%, rgba(254,226,226,0.5) 45%, rgba(255,255,255,0) 75%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        #suspendedCard > * {
+            position: relative;
+            z-index: 1;
         }
         .suspended-icon {
-            width: 70px;
-            height: 70px;
-            margin: 0 auto 12px;
-            border-radius: 16px;
-            background: linear-gradient(145deg, #fee2e2, #fecdd3);
+            width: 84px;
+            height: 84px;
+            margin: 0 auto 16px;
+            border-radius: 50%;
+            background: #ffe4e6;
+            border: 5px solid #ffffff;
+            box-shadow: 0 12px 26px rgba(239, 68, 68, 0.25);
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: inset 0 6px 14px rgba(255,255,255,0.7), 0 10px 24px rgba(239,68,68,0.25);
         }
         .suspended-icon i {
-            color: #dc2626;
-            font-size: 1.8rem;
+            color: #ef4444;
+            font-size: 1.9rem;
         }
         .suspended-title {
             font-weight: 800;
-            color: #111827;
-            font-size: 1.1rem;
-            margin-bottom: 6px;
-        }
-        .suspended-message {
-            background: #EAF7FC;
             color: #0f172a;
-            border: 1px solid #D5E5ED;
+            font-size: 1.5rem;
+            letter-spacing: -0.01em;
+            margin-bottom: 8px;
+        }
+        .suspended-subtitle {
+            color: #64748b;
+            font-size: 0.92rem;
+            line-height: 1.55;
+            margin: 0 0 18px;
+        }
+        .suspended-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 18px;
+            text-align: left;
+        }
+        .suspended-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
             border-radius: 12px;
             padding: 12px 14px;
-            text-align: left;
-            line-height: 1.5;
-            font-size: 0.97rem;
-            margin-bottom: 14px;
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
         }
-        .suspended-actions {
+        .suspended-option:hover {
+            box-shadow: 0 8px 18px rgba(15, 23, 42, 0.07);
+            transform: translateY(-1px);
+        }
+        .suspended-option .opt-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: #e0f2fe;
+            color: #0284c7;
             display: flex;
-            gap: 10px;
+            align-items: center;
             justify-content: center;
-            flex-wrap: wrap;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+        .suspended-option strong {
+            display: block;
+            color: #0f172a;
+            font-size: 0.95rem;
+            font-weight: 800;
+        }
+        .suspended-option small {
+            color: #64748b;
+            font-size: 0.8rem;
+        }
+        .suspended-close {
+            width: 100%;
+            padding: 13px 16px;
+            border: none;
+            border-radius: 12px;
+            background: #155A7A;
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 0.95rem;
+            transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 12px 26px rgba(21, 90, 122, 0.3);
+        }
+        .suspended-close:hover {
+            background: #0F455E;
+            color: #ffffff;
+            transform: translateY(-1px);
+            box-shadow: 0 14px 30px rgba(21, 90, 122, 0.38);
         }
         .btn-outline-dark {
             border-color: #2383B5;
@@ -1079,7 +1153,7 @@
         function showSuspendedNotice(message) {
             const overlay = document.getElementById('suspendedOverlay');
             const msgEl = document.getElementById('suspendedMessage');
-            const defaultMsg = 'Your account has been suspended and is currently unavailable for login. Please check your email for more details or contact our support team for assistance.';
+            const defaultMsg = 'Your account has been suspended and is currently unavailable for login.';
             if (msgEl) msgEl.textContent = message || defaultMsg;
             if (overlay) overlay.style.display = 'flex';
         }
@@ -2472,12 +2546,26 @@
                 <i class="fas fa-user-lock"></i>
             </div>
             <div class="suspended-title">Account Suspended</div>
-            <div class="suspended-message" id="suspendedMessage">
-                Your account has been suspended and is currently unavailable for login. Please check your email for more details or contact our support team for assistance.
+            <p class="suspended-subtitle" id="suspendedMessage">
+                Your account has been suspended and is currently unavailable for login.
+            </p>
+            <div class="suspended-options">
+                <div class="suspended-option">
+                    <span class="opt-icon"><i class="fas fa-envelope"></i></span>
+                    <div>
+                        <strong>Check your email</strong>
+                        <small>for more details</small>
+                    </div>
+                </div>
+                <div class="suspended-option">
+                    <span class="opt-icon"><i class="fas fa-headset"></i></span>
+                    <div>
+                        <strong>Contact our support team</strong>
+                        <small>for assistance</small>
+                    </div>
+                </div>
             </div>
-            <div class="suspended-actions" style="justify-content: center;">
-                <button class="btn btn-login" style="width:auto;padding:10px 22px;" onclick="hideSuspendedNotice()">Close</button>
-            </div>
+            <button type="button" class="suspended-close" onclick="hideSuspendedNotice()">Close</button>
         </div>
     </div>
 

@@ -488,7 +488,7 @@
             cursor: not-allowed;
         }
 
-        /* Delete confirmation modal */
+        /* Suspension confirmation modal */
         .confirm-overlay {
             position: fixed;
             inset: 0;
@@ -498,94 +498,218 @@
             align-items: center;
             justify-content: center;
             z-index: 2000;
+            padding: 16px;
         }
         .confirm-card {
-            background: linear-gradient(135deg, #2383B5 0%, #155A7A 100%);
-            border-radius: 18px;
-            padding: 2px;
-            max-width: 420px;
-            width: 92%;
-            box-shadow: 0 25px 70px rgba(0,0,0,0.30), 0 0 0 1px rgba(255,255,255,0.25);
+            background: #ffffff;
+            border-radius: 20px;
+            max-width: 470px;
+            width: 100%;
+            overflow: hidden;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.35);
             position: relative;
             animation: modalScaleIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
         }
         .confirm-inner {
-            background: #EAF7FC;
-            border-radius: 16px;
-            padding: 18px 20px 16px;
+            position: relative;
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 30px 26px 24px;
+            overflow: hidden;
+            z-index: 1;
         }
-        .confirm-header {
+        .confirm-inner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 190px;
+            background: radial-gradient(90% 100% at 50% 0%, rgba(254,205,211,0.9) 0%, rgba(254,226,226,0.5) 45%, rgba(255,255,255,0) 75%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        .confirm-inner.lift-mode::before {
+            background: radial-gradient(90% 100% at 50% 0%, rgba(187,247,208,0.95) 0%, rgba(220,252,231,0.55) 45%, rgba(255,255,255,0) 75%);
+        }
+        .confirm-hero {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            margin-bottom: 18px;
+        }
+        .confirm-icon-circle {
+            width: 84px;
+            height: 84px;
+            margin: 0 auto 14px;
+            border-radius: 50%;
+            background: #ffe4e6;
+            border: 5px solid #ffffff;
+            box-shadow: 0 12px 26px rgba(239, 68, 68, 0.25);
             display: flex;
-            gap: 12px;
             align-items: center;
-            margin-bottom: 10px;
+            justify-content: center;
+            font-size: 1.9rem;
+            color: #ef4444;
+        }
+        .confirm-inner.lift-mode .confirm-icon-circle {
+            background: #dcfce7;
+            color: #16a34a;
+            box-shadow: 0 12px 26px rgba(22, 163, 74, 0.25);
+        }
+        .confirm-title {
+            margin: 0 0 6px;
+            font-weight: 800;
+            color: #0f172a;
+            font-size: 1.5rem;
+            letter-spacing: -0.01em;
+        }
+        .confirm-subtitle {
+            margin: 0;
+            color: #64748b;
+            font-size: 0.92rem;
+            line-height: 1.5;
+        }
+        .confirm-userrow {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 12px 14px;
+            margin-bottom: 16px;
+        }
+        .confirm-userrow > i {
+            color: #155A7A;
+            font-size: 1.05rem;
+        }
+        .confirm-username {
+            flex: 1;
+            min-width: 0;
+            font-weight: 800;
+            color: #0f172a;
+            overflow-wrap: anywhere;
+        }
+        .confirm-userstatus {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.78rem;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+        .confirm-userstatus .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+        .confirm-userstatus.active { color: #16a34a; }
+        .confirm-userstatus.suspended { color: #ef4444; }
+        .confirm-field {
             position: relative;
             z-index: 1;
         }
-        .confirm-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 14px;
-            background: linear-gradient(135deg, #fef2f2, #ffe4e6);
+        .confirm-field label {
+            display: block;
+            font-weight: 800;
+            color: #0e7490;
+            font-size: 0.92rem;
+            margin-bottom: 8px;
+        }
+        .confirm-field label .req { color: #ef4444; }
+        .confirm-field textarea {
+            width: 100%;
+            border: 1px solid #d8e2ec;
+            border-radius: 12px;
+            padding: 12px 14px;
+            font-size: 0.95rem;
+            color: #0f172a;
+            background: #ffffff;
+            resize: vertical;
+            min-height: 96px;
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .confirm-field textarea:focus {
+            border-color: #2383B5;
+            box-shadow: 0 0 0 3px rgba(35, 131, 181, 0.15);
+        }
+        .confirm-field textarea::placeholder { color: #94a3b8; }
+        .confirm-infobox {
+            position: relative;
+            z-index: 1;
+            display: none;
+            gap: 10px;
+            align-items: flex-start;
+            background: #e9f8f0;
+            border: 1px solid #bfe8d3;
+            border-radius: 12px;
+            padding: 12px 14px;
+            color: #116b45;
+            font-size: 0.92rem;
+            line-height: 1.5;
+        }
+        .confirm-infobox i {
+            color: #16a34a;
+            margin-top: 3px;
+        }
+        .confirm-actions {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            gap: 12px;
+            margin-top: 18px;
+        }
+        .confirm-actions .btn {
+            flex: 1;
+            padding: 12px 14px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.95rem;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            color: #be123c;
-            box-shadow: 0 10px 24px rgba(190, 18, 60, 0.22);
-            font-size: 1.15rem;
-        }
-        .confirm-title {
-            margin: 0;
-            font-weight: 800;
-            color: #0f172a;
-            font-size: 1.05rem;
-        }
-        .confirm-body {
-            color: #475569;
-            line-height: 1.6;
-            margin: 6px 0 14px;
-            position: relative;
-            z-index: 1;
-        }
-        .confirm-username {
-            display: inline-block;
-            padding: 2px 8px;
-            border-radius: 10px;
-            background: #e0f2fe;
-            color: #075985;
-            font-weight: 700;
-        }
-        .confirm-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            position: relative;
-            z-index: 1;
+            gap: 8px;
+            transition: all 0.2s ease;
         }
         .btn-confirm-secondary {
-            background: #EAF7FC;
-            border: 1px solid #D5E5ED;
-            color: #0f172a;
-            border-radius: 10px;
-            padding: 10px 16px;
-            transition: all 0.2s ease;
-        }
-        .btn-confirm-danger {
-            background: linear-gradient(135deg, #f43f5e, #E53935);
-            border: none;
-            color: #fff;
-            border-radius: 10px;
-            padding: 10px 16px;
-            box-shadow: 0 12px 30px rgba(225,29,72,0.35);
-            transition: all 0.2s ease;
+            background: #ffffff;
+            border: 1px solid #d8e2ec;
+            color: #334155;
         }
         .btn-confirm-secondary:hover {
-            background: #D5E5ED;
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+        .btn-confirm-danger {
+            background: #ef4444;
+            border: 1px solid #ef4444;
+            color: #fff;
+            box-shadow: 0 12px 26px rgba(239, 68, 68, 0.3);
         }
         .btn-confirm-danger:hover {
+            background: #e11d48;
+            border-color: #e11d48;
             color: #fff;
             transform: translateY(-1px);
-            box-shadow: 0 14px 34px rgba(225,29,72,0.45);
+            box-shadow: 0 14px 30px rgba(239, 68, 68, 0.38);
+        }
+        .btn-confirm-success {
+            background: #16a34a;
+            border: 1px solid #16a34a;
+            color: #fff;
+            box-shadow: 0 12px 26px rgba(22, 163, 74, 0.3);
+        }
+        .btn-confirm-success:hover {
+            background: #15803d;
+            border-color: #15803d;
+            color: #fff;
+            transform: translateY(-1px);
+            box-shadow: 0 14px 30px rgba(22, 163, 74, 0.38);
         }
 
         /* Inline error banners (boxed inline validation) */
@@ -1120,32 +1244,29 @@
     <!-- Suspension Modal -->
     <div class="confirm-overlay" id="suspendOverlay" onclick="handleSuspendOverlayClick(event)">
         <div class="confirm-card">
-            <div class="confirm-inner">
-                <div class="confirm-header">
-                    <div class="confirm-icon">
-                        <i class="fas fa-ban"></i>
-                    </div>
-                    <div>
-                        <p class="confirm-title mb-1" id="suspendTitle">Suspend User</p>
-                        <small class="text-muted" id="suspendSubtitle">The user will be unable to log in until suspension is lifted.</small>
-                    </div>
+            <div class="confirm-inner" id="suspendInner">
+                <div class="confirm-hero">
+                    <div class="confirm-icon-circle" id="suspendIcon"><i class="fas fa-ban"></i></div>
+                    <p class="confirm-title" id="suspendTitle">Suspend User</p>
+                    <p class="confirm-subtitle" id="suspendSubtitle">The user will be unable to log in until suspension is lifted.</p>
                 </div>
-                <div class="confirm-body">
-                    <div class="mb-2">
-                        <strong id="suspendUsername">User</strong>
-                    </div>
-                    <div class="mb-3" id="suspendReasonGroup">
-                        <label for="suspendReason" class="form-label">Suspension Reason</label>
-                        <textarea class="form-control" id="suspendReason" rows="3" placeholder="Provide the reason for suspension"></textarea>
-                        <div class="invalid-feedback d-block" id="suspendReasonError" style="display:none;"></div>
-                    </div>
-                    <div class="alert alert-info py-2 px-3" id="suspendedInfo" style="display:none;">
-                        This account is currently suspended. You can lift the suspension to allow login again.
-                    </div>
+                <div class="confirm-userrow">
+                    <i class="fas fa-user"></i>
+                    <span class="confirm-username" id="suspendUsername">User</span>
+                    <span class="confirm-userstatus active" id="suspendUserStatus"><span class="dot"></span> Active</span>
+                </div>
+                <div class="confirm-field" id="suspendReasonGroup">
+                    <label for="suspendReason">Suspension reason <span class="req">*</span></label>
+                    <textarea class="form-control" id="suspendReason" rows="3" placeholder="Provide the reason for suspension"></textarea>
+                    <div class="invalid-feedback d-block" id="suspendReasonError" style="display:none;"></div>
+                </div>
+                <div class="confirm-infobox" id="suspendedInfo">
+                    <i class="fas fa-circle-info"></i>
+                    <span>This account is currently suspended. You can lift the suspension to allow login again.</span>
                 </div>
                 <div class="confirm-actions">
                     <button type="button" class="btn btn-confirm-secondary" onclick="closeSuspendModal()">Cancel</button>
-                    <button type="button" class="btn btn-confirm-danger" id="suspendConfirmBtn">Confirm</button>
+                    <button type="button" class="btn btn-confirm-danger" id="suspendConfirmBtn"><i class="fas fa-ban"></i> Suspend User</button>
                 </div>
             </div>
         </div>
@@ -1686,31 +1807,43 @@
             const decodedReason = decodeURIComponent(reason || '');
             
             const overlay = document.getElementById('suspendOverlay');
+            const inner = document.getElementById('suspendInner');
             const title = document.getElementById('suspendTitle');
             const subtitle = document.getElementById('suspendSubtitle');
+            const iconEl = document.getElementById('suspendIcon');
             const usernameEl = document.getElementById('suspendUsername');
+            const statusEl = document.getElementById('suspendUserStatus');
             const reasonGroup = document.getElementById('suspendReasonGroup');
             const reasonInput = document.getElementById('suspendReason');
             const reasonError = document.getElementById('suspendReasonError');
             const suspendedInfo = document.getElementById('suspendedInfo');
             const confirmBtn = document.getElementById('suspendConfirmBtn');
             
+            if (inner) inner.classList.toggle('lift-mode', isSuspended);
+            if (iconEl) iconEl.innerHTML = isSuspended
+                ? '<i class="fas fa-unlock-keyhole"></i>'
+                : '<i class="fas fa-ban"></i>';
             if (title) title.textContent = isSuspended ? 'Lift Suspension' : 'Suspend User';
             if (subtitle) subtitle.textContent = isSuspended 
                 ? 'Allow the user to log in again.'
                 : 'The user will be unable to log in until suspension is lifted.';
             if (usernameEl) usernameEl.textContent = username ? `@${username}` : 'User';
+            if (statusEl) {
+                statusEl.className = 'confirm-userstatus ' + (isSuspended ? 'suspended' : 'active');
+                statusEl.innerHTML = `<span class="dot"></span> ${isSuspended ? 'Suspended' : 'Active'}`;
+            }
             if (reasonGroup) reasonGroup.style.display = isSuspended ? 'none' : 'block';
             if (reasonInput) {
                 reasonInput.value = isSuspended ? '' : decodedReason;
                 reasonInput.focus();
             }
             if (reasonError) reasonError.style.display = 'none';
-            if (suspendedInfo) suspendedInfo.style.display = isSuspended ? 'block' : 'none';
+            if (suspendedInfo) suspendedInfo.style.display = isSuspended ? 'flex' : 'none';
             if (confirmBtn) {
-                confirmBtn.textContent = isSuspended ? 'Lift Suspension' : 'Suspend User';
-                confirmBtn.classList.toggle('btn-confirm-danger', !isSuspended);
-                confirmBtn.classList.toggle('btn-success', isSuspended);
+                confirmBtn.className = 'btn ' + (isSuspended ? 'btn-confirm-success' : 'btn-confirm-danger');
+                confirmBtn.innerHTML = isSuspended
+                    ? '<i class="fas fa-circle-check"></i> Lift Suspension'
+                    : '<i class="fas fa-ban"></i> Suspend User';
                 confirmBtn.onclick = () => performSuspend();
             }
             
