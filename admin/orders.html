@@ -604,8 +604,6 @@
                         <option value="preparing">Preparing</option>
                         <option value="shipped">Shipped</option>
                         <option value="out_for_delivery">Out for Delivery</option>
-                        <option value="delivered">Delivered</option>
-                        <option value="cancelled">Cancelled</option>
                     </select>
                 </div>
             </div>
@@ -719,7 +717,7 @@
             currentSearch = document.getElementById('searchInput').value;
             currentStatus = document.getElementById('statusFilter').value;
             
-            let url = `../api/admin/get_orders.php?page=${page}&limit=${ORDERS_PER_PAGE}`;
+            let url = `../api/admin/get_orders.php?page=${page}&limit=${ORDERS_PER_PAGE}&exclude_finished=1`;
             if (currentSearch) url += `&search=${encodeURIComponent(currentSearch)}`;
             if (currentStatus) url += `&status=${encodeURIComponent(currentStatus)}`;
             
@@ -727,6 +725,11 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
+                        const totalPages = data.pagination.total_pages || 1;
+                        if ((data.orders || []).length === 0 && page > totalPages) {
+                            loadOrders(totalPages);
+                            return;
+                        }
                         displayOrders(data.orders);
                         displayPagination(data.pagination);
                         document.getElementById('totalOrdersCount').textContent = `${data.pagination.total} Orders`;

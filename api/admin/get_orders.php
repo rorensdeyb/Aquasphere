@@ -34,10 +34,16 @@ $search = sanitize_string($_GET['search'] ?? '', 255);
 $page = max(1, sanitize_int($_GET['page'] ?? 1));
 $limit = max(1, sanitize_int($_GET['limit'] ?? 10));
 $offset = ($page - 1) * $limit;
+$exclude_finished = isset($_GET['exclude_finished']) && $_GET['exclude_finished'] == '1';
 
 // Build where clause
 $where_clause = "1=1";
 $params = [];
+
+// Active orders only (delivered/cancelled live on the Recent Orders page)
+if ($exclude_finished) {
+    $where_clause .= " AND o.status NOT IN ('delivered', 'cancelled', 'completed')";
+}
 
 if (!empty($status)) {
     $where_clause .= " AND o.status = ?";
