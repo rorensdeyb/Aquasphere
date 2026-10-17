@@ -1842,7 +1842,7 @@
             odmItemsPage = 1;
             odmRenderItems();
             
-            const modal = new bootstrap.Modal(document.getElementById('orderDetailsModal'));
+            const modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('orderDetailsModal'));
             modal.show();
         }
 
@@ -1983,6 +1983,18 @@
             applyRecentFilters();
         });
         
+        // Safety net: remove any orphaned dark backdrop + scroll lock once no modal is visible
+        function cleanUpModalArtifacts() {
+            if (document.querySelector('.modal.show')) return;
+            document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
+            document.body.classList.remove('modal-open');
+            document.body.style.removeProperty('overflow');
+            document.body.style.removeProperty('padding-right');
+        }
+        document.querySelectorAll('#orderDetailsModal').forEach(el => {
+            el.addEventListener('hidden.bs.modal', () => setTimeout(cleanUpModalArtifacts, 0));
+        });
+
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             loadOrders();

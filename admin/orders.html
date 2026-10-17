@@ -2087,16 +2087,26 @@
             odmItemsPage = 1;
             odmRenderItems();
             
-            const modal = new bootstrap.Modal(document.getElementById('orderDetailsModal'));
+            const modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('orderDetailsModal'));
             modal.show();
         }
 
         // Jump from details modal into the status update modal
         function updateFromDetails() {
             if (!currentDetailOrder) return;
-            const detailsModal = bootstrap.Modal.getInstance(document.getElementById('orderDetailsModal'));
-            if (detailsModal) detailsModal.hide();
-            setTimeout(() => updateOrderStatus(currentDetailOrder.id, currentDetailOrder.status), 250);
+            const detailsModalEl = document.getElementById('orderDetailsModal');
+            const detailsModal = bootstrap.Modal.getInstance(detailsModalEl);
+            if (!detailsModal) {
+                updateOrderStatus(currentDetailOrder.id, currentDetailOrder.status);
+                return;
+            }
+            // Wait for the details modal to finish hiding before opening the next
+            // one, otherwise overlapping backdrops can stack and get stuck.
+            detailsModalEl.addEventListener('hidden.bs.modal', function handler() {
+                detailsModalEl.removeEventListener('hidden.bs.modal', handler);
+                updateOrderStatus(currentDetailOrder.id, currentDetailOrder.status);
+            });
+            detailsModal.hide();
         }
         
         // Update order status
@@ -2118,7 +2128,7 @@
                 };
             });
             
-            const modal = new bootstrap.Modal(document.getElementById('updateStatusModal'));
+            const modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('updateStatusModal'));
             modal.show();
         }
         
@@ -2290,6 +2300,20 @@
             loadOrders(1);
         });
         
+        // Safety net: if a modal is shown while another is still animating,
+        // Bootstrap can leave an orphaned dark backdrop + scroll lock behind.
+        // Once no modal is visible, remove any stray backdrop and release the lock.
+        function cleanUpModalArtifacts() {
+            if (document.querySelector('.modal.show')) return;
+            document.querySelectorAll('.modal-backdrop').forEach(b => b.remove());
+            document.body.classList.remove('modal-open');
+            document.body.style.removeProperty('overflow');
+            document.body.style.removeProperty('padding-right');
+        }
+        document.querySelectorAll('#orderDetailsModal, #updateStatusModal').forEach(el => {
+            el.addEventListener('hidden.bs.modal', () => setTimeout(cleanUpModalArtifacts, 0));
+        });
+
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             loadOrders();
