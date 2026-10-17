@@ -1928,6 +1928,45 @@
         let currentIndex = 0;
         const FETCH_LIMIT = 1000; // fetch up to 1000 orders in one request
         const SELECTED_ORDER_KEY = 'ordersPageSelectedOrderId';
+        const ORDERS_PAGE_CACHE_KEY = 'ordersPageCache';
+
+        function cacheOrdersPage() {
+            try {
+                localStorage.setItem(ORDERS_PAGE_CACHE_KEY, JSON.stringify(allOrders));
+            } catch (_) {}
+        }
+
+        // Instant paint from localStorage cache (stale-while-revalidate); loadOrders() syncs in background
+        function fastPaintOrders() {
+            try {
+                // Let loadOrders() own the from_payment flow (shows the freshest order)
+                const urlParams = new URLSearchParams(window.location.search);
+                const fromPayment = urlParams.get('from_payment') === 'true' || sessionStorage.getItem('from_payment') === 'true';
+                if (fromPayment) return;
+
+                const raw = localStorage.getItem(ORDERS_PAGE_CACHE_KEY);
+                if (!raw) return;
+                const cached = JSON.parse(raw);
+                if (!Array.isArray(cached) || cached.length === 0) return;
+
+                allOrders = cached;
+                window.__ordersCache = allOrders;
+
+                const storedOrderId = sessionStorage.getItem(SELECTED_ORDER_KEY);
+                currentIndex = 0;
+                if (storedOrderId) {
+                    const foundIndex = allOrders.findIndex(o => String(o.id) === String(storedOrderId));
+                    currentIndex = foundIndex >= 0 ? foundIndex : 0;
+                }
+                if (currentIndex >= allOrders.length) {
+                    currentIndex = Math.max(0, allOrders.length - 1);
+                }
+
+                renderOrders();
+            } catch (_) {}
+        }
+
+        fastPaintOrders();
 
         // Load orders (fetch all, then navigate client-side)
         async function loadOrders() {
@@ -2008,6 +2047,9 @@
 
                 // Share with navbar to avoid duplicate fetch for badge (already filtered - no delivered/cancelled)
                 window.__ordersCache = allOrders;
+
+                // Persist for instant paint on next refresh
+                cacheOrdersPage();
 
                 // Update navbar badge count immediately
                 if (typeof window.updateOrderCount === 'function') {
@@ -2559,6 +2601,7 @@
                         }
                         // Share updated list with navbar cache
                         window.__ordersCache = allOrders;
+                        cacheOrdersPage();
                         // Show cancellation request submitted modal
                         showCancellationRequestModal();
                         renderOrders();
@@ -2573,6 +2616,7 @@
                     }
                         // Share updated list with navbar cache and update badge
                         window.__ordersCache = allOrders;
+                        cacheOrdersPage();
                         if (typeof window.updateOrderCount === 'function') {
                             window.updateOrderCount();
                         }
