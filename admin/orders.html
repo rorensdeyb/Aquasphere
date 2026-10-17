@@ -94,82 +94,395 @@
         
         .page-header {
             background: white;
-            padding: 20px 30px;
-            border-radius: 10px;
-            margin-bottom: 30px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 18px 26px;
+            border-radius: 16px;
+            margin-bottom: 22px;
+            box-shadow: 0 4px 18px rgba(15, 23, 42, 0.05);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 12px;
         }
-        
+        .page-header-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            min-width: 0;
+        }
+        .page-header-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 13px;
+            background: linear-gradient(135deg, #2383B5, #155A7A);
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.15rem;
+            box-shadow: 0 10px 24px rgba(21, 90, 122, 0.28);
+            flex-shrink: 0;
+        }
         .page-header h1 {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #155A7A;
+            font-size: 1.55rem;
+            font-weight: 800;
+            color: #0f2f45;
             margin: 0;
         }
-        
-        .content-card {
-            background: white;
-            border-radius: 10px;
-            padding: 25px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            margin-bottom: 30px;
+        .page-header-sub {
+            margin: 2px 0 0;
+            color: #64748b;
+            font-size: 0.86rem;
         }
-        
-        .content-card h5 {
-            font-weight: 600;
-            color: #155A7A;
+        .om-count-badge {
+            background: #DBEAFE;
+            color: #1D4ED8;
+            font-weight: 800;
+            font-size: 0.8rem;
+            padding: 8px 14px;
+            border-radius: 999px;
+            white-space: nowrap;
+        }
+        .om-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
             margin-bottom: 20px;
         }
-        
-        .filters-bar {
+        .om-stat-card {
+            background: #ffffff;
+            border: 1px solid #E8EEF4;
+            border-radius: 16px;
+            padding: 18px 20px;
             display: flex;
-            gap: 12px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
             align-items: center;
+            gap: 14px;
+            box-shadow: 0 6px 20px rgba(15, 23, 42, 0.05);
         }
-        
-        .filters-bar input,
-        .filters-bar select {
-            border-radius: 8px;
-            border: 2px solid #D5E5ED;
-            padding: 10px 15px;
+        .om-stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 1.15rem;
+            flex-shrink: 0;
         }
-        
-        .filters-bar input:focus,
-        .filters-bar select:focus {
-            border-color: #2383B5;
-            box-shadow: 0 0 0 0.2rem rgba(14, 165, 233, 0.25);
-            outline: none;
+        .om-stat-icon.total { background: linear-gradient(135deg, #2C8FBA, #14607F); }
+        .om-stat-icon.pending { background: linear-gradient(135deg, #F5A524, #E08A00); }
+        .om-stat-icon.value { background: linear-gradient(135deg, #22C55E, #15803D); }
+        .om-stat-label {
+            font-size: 0.7rem;
+            font-weight: 800;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+            color: #94A3B8;
         }
-        
-        .filters-bar input {
+        .om-stat-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #0f172a;
+            line-height: 1.2;
+            margin-top: 2px;
+        }
+        .om-toolbar {
+            display: flex;
+            gap: 14px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+        .om-search {
+            position: relative;
             flex: 1;
             min-width: 240px;
         }
-        
-        .filter-actions {
+        .om-search i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94A3B8;
+            font-size: 0.9rem;
+        }
+        .om-search input {
+            width: 100%;
+            border-radius: 12px;
+            border: 1.5px solid #DCE7EF;
+            padding: 12px 14px 12px 40px;
+            font-size: 0.92rem;
+            color: #0f172a;
+            outline: none;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+        .om-search input:focus {
+            border-color: #2383B5;
+            box-shadow: 0 0 0 3px rgba(35, 131, 181, 0.14);
+        }
+        .om-pills {
             display: flex;
-            gap: 10px;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .om-pill-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            border-radius: 999px;
+            border: 1.5px solid #DCE7EF;
+            background: #ffffff;
+            color: #334155;
+            font-size: 0.82rem;
+            font-weight: 700;
+            padding: 9px 14px;
+            transition: all 0.15s ease;
+            cursor: pointer;
+        }
+        .om-pill-btn .pdot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+        .om-pill-btn .pcount {
+            background: #F1F5F9;
+            color: #475569;
+            border-radius: 999px;
+            padding: 1px 8px;
+            font-size: 0.75rem;
+            font-weight: 800;
+        }
+        .om-pill-btn:hover {
+            border-color: #9CCFE4;
+        }
+        .om-pill-btn.active {
+            background: linear-gradient(135deg, #1B5F82, #123F58);
+            border-color: transparent;
+            color: #ffffff;
+        }
+        .om-pill-btn.active .pcount {
+            background: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+        }
+        .om-table-card {
+            background: #ffffff;
+            border: 1px solid #E8EEF4;
+            border-radius: 16px;
+            box-shadow: 0 6px 20px rgba(15, 23, 42, 0.05);
+            overflow: hidden;
+        }
+        .om-table {
+            margin-bottom: 0;
+            min-width: 920px;
+        }
+        .om-table thead th {
+            background: #EFF8FD;
+            color: #0E7490;
+            font-size: 0.72rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            border-bottom: 1px solid #DCE7EF;
+            padding: 14px 18px;
+            white-space: nowrap;
+        }
+        .om-table tbody td {
+            padding: 16px 18px;
+            border-bottom: 1px solid #F1F5F9;
+            vertical-align: middle;
+        }
+        .om-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+        .om-table tbody tr:hover {
+            background: #F8FBFD;
+        }
+        .om-order-id {
+            font-weight: 800;
+            color: #0f172a;
+        }
+        .om-customer {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 0;
+        }
+        .om-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: #DBEAFE;
+            color: #1D4ED8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+        .om-cname {
+            font-weight: 700;
+            color: #0f172a;
+        }
+        .om-cemail {
+            color: #7C8CA0;
+            font-size: 0.8rem;
+            overflow-wrap: anywhere;
+        }
+        .om-date-main {
+            font-weight: 700;
+            color: #0f172a;
+            font-size: 0.92rem;
+            white-space: nowrap;
+        }
+        .om-date-sub {
+            color: #7C8CA0;
+            font-size: 0.8rem;
+            margin-top: 2px;
+        }
+        .om-items-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: #E0F2FE;
+            color: #0369A1;
+            border-radius: 9px;
+            padding: 6px 11px;
+            font-weight: 700;
+            font-size: 0.82rem;
+            white-space: nowrap;
+        }
+        .om-total {
+            font-weight: 800;
+            color: #0f172a;
+            white-space: nowrap;
+        }
+        .om-pay-chip {
+            display: inline-block;
+            background: #F1F5F9;
+            color: #475569;
+            border-radius: 999px;
+            padding: 5px 12px;
+            font-weight: 700;
+            font-size: 0.8rem;
+        }
+        .om-status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            border-radius: 999px;
+            padding: 6px 12px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: capitalize;
+            white-space: nowrap;
+        }
+        .om-status-pill .sdot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+        .om-status-pill.pending { background: #FEF3C7; color: #B45309; }
+        .om-status-pill.preparing { background: #DBEAFE; color: #1D4ED8; }
+        .om-status-pill.shipped { background: #EDE9FE; color: #6D28D9; }
+        .om-status-pill.out_for_delivery { background: #CCFBF1; color: #0F766E; }
+        .om-status-pill.delivered { background: #D1FAE5; color: #047857; }
+        .om-status-pill.completed { background: #D1FAE5; color: #047857; }
+        .om-status-pill.cancelled { background: #FEE2E2; color: #B91C1C; }
+        .om-actions {
+            display: flex;
+            gap: 8px;
+            white-space: nowrap;
+        }
+        .btn-om-view {
+            background: #ffffff;
+            border: 1.5px solid #9CCFE4;
+            color: #155A7A;
+            border-radius: 10px;
+            padding: 8px 14px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            transition: all 0.15s ease;
+        }
+        .btn-om-view:hover {
+            background: #EFF8FD;
+            color: #0F455E;
+        }
+        .btn-om-update {
+            background: linear-gradient(135deg, #1B5F82, #0F3A54);
+            border: none;
+            color: #ffffff;
+            border-radius: 10px;
+            padding: 8px 14px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            transition: all 0.15s ease;
+            box-shadow: 0 8px 18px rgba(15, 58, 84, 0.25);
+        }
+        .btn-om-update:hover {
+            background: linear-gradient(135deg, #154C6B, #0B2C40);
+            color: #ffffff;
+            transform: translateY(-1px);
+        }
+        .om-table-foot {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 12px 18px;
+            border-top: 1px solid #EEF4F8;
+            background: #ffffff;
+            flex-wrap: wrap;
+        }
+        .om-showing {
+            color: #64748b;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .om-pagination {
+            display: flex;
+            gap: 6px;
             align-items: center;
         }
-        
-        .filter-actions select {
-            min-width: 170px;
+        .om-page-btn {
+            min-width: 32px;
+            height: 32px;
+            border-radius: 9px;
+            border: 1px solid #D5E5ED;
+            background: #ffffff;
+            color: #334155;
+            font-weight: 700;
+            font-size: 0.82rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            padding: 0 8px;
+            transition: all 0.15s ease;
         }
-        
-        .table {
-            margin-bottom: 0;
+        .om-page-btn:hover:not(:disabled):not(.active) {
+            background: #F1F5F9;
         }
-        
-        .table thead th {
-            background-color: #f8f9fa;
-            font-weight: 600;
-            color: #155A7A;
-            border-bottom: 2px solid #dee2e6;
+        .om-page-btn.active {
+            background: linear-gradient(135deg, #2383B5, #155A7A);
+            border-color: #2383B5;
+            color: #ffffff;
+        }
+        .om-page-btn:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+        @media (max-width: 991.98px) {
+            .om-stats {
+                grid-template-columns: 1fr;
+            }
         }
         
         .status-badge {
@@ -1135,31 +1448,70 @@
     <!-- Main Content -->
     <div class="main-content">
         <div class="page-header">
-            <h1><i class="fas fa-shopping-cart me-2"></i>Order Management</h1>
-            <div>
-                <span class="badge bg-primary" id="totalOrdersCount">0 Orders</span>
+            <div class="page-header-left">
+                <div class="page-header-icon"><i class="fas fa-shopping-cart"></i></div>
+                <div>
+                    <h1>Order Management</h1>
+                    <p class="page-header-sub">Track, review and update customer orders</p>
+                </div>
+            </div>
+            <span class="om-count-badge" id="totalOrdersCount">0 Orders</span>
+        </div>
+
+        <div class="om-stats">
+            <div class="om-stat-card">
+                <div class="om-stat-icon total"><i class="fas fa-list-check"></i></div>
+                <div>
+                    <div class="om-stat-label">Total Orders</div>
+                    <div class="om-stat-value" id="statTotalOrders">0</div>
+                </div>
+            </div>
+            <div class="om-stat-card">
+                <div class="om-stat-icon pending"><i class="fas fa-clock"></i></div>
+                <div>
+                    <div class="om-stat-label">Pending</div>
+                    <div class="om-stat-value" id="statPending">0</div>
+                </div>
+            </div>
+            <div class="om-stat-card">
+                <div class="om-stat-icon value"><i class="fas fa-peso-sign"></i></div>
+                <div>
+                    <div class="om-stat-label">Total Value</div>
+                    <div class="om-stat-value" id="statValue">₱0</div>
+                </div>
             </div>
         </div>
 
-        <div class="content-card">
-            <div class="filters-bar">
-                <input type="text" class="form-control" id="searchInput" placeholder="Search by order ID, username, or email...">
-                <div class="filter-actions">
-                    <select class="form-select" id="statusFilter">
-                        <option value="">All Statuses</option>
-                        <option value="pending">Pending</option>
-                        <option value="preparing">Preparing</option>
-                        <option value="shipped">Shipped</option>
-                        <option value="out_for_delivery">Out for Delivery</option>
-                    </select>
-                </div>
+        <div class="om-toolbar">
+            <div class="om-search">
+                <i class="fas fa-magnifying-glass"></i>
+                <input type="text" id="searchInput" placeholder="Search by order ID, username, or email...">
             </div>
-            
+            <div class="om-pills" id="statusPills">
+                <button type="button" class="om-pill-btn active" data-status="">
+                    All <span class="pcount" id="pillCountAll">0</span>
+                </button>
+                <button type="button" class="om-pill-btn" data-status="pending">
+                    <span class="pdot" style="color:#F59E0B;"></span> Pending <span class="pcount" id="pillCountPending">0</span>
+                </button>
+                <button type="button" class="om-pill-btn" data-status="preparing">
+                    <span class="pdot" style="color:#3B82F6;"></span> Preparing <span class="pcount" id="pillCountPreparing">0</span>
+                </button>
+                <button type="button" class="om-pill-btn" data-status="shipped">
+                    <span class="pdot" style="color:#8B5CF6;"></span> Shipped <span class="pcount" id="pillCountShipped">0</span>
+                </button>
+                <button type="button" class="om-pill-btn" data-status="out_for_delivery">
+                    <span class="pdot" style="color:#14b8a6;"></span> Out for Delivery <span class="pcount" id="pillCountOut">0</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="om-table-card">
             <div class="table-responsive">
-                <table class="table table-hover">
+                <table class="table om-table">
                     <thead>
                         <tr>
-                            <th>Order ID</th>
+                            <th>Order</th>
                             <th>Customer</th>
                             <th>Date</th>
                             <th>Items</th>
@@ -1176,11 +1528,10 @@
                     </tbody>
                 </table>
             </div>
-            
-            <nav aria-label="Orders pagination">
-                <ul class="pagination justify-content-center" id="pagination">
-                </ul>
-            </nav>
+            <div class="om-table-foot">
+                <span class="om-showing" id="omShowing">Showing 0 of 0 orders</span>
+                <div class="om-pagination" id="pagination"></div>
+            </div>
         </div>
     </div>
 
@@ -1310,7 +1661,6 @@
         function loadOrders(page = 1) {
             currentPage = page;
             currentSearch = document.getElementById('searchInput').value;
-            currentStatus = document.getElementById('statusFilter').value;
             
             let url = `../api/admin/get_orders.php?page=${page}&limit=${ORDERS_PER_PAGE}&exclude_finished=1`;
             if (currentSearch) url += `&search=${encodeURIComponent(currentSearch)}`;
@@ -1328,6 +1678,8 @@
                         displayOrders(data.orders);
                         displayPagination(data.pagination);
                         document.getElementById('totalOrdersCount').textContent = `${data.pagination.total} Orders`;
+                        document.getElementById('omShowing').textContent = `Showing ${data.orders.length} of ${data.pagination.total} orders`;
+                        loadStats();
                     } else {
                         showNotification(data.message || 'Failed to load orders', 'error');
                     }
@@ -1336,6 +1688,32 @@
                     console.error('Error loading orders:', error);
                     showNotification('Failed to load orders', 'error');
                 });
+        }
+        
+        // Load summary stats + pill counts
+        function loadStats() {
+            fetch(`../api/admin/get_orders.php?page=1&limit=1000&exclude_finished=1`)
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.success) return;
+                    const orders = data.orders || [];
+                    const counts = { pending: 0, preparing: 0, shipped: 0, out_for_delivery: 0 };
+                    let totalValue = 0;
+                    orders.forEach(o => {
+                        const s = (o.status || '').toLowerCase();
+                        if (counts[s] !== undefined) counts[s]++;
+                        totalValue += parseFloat(o.total_amount) || 0;
+                    });
+                    document.getElementById('statTotalOrders').textContent = orders.length;
+                    document.getElementById('statPending').textContent = counts.pending;
+                    document.getElementById('statValue').textContent = '₱' + totalValue.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                    document.getElementById('pillCountAll').textContent = orders.length;
+                    document.getElementById('pillCountPending').textContent = counts.pending;
+                    document.getElementById('pillCountPreparing').textContent = counts.preparing;
+                    document.getElementById('pillCountShipped').textContent = counts.shipped;
+                    document.getElementById('pillCountOut').textContent = counts.out_for_delivery;
+                })
+                .catch(error => console.error('Error loading stats:', error));
         }
         
         // Display orders
@@ -1368,31 +1746,38 @@
             }
             
             tbody.innerHTML = orders.map(order => {
-                const status = order.status.toLowerCase();
-                const statusLabel = status.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
+                const status = (order.status || '').toLowerCase();
                 const itemsCount = order.items ? order.items.length : 0;
-                const address = order.delivery_address;
-                const addressText = address ? (typeof address === 'string' ? address : (address.address || address.street || 'N/A')) : 'N/A';
                 
                 return `
                     <tr>
-                        <td><strong>${highlightText('#' + order.id, searchTerm)}</strong></td>
+                        <td><span class="om-order-id">#${order.id}</span></td>
                         <td>
-                            <div><strong>${highlightText(order.username || 'N/A', searchTerm)}</strong></div>
-                            <small class="text-muted">${highlightText(order.email || 'N/A', searchTerm)}</small>
+                            <div class="om-customer">
+                                <div class="om-avatar"><i class="fas fa-user"></i></div>
+                                <div>
+                                    <div class="om-cname">${highlightText(order.username || 'N/A', searchTerm)}</div>
+                                    <div class="om-cemail">${highlightText(order.email || 'N/A', searchTerm)}</div>
+                                </div>
+                            </div>
                         </td>
-                        <td>${formatDate(order.order_date)}</td>
-                        <td>${itemsCount} item${itemsCount !== 1 ? 's' : ''}</td>
-                        <td><strong>₱${parseFloat(order.total_amount).toFixed(2)}</strong></td>
-                        <td>${escapeHtml(order.payment_method || 'COD')}</td>
-                        <td><span class="status-badge ${status}">${statusLabel}</span></td>
                         <td>
-                            <button class="btn btn-primary btn-sm" onclick="viewOrderDetails(${order.id})">
-                                <i class="fas fa-eye"></i> View
-                            </button>
-                            <button class="btn btn-update btn-sm" onclick="updateOrderStatus(${order.id}, '${status}')">
-                                <i class="fas fa-sync-alt"></i> Update
-                            </button>
+                            <div class="om-date-main">${formatDateShort(order.order_date)}</div>
+                            <div class="om-date-sub">${formatTimeShort(order.order_date)}</div>
+                        </td>
+                        <td><span class="om-items-chip"><i class="fas fa-box"></i> ${itemsCount} item${itemsCount !== 1 ? 's' : ''}</span></td>
+                        <td><span class="om-total">₱${parseFloat(order.total_amount).toFixed(2)}</span></td>
+                        <td><span class="om-pay-chip">${escapeHtml(order.payment_method || 'COD')}</span></td>
+                        <td><span class="om-status-pill ${status}"><span class="sdot"></span>${status.replace(/_/g, ' ')}</span></td>
+                        <td>
+                            <div class="om-actions">
+                                <button class="btn-om-view" onclick="viewOrderDetails(${order.id})">
+                                    <i class="fas fa-eye"></i> View
+                                </button>
+                                <button class="btn-om-update" onclick="updateOrderStatus(${order.id}, '${status}')">
+                                    <i class="fas fa-sync-alt"></i> Update
+                                </button>
+                            </div>
                         </td>
                     </tr>
                 `;
@@ -1402,7 +1787,7 @@
         // Display pagination
         function displayPagination(pagination) {
             const paginationEl = document.getElementById('pagination');
-            const totalPages = pagination.total_pages;
+            const totalPages = pagination.total_pages || 1;
             
             if (totalPages <= 1) {
                 paginationEl.innerHTML = '';
@@ -1411,36 +1796,17 @@
             
             let html = '';
             
-            // Previous button
-            html += `
-                <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
-                    <a class="page-link" href="#" onclick="loadOrders(${currentPage - 1}); return false;">
-                        <i class="fas fa-chevron-left"></i>
-                    </a>
-                </li>
-            `;
+            html += `<button type="button" class="om-page-btn" ${currentPage === 1 ? 'disabled' : ''} onclick="loadOrders(${currentPage - 1})"><i class="fas fa-chevron-left"></i></button>`;
             
-            // Page numbers
             for (let i = 1; i <= totalPages; i++) {
                 if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
-                    html += `
-                        <li class="page-item ${i === currentPage ? 'active' : ''}">
-                            <a class="page-link" href="#" onclick="loadOrders(${i}); return false;">${i}</a>
-                        </li>
-                    `;
+                    html += `<button type="button" class="om-page-btn ${i === currentPage ? 'active' : ''}" onclick="loadOrders(${i})">${i}</button>`;
                 } else if (i === currentPage - 2 || i === currentPage + 2) {
-                    html += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
+                    html += `<span class="om-page-btn" style="border:none;background:none;cursor:default;">...</span>`;
                 }
             }
             
-            // Next button
-            html += `
-                <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
-                    <a class="page-link" href="#" onclick="loadOrders(${currentPage + 1}); return false;">
-                        <i class="fas fa-chevron-right"></i>
-                    </a>
-                </li>
-            `;
+            html += `<button type="button" class="om-page-btn" ${currentPage === totalPages ? 'disabled' : ''} onclick="loadOrders(${currentPage + 1})"><i class="fas fa-chevron-right"></i></button>`;
             
             paginationEl.innerHTML = html;
         }
@@ -1805,6 +2171,34 @@
             });
         }
         
+        // Short date (table row)
+        function formatDateShort(dateString) {
+            if (!dateString) return 'N/A';
+            const normalized = dateString.match(/Z|[\\+\\-]\\d\\d:?\\d\\d$/) ? dateString : `${dateString}Z`;
+            const date = new Date(normalized);
+            if (isNaN(date)) return 'N/A';
+            return date.toLocaleDateString('en-PH', {
+                timeZone: 'Asia/Manila',
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
+            });
+        }
+        
+        // Short time (table row)
+        function formatTimeShort(dateString) {
+            if (!dateString) return '';
+            const normalized = dateString.match(/Z|[\\+\\-]\\d\\d:?\\d\\d$/) ? dateString : `${dateString}Z`;
+            const date = new Date(normalized);
+            if (isNaN(date)) return '';
+            return date.toLocaleTimeString('en-PH', {
+                timeZone: 'Asia/Manila',
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true
+            });
+        }
+        
         // Escape HTML
         function escapeHtml(text) {
             const div = document.createElement('div');
@@ -1886,8 +2280,13 @@
             }, 400);
         });
         
-        // Auto-filter on status change
-        document.getElementById('statusFilter').addEventListener('change', function() {
+        // Status filter pills
+        document.getElementById('statusPills').addEventListener('click', function(e) {
+            const btn = e.target.closest('.om-pill-btn');
+            if (!btn) return;
+            document.querySelectorAll('#statusPills .om-pill-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentStatus = btn.dataset.status || '';
             loadOrders(1);
         });
         
