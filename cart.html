@@ -3392,6 +3392,10 @@
                         deliveryStartDate: data.delivery_start_date || null,
                         deliveryEndDate: data.delivery_end_date || null
                     };
+                    // Cache prediction so the fee paints instantly on refresh
+                    try {
+                        localStorage.setItem('cartDeliveryPrediction', JSON.stringify(mlPrediction));
+                    } catch (_) { /* quota — ignore */ }
                 } else {
                     // Fallback to default
                     mlPrediction = { 
@@ -6165,6 +6169,24 @@
         }
         
         // Initialize
+        // Stale-while-revalidate: paint cart + address instantly from
+        // localStorage (already synced on last visit), then await the server
+        // and repaint with fresh data.
+        (function fastPaintCart() {
+            try {
+                // Seed delivery prediction from cache so the fee isn't ₱-- on first paint
+                try {
+                    const pred = JSON.parse(localStorage.getItem('cartDeliveryPrediction') || 'null');
+                    if (pred && typeof pred.shippingFee === 'number') {
+                        mlPrediction = pred;
+                    }
+                } catch (_) { /* ignore bad cache */ }
+                loadCart();
+                loadAddress();
+            } catch (e) {
+                console.error('Fast cart paint failed:', e);
+            }
+        })();
         (async () => {
             const serverState = await UserState.loadState();
             // Only sync from server if user is logged in and we got data
@@ -6175,10 +6197,11 @@
                 // User not logged in or server unavailable - use localStorage
                 selectedItems = new Set(JSON.parse(localStorage.getItem('selectedCartItems') || '[]'));
             }
+        // Reset fee placeholder BEFORE loadCart so the summary paint wins
+        initializeDeliveryFeeDisplay();
         loadCart();
         loadAddress();
         initializeLocationDropdowns();
-        initializeDeliveryFeeDisplay();
         })();
         
         // Maintain cart item hover state when quantity buttons are clicked to allow continuous clicking

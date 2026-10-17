@@ -1755,6 +1755,10 @@
                             deliveryTimeHours: data.delivery_time_hours,
                             deliveryDateRange: data.delivery_date_range || null
                         };
+                        // Cache prediction so fee/total/date paint instantly on refresh
+                        try {
+                            localStorage.setItem('paymentDeliveryPrediction', JSON.stringify(mlPrediction));
+                        } catch (_) { /* quota — ignore */ }
                     }
                 }
             } catch (error) {
@@ -1848,6 +1852,82 @@
                 }
             }
         }
+        
+        // Stale-while-revalidate: paint the summary instantly from localStorage
+        // (no network waits), then predictDeliveryTime()/loadOrderSummary() repaint
+        // with fresh server-verified values in the background.
+        function fastPaintOrderSummary() {
+            try {
+                // Never fast-paint on the post-payment success redirect
+                const urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.get('status') === 'success') return;
+                
+                // Seed prediction from cache so fee/total/date aren't ₱-- on first paint
+                try {
+                    const pred = JSON.parse(localStorage.getItem('paymentDeliveryPrediction') || 'null');
+                    if (pred && typeof pred.shippingFee === 'number') {
+                        mlPrediction.shippingFee = pred.shippingFee;
+                        mlPrediction.deliveryTimeMinutes = pred.deliveryTimeMinutes;
+                        mlPrediction.deliveryTimeHours = pred.deliveryTimeHours;
+                        mlPrediction.deliveryDateRange = pred.deliveryDateRange || null;
+                    }
+                } catch (_) { /* ignore bad cache */ }
+                
+                // Synchronous localStorage reads — no loadState() wait
+                const checkoutItems = UserState.getCheckoutItems();
+                const deliveryAddress = UserState.getDeliveryAddress();
+                if (!checkoutItems || checkoutItems.length === 0) return;
+                
+                let subtotal = 0;
+                checkoutItems.forEach(item => {
+                    subtotal += item.price * item.quantity;
+                });
+                
+                const needsPrediction = subtotal > 0 && deliveryAddress && deliveryAddress.latitude && deliveryAddress.longitude;
+                const predictionReady = mlPrediction.shippingFee !== null;
+                
+                let deliveryFee = 0;
+                let deliveryFeeDisplay = '₱--';
+                let subtotalDisplay = `₱${subtotal.toFixed(2)}`;
+                let totalDisplay = '₱--';
+                
+                if (subtotal > 0) {
+                    if (needsPrediction && !predictionReady) {
+                        // Cached paint without a prediction yet: show subtotal,
+                        // leave fee/total as placeholders until revalidation lands
+                        deliveryFeeDisplay = '₱--';
+                        totalDisplay = '₱--';
+                    } else if (predictionReady) {
+                        deliveryFee = mlPrediction.shippingFee;
+                        deliveryFeeDisplay = `₱${deliveryFee.toFixed(2)}`;
+                        totalDisplay = `₱${(subtotal + deliveryFee).toFixed(2)}`;
+                    } else {
+                        totalDisplay = `₱${(subtotal + deliveryFee).toFixed(2)}`;
+                    }
+                } else {
+                    totalDisplay = '₱0.00';
+                }
+                
+                document.getElementById('orderSubtotal').textContent = subtotalDisplay;
+                document.getElementById('orderDeliveryFee').textContent = deliveryFeeDisplay;
+                document.getElementById('orderTotal').textContent = totalDisplay;
+                const codNoteTotal = document.getElementById('codNoteTotal');
+                if (codNoteTotal) codNoteTotal.textContent = totalDisplay;
+                
+                const deliveryTimeRow = document.getElementById('orderDeliveryTimeRow');
+                const deliveryTimeEl = document.getElementById('orderDeliveryTime');
+                if (mlPrediction.deliveryDateRange && subtotal > 0 && predictionReady) {
+                    if (deliveryTimeEl) deliveryTimeEl.textContent = mlPrediction.deliveryDateRange;
+                    if (deliveryTimeRow) deliveryTimeRow.style.display = 'flex';
+                } else if (deliveryTimeRow) {
+                    deliveryTimeRow.style.display = 'none';
+                }
+            } catch (e) {
+                console.error('Fast summary paint failed:', e);
+            }
+        }
+        // Paint immediately at script parse (DOM above is already parsed)
+        fastPaintOrderSummary();
         
         // Select payment method
         function selectPaymentMethod(method) {
