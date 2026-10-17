@@ -752,7 +752,7 @@
             display: flex;
             align-items: flex-start;
             gap: 1rem;
-            margin: 0 0 16px;
+            margin: 24px 0 16px;
             position: relative;
             z-index: 2;
         }
@@ -772,19 +772,6 @@
         .up-avatar i {
             font-size: 2.8rem;
             color: #155A7A;
-        }
-        .up-status-dot {
-            position: absolute;
-            right: 6px;
-            bottom: 8px;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            border: 3px solid #ffffff;
-            background: #22c55e;
-        }
-        .up-status-dot.suspended {
-            background: #ef4444;
         }
         .up-idblock {
             min-width: 0;
@@ -1897,7 +1884,6 @@
                 <div class="up-profile">
                     <div class="up-avatar">
                         <i class="fas fa-user"></i>
-                        <span class="up-status-dot${isSuspended ? ' suspended' : ''}"></span>
                     </div>
                     <div class="up-idblock">
                         <h3 class="up-name">${escapeHtml(fullName)}</h3>
