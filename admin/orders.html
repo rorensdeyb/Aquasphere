@@ -869,46 +869,212 @@
             }
         }
 
-        /* Update status modal styling */
-        .update-modal {
-            border-radius: 16px;
+        /* Update status modal - Redesigned */
+        .update-status-modal .modal-dialog {
+            max-width: 520px;
+        }
+        .update-status-modal .modal-content {
+            border: none;
+            border-radius: 20px;
             overflow: hidden;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.38);
         }
-        .update-card {
-            background: linear-gradient(135deg, #EAF7FC 0%, #eef7ff 100%);
-            border: 1px solid #D5E5ED;
-            border-radius: 14px;
-            padding: 16px;
+        .usm-header {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #2C8FBA 0%, #14607F 100%);
+            color: #ffffff;
+            padding: 1.1rem 1.25rem;
             display: flex;
-            gap: 14px;
             align-items: center;
-            box-shadow: 0 8px 28px rgba(0,0,0,0.08);
+            justify-content: space-between;
+            gap: 0.75rem;
+            border: none;
         }
-        .update-icon {
-            width: 52px;
-            height: 52px;
-            border-radius: 14px;
-            background: linear-gradient(135deg, #2383B5, #155A7A);
-            color: #fff;
-            display: inline-flex;
+        .usm-header::after {
+            content: '';
+            position: absolute;
+            right: -40px;
+            top: -60px;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.10);
+            pointer-events: none;
+        }
+        .usm-head-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+            z-index: 1;
+        }
+        .usm-head-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.18);
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.25rem;
-            box-shadow: 0 12px 30px rgba(14, 165, 233, 0.35);
+            font-size: 1.1rem;
         }
-        .btn-gradient {
+        .usm-title {
+            margin: 0;
+            font-size: 1.18rem;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.2;
+        }
+        .usm-sub {
+            margin: 2px 0 0;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.82);
+        }
+        .usm-close {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.88);
+            color: #155A7A;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+            position: relative;
+            z-index: 1;
+            flex-shrink: 0;
+        }
+        .usm-close:hover {
+            background: #ffffff;
+            color: #0F455E;
+            transform: rotate(90deg);
+        }
+        .usm-body {
+            background: #ffffff;
+            padding: 1.15rem 1.25rem 1rem;
+        }
+        .usm-label {
+            font-size: 0.7rem;
+            font-weight: 800;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+            color: #0E7490;
+            margin-bottom: 10px;
+        }
+        .usm-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            border: 1.5px solid #E2E8F0;
+            border-radius: 12px;
+            background: #ffffff;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            margin-bottom: 10px;
+        }
+        .usm-option:last-child {
+            margin-bottom: 0;
+        }
+        .usm-option:hover {
+            border-color: #9CCFE4;
+        }
+        .usm-option.selected {
+            border-color: #2383B5;
+            background: #EFF8FD;
+        }
+        .usm-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .usm-opt-label {
+            flex: 1;
+            min-width: 0;
+            font-weight: 700;
+            color: #0f172a;
+            font-size: 0.95rem;
+        }
+        .usm-current {
+            display: none;
+            background: #FEF3C7;
+            color: #92400e;
+            font-size: 0.66rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 3px 9px;
+            border-radius: 999px;
+            flex-shrink: 0;
+        }
+        .usm-option.is-current .usm-current {
+            display: inline-block;
+        }
+        .usm-radio {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid #CBD5E1;
+            margin: 0;
+            cursor: pointer;
+            position: relative;
+            flex-shrink: 0;
+            transition: border-color 0.15s ease;
+        }
+        .usm-radio:checked {
+            border-color: #155A7A;
+        }
+        .usm-radio:checked::after {
+            content: '';
+            position: absolute;
+            inset: 3px;
+            border-radius: 50%;
+            background: #155A7A;
+        }
+        .usm-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            padding: 14px 1.25rem;
+            background: #ffffff;
+            border-top: 1px solid #E2E8F0;
+        }
+        .usm-btn {
+            border-radius: 12px;
+            padding: 11px 22px;
+            font-weight: 700;
+            font-size: 0.93rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+        .usm-btn-cancel {
+            background: #ffffff;
+            border: 1px solid #D5E5ED;
+            color: #334155;
+        }
+        .usm-btn-cancel:hover {
+            background: #F1F5F9;
+            color: #0f172a;
+        }
+        .usm-btn-save {
             background: linear-gradient(135deg, #2383B5, #155A7A);
             border: none;
-            color: #fff;
-            box-shadow: 0 10px 26px rgba(14,165,233,0.35);
+            color: #ffffff;
+            box-shadow: 0 12px 26px rgba(21, 90, 122, 0.30);
         }
-        .btn-gradient:hover {
-            background: linear-gradient(135deg, #155A7A, #2383B5);
-            color: #fff;
+        .usm-btn-save:hover {
+            background: linear-gradient(135deg, #155A7A, #0F455E);
+            color: #ffffff;
             transform: translateY(-1px);
-        }
-        .update-actions {
-            border-top: 1px solid #D5E5ED;
         }
         
         .search-highlight {
@@ -1052,36 +1218,66 @@
     </div>
 
     <!-- Update Status Modal -->
-    <div class="modal fade" id="updateStatusModal" tabindex="-1">
+    <div class="modal fade update-status-modal" id="updateStatusModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content update-modal">
-                <div class="modal-header">
-                    <h5 class="modal-title"><i class="fas fa-sync-alt me-2"></i>Update Order Status</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="updateStatusForm" novalidate>
-                        <input type="hidden" id="updateOrderId">
-                        <div class="update-card">
-                            <div class="update-icon"><i class="fas fa-shipping-fast"></i></div>
-                            <div class="mb-3">
-                                <label for="updateStatus" class="form-label">Order Status</label>
-                                <select class="form-select" id="updateStatus" required>
-                                    <option value="pending">Pending</option>
-                                    <option value="preparing">Preparing</option>
-                                    <option value="shipped">Shipped</option>
-                                    <option value="out_for_delivery">Out for Delivery</option>
-                                    <option value="delivered">Delivered</option>
-                                    <option value="cancelled">Cancelled</option>
-                                </select>
-                            </div>
+            <div class="modal-content">
+                <div class="usm-header">
+                    <div class="usm-head-left">
+                        <div class="usm-head-icon"><i class="fas fa-arrows-rotate"></i></div>
+                        <div>
+                            <h5 class="usm-title">Update Order Status</h5>
+                            <p class="usm-sub">Choose the new status for this order</p>
                         </div>
-                    </form>
+                    </div>
+                    <button type="button" class="usm-close" data-bs-dismiss="modal" aria-label="Close"><i class="fas fa-xmark"></i></button>
                 </div>
-                <div class="modal-footer update-actions">
-                    <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary btn-gradient" onclick="saveStatus()">
-                        <i class="fas fa-save me-2"></i>Update Status
+                <div class="usm-body">
+                    <input type="hidden" id="updateOrderId">
+                    <input type="hidden" id="updateStatus" value="">
+                    <div class="usm-label">Order Status</div>
+                    <div class="usm-options" id="usmOptions">
+                        <label class="usm-option" data-status="pending">
+                            <span class="usm-dot" style="background:#f59e0b;"></span>
+                            <span class="usm-opt-label">Pending</span>
+                            <span class="usm-current">Current</span>
+                            <input type="radio" name="usmStatus" class="usm-radio" value="pending">
+                        </label>
+                        <label class="usm-option" data-status="preparing">
+                            <span class="usm-dot" style="background:#3b82f6;"></span>
+                            <span class="usm-opt-label">Preparing</span>
+                            <span class="usm-current">Current</span>
+                            <input type="radio" name="usmStatus" class="usm-radio" value="preparing">
+                        </label>
+                        <label class="usm-option" data-status="shipped">
+                            <span class="usm-dot" style="background:#8b5cf6;"></span>
+                            <span class="usm-opt-label">Shipped</span>
+                            <span class="usm-current">Current</span>
+                            <input type="radio" name="usmStatus" class="usm-radio" value="shipped">
+                        </label>
+                        <label class="usm-option" data-status="out_for_delivery">
+                            <span class="usm-dot" style="background:#14b8a6;"></span>
+                            <span class="usm-opt-label">Out for Delivery</span>
+                            <span class="usm-current">Current</span>
+                            <input type="radio" name="usmStatus" class="usm-radio" value="out_for_delivery">
+                        </label>
+                        <label class="usm-option" data-status="delivered">
+                            <span class="usm-dot" style="background:#22c55e;"></span>
+                            <span class="usm-opt-label">Delivered</span>
+                            <span class="usm-current">Current</span>
+                            <input type="radio" name="usmStatus" class="usm-radio" value="delivered">
+                        </label>
+                        <label class="usm-option" data-status="cancelled">
+                            <span class="usm-dot" style="background:#ef4444;"></span>
+                            <span class="usm-opt-label">Cancelled</span>
+                            <span class="usm-current">Current</span>
+                            <input type="radio" name="usmStatus" class="usm-radio" value="cancelled">
+                        </label>
+                    </div>
+                </div>
+                <div class="usm-footer">
+                    <button type="button" class="usm-btn usm-btn-cancel" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="usm-btn usm-btn-save" onclick="saveStatus()">
+                        <i class="fas fa-floppy-disk"></i> Update Status
                     </button>
                 </div>
             </div>
@@ -1540,7 +1736,21 @@
         // Update order status
         function updateOrderStatus(orderId, currentStatus) {
             document.getElementById('updateOrderId').value = orderId;
-            document.getElementById('updateStatus').value = currentStatus;
+            document.getElementById('updateStatus').value = currentStatus || '';
+            
+            document.querySelectorAll('#usmOptions .usm-option').forEach(opt => {
+                const radio = opt.querySelector('.usm-radio');
+                const isCurrent = opt.dataset.status === currentStatus;
+                radio.checked = isCurrent;
+                opt.classList.toggle('is-current', isCurrent);
+                opt.classList.toggle('selected', isCurrent);
+                radio.onchange = () => {
+                    document.getElementById('updateStatus').value = radio.value;
+                    document.querySelectorAll('#usmOptions .usm-option').forEach(o => {
+                        o.classList.toggle('selected', o.querySelector('.usm-radio').checked);
+                    });
+                };
+            });
             
             const modal = new bootstrap.Modal(document.getElementById('updateStatusModal'));
             modal.show();
