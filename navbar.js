@@ -339,13 +339,11 @@ function updateOrderCount() {
         return;
     }
     
-    // FAST PATH: Try localStorage cache first (instant display)
+    // FAST PATH: Try localStorage cache first (instant display, even if stale)
+    // Stale-while-revalidate: paint whatever we have, sync in background
     try {
         const cachedCount = localStorage.getItem('ordersCount');
-        const cacheTimestamp = localStorage.getItem('ordersCountTimestamp');
-        const now = Date.now();
-        // Use cache if it's less than 30 seconds old
-        if (cachedCount !== null && cacheTimestamp && (now - parseInt(cacheTimestamp)) < 30000) {
+        if (cachedCount !== null) {
             const orderCount = parseInt(cachedCount, 10);
             paintCountBadge('ordersCount', orderCount);
             // Fetch in background to sync, but don't wait for it
@@ -636,13 +634,11 @@ function loadNotificationBadgeFast() {
         return;
     }
 
-    // FAST PATH: Try localStorage cache first (instant display)
+    // FAST PATH: Try localStorage cache first (instant display, even if stale)
+    // Stale-while-revalidate: paint whatever we have; loadNotifications() syncs in background
     try {
         const cachedCount = localStorage.getItem('notificationCount');
-        const cacheTimestamp = localStorage.getItem('notificationCountTimestamp');
-        const now = Date.now();
-        // Use cache if it's less than 30 seconds old
-        if (cachedCount !== null && cacheTimestamp && (now - parseInt(cacheTimestamp)) < 30000) {
+        if (cachedCount !== null) {
             const notifCount = parseInt(cachedCount, 10);
             paintCountBadge('notificationCount', notifCount);
             return; // Badge updated, full load will happen in background
@@ -672,14 +668,12 @@ function loadNotifications(force = false) {
         return;
     }
 
-    // FAST PATH: Try localStorage cache first (instant display) - only if not forcing refresh
+    // FAST PATH: Try localStorage cache first (instant display, even if stale)
+    // Stale-while-revalidate: paint whatever we have, sync in background - only if not forcing refresh
     if (!force) {
         try {
             const cachedCount = localStorage.getItem('notificationCount');
-            const cacheTimestamp = localStorage.getItem('notificationCountTimestamp');
-            const now = Date.now();
-            // Use cache if it's less than 30 seconds old
-            if (cachedCount !== null && cacheTimestamp && (now - parseInt(cacheTimestamp)) < 30000) {
+            if (cachedCount !== null) {
                 const notifCount = parseInt(cachedCount, 10);
                 paintCountBadge('notificationCount', notifCount);
                 // Fetch in background to sync, but don't wait for it

@@ -1893,8 +1893,35 @@
             controls.appendChild(nextBtn);
         }
         
+        // Stale-while-revalidate product cache: paint cached grid instantly,
+        // then refresh from API in the background
+        const DASH_PRODUCTS_CACHE_KEY = 'dashProductsCache';
+
+        function paintCachedProducts() {
+            try {
+                const raw = localStorage.getItem(DASH_PRODUCTS_CACHE_KEY);
+                if (!raw) return false;
+                const cached = JSON.parse(raw);
+                if (!cached || !Array.isArray(cached.products) || !cached.products.length) return false;
+                products = cached.products;
+                dashCurrentPage = 1;
+                renderProductGrid();
+                return true;
+            } catch (_) {
+                return false;
+            }
+        }
+
+        function cacheProductsList(list) {
+            try {
+                localStorage.setItem(DASH_PRODUCTS_CACHE_KEY, JSON.stringify({ t: Date.now(), products: list }));
+            } catch (_) { /* quota exceeded — ignore */ }
+        }
+
         // Load products from API
         async function loadProducts() {
+            // Instant paint from cache so the grid never starts empty on refresh
+            const hadCachedPaint = paintCachedProducts();
             try {
                 const response = await fetch('api/get_products.php');
                 
@@ -1922,6 +1949,7 @@
                 
                 if (data.success && data.products) {
                     products = data.products;
+                    cacheProductsList(products);
                     console.log('Loaded products:', products);
                     // Warm the image cache first (bounded wait) so product
                     // cards appear with images instead of loading piecemeal
@@ -1933,11 +1961,16 @@
                     renderProductGrid();
                 } else {
                     console.log('No products or success=false:', data);
-                    document.getElementById('productsGrid').innerHTML = '<div class="grid-message"><p>No products available. Please check back later.</p></div>';
+                    if (!hadCachedPaint) {
+                        document.getElementById('productsGrid').innerHTML = '<div class="grid-message"><p>No products available. Please check back later.</p></div>';
+                    }
                 }
             } catch (error) {
                 console.error('Error loading products:', error);
-                document.getElementById('productsGrid').innerHTML = '<div class="grid-message"><p>Failed to load products. Please refresh the page.</p><p style="font-size: 0.9rem;">Error: ' + error.message + '</p></div>';
+                // Keep the cached grid if we painted one; only show the error otherwise
+                if (!hadCachedPaint) {
+                    document.getElementById('productsGrid').innerHTML = '<div class="grid-message"><p>Failed to load products. Please refresh the page.</p><p style="font-size: 0.9rem;">Error: ' + error.message + '</p></div>';
+                }
             }
         }
         
@@ -2195,8 +2228,46 @@
             loadProducts();
         });
         
+        // Stale-while-revalidate stats cache: paint cached counts instantly,
+        // then refresh from API in the background
+        const DASH_STATS_CACHE_KEY = 'dashStatsCache';
+
+        function computeDashStats(orders) {
+            const total = orders.filter(o => {
+                const s = (o.status || '').toLowerCase();
+                return s === 'pending' || s === 'preparing';
+            }).length;
+            const active = orders.filter(o => {
+                const s = (o.status || '').toLowerCase();
+                return s === 'shipped' || s === 'out_for_delivery';
+            }).length;
+            const completed = orders.filter(o => (o.status || '').toLowerCase() === 'delivered').length;
+            return { total, active, completed };
+        }
+
+        function paintDashStats(stats) {
+            document.getElementById('totalOrders').textContent = stats.total;
+            document.getElementById('activeDeliveries').textContent = stats.active;
+            document.getElementById('completedOrders').textContent = stats.completed;
+        }
+
+        function paintCachedStats() {
+            try {
+                const raw = localStorage.getItem(DASH_STATS_CACHE_KEY);
+                if (!raw) return false;
+                const cached = JSON.parse(raw);
+                if (!cached || typeof cached.total === 'undefined') return false;
+                paintDashStats(cached);
+                return true;
+            } catch (_) {
+                return false;
+            }
+        }
+
         // Load stats from API
         async function loadStats() {
+            // Instant paint from cache so counts never start at 0 on refresh
+            paintCachedStats();
             let orders = [];
             try {
                 const res = await fetch('api/get_orders.php?limit=1000');
@@ -2209,20 +2280,14 @@
             } catch (err) {
                 console.error('Error loading stats:', err);
             }
-            // Fallback to zero if none
-            const total = orders.filter(o => {
-                const s = (o.status || '').toLowerCase();
-                return s === 'pending' || s === 'preparing';
-            }).length;
-            const active = orders.filter(o => {
-                const s = (o.status || '').toLowerCase();
-                return s === 'shipped' || s === 'out_for_delivery';
-            }).length;
-            const completed = orders.filter(o => (o.status || '').toLowerCase() === 'delivered').length;
-
-            document.getElementById('totalOrders').textContent = total;
-            document.getElementById('activeDeliveries').textContent = active;
-            document.getElementById('completedOrders').textContent = completed;
+            // Share with the navbar orders badge (fast path) so it doesn't
+            // fire a duplicate get_orders.php request
+            window.__ordersCache = orders;
+            const stats = computeDashStats(orders);
+            paintDashStats(stats);
+            try {
+                localStorage.setItem(DASH_STATS_CACHE_KEY, JSON.stringify({ ...stats, t: Date.now() }));
+            } catch (_) { /* quota exceeded — ignore */ }
         }
         
         // Fast notification function - reuses single element for rapid updates
