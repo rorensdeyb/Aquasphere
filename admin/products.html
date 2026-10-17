@@ -441,7 +441,7 @@
             position: fixed;
             inset: 0;
             background: rgba(0, 0, 0, 0.85);
-            z-index: 9999;
+            z-index: 100000;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1355,7 +1355,7 @@
             max-height: 200px;
             border-radius: 10px;
         }
-        .edit-side-thumb i {
+        .edit-side-thumb > i {
             font-size: 2.5rem;
             color: #155A7A;
         }
@@ -1386,6 +1386,16 @@
         }
         .edit-thumb-wrap:hover .edit-thumb-overlay {
             opacity: 1;
+        }
+        /* Keep the overlay action icons at a normal size/colour regardless of
+           any font-size/colour rules inherited from the thumbnail container. */
+        .edit-thumb-overlay .image-fullscreen-btn i,
+        .edit-thumb-overlay .image-close-btn i,
+        .image-preview-overlay .image-fullscreen-btn i,
+        .image-preview-overlay .image-close-btn i {
+            font-size: 0.85rem;
+            line-height: 1;
+            color: #ffffff;
         }
         .edit-side-upload {
             margin: 1rem 0 0;
