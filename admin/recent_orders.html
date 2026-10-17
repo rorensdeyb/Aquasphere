@@ -479,6 +479,43 @@
         .odm-item:last-child {
             border-bottom: none;
         }
+        .odm-items-pager {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 14px;
+            border-top: 1px solid #EEF2F7;
+            background: #ffffff;
+        }
+        .odm-page-btn {
+            min-width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            border: 1px solid #D5E5ED;
+            background: #ffffff;
+            color: #334155;
+            font-weight: 700;
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            padding: 0 8px;
+        }
+        .odm-page-btn:hover:not(:disabled):not(.active) {
+            background: #F1F5F9;
+        }
+        .odm-page-btn.active {
+            background: linear-gradient(135deg, #2383B5, #155A7A);
+            border-color: #2383B5;
+            color: #ffffff;
+        }
+        .odm-page-btn:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
         .odm-item-info {
             display: flex;
             align-items: center;
@@ -1246,6 +1283,57 @@
                 </div>`;
         }
 
+        // Items pagination inside the details modal (3 per page)
+        const ODM_ITEMS_PER_PAGE = 3;
+        let odmItemsData = [];
+        let odmItemsPage = 1;
+
+        function odmItemRow(item) {
+            const tag = odmItemTag(item.product_name);
+            return `
+            <div class="odm-item">
+                <div class="odm-item-info">
+                    <div class="odm-thumb"><i class="fas fa-bottle-water"></i></div>
+                    <div>
+                        <div class="odm-item-name">${escapeHtml(item.product_name)}</div>
+                        ${tag ? `<span class="odm-tag">${tag}</span>` : ''}
+                    </div>
+                </div>
+                <div class="odm-price">₱${parseFloat(item.product_price).toFixed(2)}</div>
+                <div class="odm-qty"><span>×${item.quantity}</span></div>
+                <div class="odm-sub">₱${parseFloat(item.subtotal).toFixed(2)}</div>
+            </div>`;
+        }
+
+        function odmGoPage(page) {
+            odmItemsPage = page;
+            odmRenderItems();
+        }
+
+        function odmRenderItems() {
+            const rows = document.getElementById('odmItemsRows');
+            const pager = document.getElementById('odmItemsPager');
+            if (!rows) return;
+            const totalPages = Math.max(1, Math.ceil(odmItemsData.length / ODM_ITEMS_PER_PAGE));
+            if (odmItemsPage > totalPages) odmItemsPage = totalPages;
+            if (odmItemsPage < 1) odmItemsPage = 1;
+            const start = (odmItemsPage - 1) * ODM_ITEMS_PER_PAGE;
+            rows.innerHTML = odmItemsData.slice(start, start + ODM_ITEMS_PER_PAGE).map(odmItemRow).join('');
+            if (!pager) return;
+            if (totalPages <= 1) {
+                pager.style.display = 'none';
+                pager.innerHTML = '';
+                return;
+            }
+            pager.style.display = 'flex';
+            let html = `<button type="button" class="odm-page-btn" ${odmItemsPage === 1 ? 'disabled' : ''} onclick="odmGoPage(${odmItemsPage - 1})"><i class="fas fa-chevron-left"></i></button>`;
+            for (let i = 1; i <= totalPages; i++) {
+                html += `<button type="button" class="odm-page-btn ${i === odmItemsPage ? 'active' : ''}" onclick="odmGoPage(${i})">${i}</button>`;
+            }
+            html += `<button type="button" class="odm-page-btn" ${odmItemsPage === totalPages ? 'disabled' : ''} onclick="odmGoPage(${odmItemsPage + 1})"><i class="fas fa-chevron-right"></i></button>`;
+            pager.innerHTML = html;
+        }
+
         async function viewOrderDetails(orderId) {
             const response = await fetch(`../api/admin/get_orders.php?page=1&limit=1000`);
             const data = await response.json();
@@ -1336,22 +1424,8 @@
                                 <span>Qty</span>
                                 <span>Subtotal</span>
                             </div>
-                            ${items.map(item => {
-                                const tag = odmItemTag(item.product_name);
-                                return `
-                                <div class="odm-item">
-                                    <div class="odm-item-info">
-                                        <div class="odm-thumb"><i class="fas fa-bottle-water"></i></div>
-                                        <div>
-                                            <div class="odm-item-name">${escapeHtml(item.product_name)}</div>
-                                            ${tag ? `<span class="odm-tag">${tag}</span>` : ''}
-                                        </div>
-                                    </div>
-                                    <div class="odm-price">₱${parseFloat(item.product_price).toFixed(2)}</div>
-                                    <div class="odm-qty"><span>×${item.quantity}</span></div>
-                                    <div class="odm-sub">₱${parseFloat(item.subtotal).toFixed(2)}</div>
-                                </div>`;
-                            }).join('')}
+                            <div class="odm-item-rows" id="odmItemsRows"></div>
+                            <div class="odm-items-pager" id="odmItemsPager"></div>
                         </div>
                         <div class="odm-totals-card">
                             <div class="odm-total-row"><span>Subtotal</span><strong>₱${subtotal.toFixed(2)}</strong></div>
@@ -1416,6 +1490,10 @@
                     </aside>
                 </div>
             `;
+            
+            odmItemsData = items;
+            odmItemsPage = 1;
+            odmRenderItems();
             
             const modal = new bootstrap.Modal(document.getElementById('orderDetailsModal'));
             modal.show();
